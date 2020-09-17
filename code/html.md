@@ -1,4 +1,4 @@
-#HTML
+# HTML
 
 ## Initial scaling for iPad devices
 This HTML will fix some rendering issues on iPad by initially zooming out the page a little bit.
