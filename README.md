@@ -1,2 +1,3 @@
-# cookbook
-miscellaneous code snippets in .md format; inspiration from https://github.com/azer/notebook
+# notes
+
+Notes on random things - in mostly `.md` format.
