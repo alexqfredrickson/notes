@@ -10,20 +10,22 @@
 
 ### Backends
 
-* State files live in Terraform workspaces, which (in-turn) live in Terraform backends.
-* Some (but not all) Terraform backends support multiple workspaces - for instance, if you need a different workspace for "production" versus "development".
+* Backends house workspaces, which house state files. 
+* Some (but not all) Terraform backends support multiple workspaces.
 
 ### Workspaces
 
-A Terraform workspace is like an atomic instance of state data.
+Workspaces are like atomic instances of state data.
+
+They are useful in representing individual environments. For example: a "production" workpace versus a "development" workspace.
 
 ### Provisioners
 
-Terraform provisioners invoke scripts imperatively, which generally breaks Terraform's declarative model.
+Provisioners execute imperative scripts. This breaks Terraform's declarative model, and should be used "as a last resort".
 
 ### Providers
 
-Terraform providers 
+Providers are plugins that tell Terraform how to interact with external hosting environments.
 
 ## Commands
 
