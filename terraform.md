@@ -69,3 +69,10 @@ resource "aws_instance" "app_server" {
 }
 ```
 
+* The `terraform` block contains [basic Terraform configuration](https://developer.hashicorp.com/terraform/language/settings#terraform-block-syntax).
+* `terraform -> required_providers` [is where providers are defined](https://developer.hashicorp.com/terraform/language/providers/requirements). Providers are plugins that interact with remote systems.
+* `terraform -> required_providers -> {provider} -> source` is a [source address](https://developer.hashicorp.com/terraform/language/providers/requirements#source-addresses). This is a globally unique identifier that expresses where Terraform can download the provider from - in format `NAMESPACE/TYPE` OR `HOSTNAME/NAMESPACE/TYPE`. The default hostname is `registry.terraform.io`.
+* `~>` represents a "maximum version" constraint.
+* `terraform -> required_version` is the Terraform version; `>= x.x` represents the minimum version, and is best-practice to allow for patching.
+* Provider configuration is found at the `provider` block. For `hashicorp/aws`, see https://registry.terraform.io/providers/hashicorp/aws/latest/docs for documentation about this provider's properties. 
+* The `resource` block defines an atomic resource, with a specific name. Names are locally-scoped. `resource "aws_instance" "app_server"` is an AWS EC2 instance named "web". Arguments depend on the resource type. Arguments are documented at the Terraform registry - for example: `https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance`.
