@@ -6,12 +6,13 @@
 * `~>` represents a "maximum version" constraint.
 * `main.tf` is just a naming convention, and isn't necessary.
 
-## Concepts
+## Components
 
 ### Backends
 
-* Backends house workspaces, which house state files. 
-* Some (but not all) Terraform backends support multiple workspaces.
+Backends house workspaces, which house state files. 
+
+Some (but not all) Terraform backends support multiple workspaces.
 
 ### Workspaces
 
@@ -26,6 +27,113 @@ Provisioners execute imperative scripts. This breaks Terraform's declarative mod
 ### Providers
 
 Providers are plugins that tell Terraform how to interact with external hosting environments.
+
+### Variables
+
+Variables (or "input variables") are [template parameters](https://developer.hashicorp.com/terraform/language/values/variables). 
+
+Variables can be declared in root modules, and/or child modules. At the root level, they are set in the CLI call to Terraform, or as an environment variable. At the module level, they are set in the `module` block.
+
+They are declared in `variable` blocks:
+
+```hcl
+# base case
+variable "image_id" {
+  type = string
+}
+ 
+# with default
+variable "availability_zone_names" {
+  type    = list(string)
+  default = ["us-west-1a"]
+}
+ 
+# as a list of objects, with defaults 
+variable "docker_ports" {
+  type = list(object({
+    internal = number
+    external = number
+    protocol = string
+  }))
+
+  default = [
+    {
+      internal = 8300
+      external = 8300
+      protocol = "tcp"
+    }
+  ]
+}
+```
+
+All variables are required unless `default` is declared.
+
+Variables have optional arguments:
+
+| Argument    | Description |
+| -------- | ------- |
+| default  | The default value. Makes the variable optional.    |
+| type | `string`, `number`, or `bool`. `list()`, `set()`, `map()`, `object()`, and `tuple()` are also valid complex types.     |
+| description    | A description.    |
+| validation    | Some validation contraints - for example: `length(var.image_id) > 4 && substr(var.image_id, 0, 4) == "ami-"`.    |
+| sensitive    | If `true`, then `terraform plan` and `terraform apply` will not send the variable to STDOUT. Sensitive values are still stored in plaintext in the Terraform state.   |
+| nullable    | If `true`, a null value is permitted.    |
+
+Variables are referenced like "`var.image_id`". They may also be interpolated into strings - like `"${var.foo}-bar!"`.
+
+### Locals
+
+[Local values](https://developer.hashicorp.com/terraform/language/values/locals) are temp variables, expressed in their own types of resource blocks. They function similar to enums. For example:
+
+```hcl
+locals {
+  service_name = "forum"
+  owner        = "Community Team"
+}
+```
+
+They are referenced like this:
+
+```hcl
+resource "aws_instance" "example" {
+  # ...
+ 
+  tags = local.common_tags
+}
+```
+
+### Expressions
+
+Expressions are like [computed values](https://developer.hashicorp.com/terraform/language/expressions). They are sometimes used in conjunction with locals.
+
+### Outputs
+
+Outputs (or "output values") are like function return statements.
+
+## Concepts
+
+### Resource Dependencies
+
+Terraform automatically detects _implicit_ dependencies, when a resource's property is referenced by another resource:
+
+```hcl
+data "aws_ami" "amazon_linux" {  
+  most_recent = true  
+  owners      = ["amazon"]   
+} 
+
+resource "aws_instance" "example_a" {
+  ami           = data.aws_ami.amazon_linux.id    instance_type = "t2.micro"
+} 
+
+resource "aws_eip" "ip" {  
+  vpc      = true  
+  instance = aws_instance.example_a.id
+}
+```
+
+It can't always find this out, so it allows for `depends_on` arguments to declare _explicit_ dependencies - for example: `depends_on = [aws_s3_bucket.example, aws_instance.example_c]`.
+
 
 ## Commands
 
