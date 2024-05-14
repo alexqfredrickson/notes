@@ -8,11 +8,34 @@
 
 ## Components
 
+### State
+
+Terraform [state](https://developer.hashicorp.com/terraform/language/state) describes the infrastructure that is managed by Terraform: mapping Terraform configuration with external resources.
+
+* State is stored (by default) in a `terraform.tfstate` file. For teams, remote state files are used - which have built-in locking mechanisms.
+* `terraform refresh` occurs prior to any operation. This updates the local state.
+* `terraform state` can be used to modify the state file.
+* State is expressed in JSON format.
+
 ### Backends
+ 
+[Backends](https://developer.hashicorp.com/terraform/language/settings/backends/configuration) store state files. The default backend is `local`, storing state on-disk.
 
-Backends house workspaces, which house state files. 
+Backends are expressed within `terraform` blocks - for example:
 
-Some (but not all) Terraform backends support multiple workspaces.
+```hcl
+terraform {
+  backend "remote" {
+    organization = "example_corp"
+ 
+    workspaces {
+      name = "my-app-prod"
+    }
+  }
+}
+```
+
+* Backends may house workspaces, which house state files. Some (but not all) Terraform backends support multiple workspaces.
 
 ### Workspaces
 
@@ -141,6 +164,20 @@ It can't always find this out, so it allows for `depends_on` arguments to declar
 
 Applies Terraform *plans* against Terraform *backends*.  This is an asychronous operation that supports up to ten concurrent nodes by default.
 
+#### `terraform apply -replace`
+
+Terraform can't always detect issues with remote objects, so `terraform apply -replace` can replace atomic resources - for example:
+
+```
+$ terraform apply -replace="aws_instance.example"
+# ...
+ 
+  # aws_instance.example will be replaced, as requested
+-/+ resource "aws_instance" "example" {
+      # ...
+    }
+```
+
 ### `terraform state`
 
 * `terraform state mv` - `TODO`
@@ -148,6 +185,18 @@ Applies Terraform *plans* against Terraform *backends*.  This is an asychronous 
 ### `terraform init`
 
 On Terraform initialization, Terraform will (1) initialize a backend state, (2) download all providers, and (3) download modules referenced from public/private repositories.
+
+## Vault
+
+Hashicorp Vault is a third-party centralized secrets management service, which encrypts secrets at-rest and in-transit to clients. It's very similar to AWS Secrets Manager. 
+
+Terraform has providers that talk to Vault.
+
+Terraform secrets are sometimes exposed through Terraform configuration and state files, so Hashicorp claims that it's best practice to use Vault.
+
+## Terraform CLI
+
+Terraform CLI stores local state in a `terraform.tfstate` file.
 
 ## Examples
 
