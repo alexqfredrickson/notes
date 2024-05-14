@@ -37,6 +37,10 @@ terraform {
 
 * Backends may house workspaces, which house state files. Some (but not all) Terraform backends support multiple workspaces.
 
+#### Remote backends
+
+[Remote backends](https://developer.hashicorp.com/terraform/language/settings/backends/remote) is a unique type of backend that stores state snapshots, and executes operations for the HCP Terraform application.
+
 ### Workspaces
 
 Workspaces are like atomic instances of state data.
@@ -162,7 +166,9 @@ It can't always find this out, so it allows for `depends_on` arguments to declar
 
 ### `terraform apply`
 
-Applies Terraform *plans* against Terraform *backends*.  This is an asychronous operation that supports up to ten concurrent nodes by default.
+`terraform apply` applies Terraform *plans* against Terraform *backends* (which store state). By default, it generates a new plan. You can also give it a plan from `terraform plan`.
+
+* This is an asychronous operation that supports up to ten concurrent nodes by default.
 
 #### `terraform apply -replace`
 
@@ -184,7 +190,7 @@ $ terraform apply -replace="aws_instance.example"
 
 ### `terraform init`
 
-On Terraform initialization, Terraform will (1) initialize a backend state, (2) download all providers, and (3) download modules referenced from public/private repositories.
+`terraform init` instantiates state files, downloads providers (i.e. cloud plugins), and downloads modules (i.e. groups of resource configurations) to the root module directory (i.e. where `.tf` files are located).
 
 ## Vault
 
@@ -235,3 +241,8 @@ resource "aws_instance" "app_server" {
 * `terraform -> required_version` is the Terraform version; `>= x.x` represents the minimum version, and is best-practice to allow for patching.
 * Provider configuration is found at the `provider` block. For `hashicorp/aws`, see https://registry.terraform.io/providers/hashicorp/aws/latest/docs for documentation about this provider's properties. 
 * The `resource` block defines an atomic resource, with a specific name. Names are locally-scoped. `resource "aws_instance" "app_server"` is an AWS EC2 instance named "web". Arguments depend on the resource type. Arguments are documented at the Terraform registry - for example: `https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance`.
+
+
+## Errata
+
+* Terraform can handle cross-cloud dependencies.
