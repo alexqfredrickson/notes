@@ -53,7 +53,7 @@ Provisioners execute imperative scripts. This breaks Terraform's declarative mod
 
 ### Providers
 
-Providers are plugins that tell Terraform how to interact with external hosting environments.
+[Providers](https://developer.hashicorp.com/terraform/language/providers) are plugins that tell Terraform how to interact with external hosting environments.
 
 ### Variables
 
@@ -192,6 +192,32 @@ $ terraform apply -replace="aws_instance.example"
 
 `terraform init` instantiates state files, downloads providers (i.e. cloud plugins), and downloads modules (i.e. groups of resource configurations) to the root module directory (i.e. where `.tf` files are located).
 
+### `terraform force-unlock`
+
+Unlocks the state file.
+
+### `terraform get`
+
+Downloads modules recursively to the current working directory. Generally, this is not executed - `terraform init` does the same thing, and then some.
+
+### `terraform workspace`
+
+Creates, deletes, lists, selects, and shows (displays names) of workspaces.
+
+* The syntax is `terraform workspace new [workspace-name]` (for example).
+
+### `terraform show`
+
+Displays state information.
+
+### `terraform fmt`
+
+Reformats configuration to conform with style guidelines.
+
+### `terraform validate`
+
+Ensures that configuration is syntactically _valid_. Note that `terraform fmt` is what makes it _pretty_.
+
 ## Vault
 
 Hashicorp Vault is a third-party centralized secrets management service, which encrypts secrets at-rest and in-transit to clients. It's very similar to AWS Secrets Manager. 
@@ -200,9 +226,15 @@ Terraform has providers that talk to Vault.
 
 Terraform secrets are sometimes exposed through Terraform configuration and state files, so Hashicorp claims that it's best practice to use Vault.
 
-## Terraform CLI
+## CLI
 
 Terraform CLI stores local state in a `terraform.tfstate` file.
+
+## HCP Terraform
+
+HCP Terraform (formerly Terraform Cloud) is located at https://app.terraform.io/. It's basically a web-based abstraction over Terraform, designed for use with teams. It's like what GitHub is to `git` itself.
+
+* HCP Terraform creates speculative plans and runs Sentinel scans on PR approval. It does _not_ automatically apply Terraform plans by-default.
 
 ## Examples
 
