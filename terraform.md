@@ -37,6 +37,10 @@ terraform {
 
 * Backends may house workspaces, which house state files. Some (but not all) Terraform backends support multiple workspaces.
 
+#### Local backends
+
+* Local backends do not support locking (go figure).
+
 #### Remote backends
 
 [Remote backends](https://developer.hashicorp.com/terraform/language/settings/backends/remote) is a unique type of backend that stores state snapshots, and executes operations for the HCP Terraform application.
@@ -47,6 +51,8 @@ Workspaces are like atomic instances of state data.
 
 They are useful in representing individual environments. For example: a "production" workpace versus a "development" workspace.
 
+* Workspace-specific state is found in `terraform.tfstate.d` files (not `terraform.tfstate`).
+
 ### Provisioners
 
 Provisioners execute imperative scripts. This breaks Terraform's declarative model, and should be used "as a last resort".
@@ -54,6 +60,10 @@ Provisioners execute imperative scripts. This breaks Terraform's declarative mod
 ### Providers
 
 [Providers](https://developer.hashicorp.com/terraform/language/providers) are plugins that tell Terraform how to interact with external hosting environments.
+
+* Provider dependencies are defined by way of provider blocks, references to providers in state, and references to providers in resource blocks. They are not defined by providers found in the local working directory - those might just be the result of a cache or something.
+* Providers cannot be downloaded and installed directly from source code. They are acquired from  Terraform registries, HashiCorp releases, local plugins directories, and from plugins caches.
+* Provider blocks are (surprisingly) optional; Terraform tries to figure out what you're talking about automatically, and downloads providers without them being explicitly declared ... on a side note, this seems a bit sketchy!
 
 ### Variables
 
@@ -137,6 +147,12 @@ Expressions are like [computed values](https://developer.hashicorp.com/terraform
 
 Outputs (or "output values") are like function return statements.
 
+### Modules
+
+[Modules](https://developer.hashicorp.com/terraform/language/modules) are containers for groups of resources. They consist of `.tf` files in a directory.
+
+Terraform always has a "root" module, and child modules, which bring resources into their own configuration.
+
 ## Concepts
 
 ### Resource Dependencies
@@ -214,6 +230,8 @@ Displays state information.
 
 Reformats configuration to conform with style guidelines.
 
+* This does not run recursively by-default.
+
 ### `terraform validate`
 
 Ensures that configuration is syntactically _valid_. Note that `terraform fmt` is what makes it _pretty_.
@@ -235,6 +253,7 @@ Terraform CLI stores local state in a `terraform.tfstate` file.
 HCP Terraform (formerly Terraform Cloud) is located at https://app.terraform.io/. It's basically a web-based abstraction over Terraform, designed for use with teams. It's like what GitHub is to `git` itself.
 
 * HCP Terraform creates speculative plans and runs Sentinel scans on PR approval. It does _not_ automatically apply Terraform plans by-default.
+* When migrating to HCP Terraform (from local), HCP Terraform will inherit from the local version (i.e. the version used to perform the migration).
 
 ## Examples
 
