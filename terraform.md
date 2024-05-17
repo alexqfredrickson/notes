@@ -52,6 +52,7 @@ Workspaces are like atomic instances of state data.
 They are useful in representing individual environments. For example: a "production" workpace versus a "development" workspace.
 
 * Workspace-specific state is found in `terraform.tfstate.d` files (not `terraform.tfstate`).
+* In HCP Terraform, workspaces are often mapped to different code repositories. In local Terraform, one code repository generally contains multiple workspaces (perhaps). 
 
 ### Provisioners
 
@@ -117,6 +118,8 @@ Variables have optional arguments:
 | nullable    | If `true`, a null value is permitted.    |
 
 Variables are referenced like "`var.image_id`". They may also be interpolated into strings - like `"${var.foo}-bar!"`.
+
+Variables can be set at the level of the environment as well. By convention, they are prefixed with `TF_VAR_[variable]`.
 
 ### Locals
 
@@ -235,6 +238,14 @@ Reformats configuration to conform with style guidelines.
 ### `terraform validate`
 
 Ensures that configuration is syntactically _valid_. Note that `terraform fmt` is what makes it _pretty_.
+
+### `terraform console`
+
+This provides an interacive console for the evaluation of expressions. Confusingly, this holds a lock on state, even if the backend is `local`.
+
+### `terraform import`
+
+Imports existing infrastructure into the Terraform state.
 
 ## Vault
 
