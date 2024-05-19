@@ -66,11 +66,20 @@ Provisioners execute imperative scripts. This breaks Terraform's declarative mod
 * Providers cannot be downloaded and installed directly from source code. They are acquired from  Terraform registries, HashiCorp releases, local plugins directories, and from plugins caches.
 * Provider blocks are (surprisingly) optional; Terraform tries to figure out what you're talking about automatically, and downloads providers without them being explicitly declared ... on a side note, this seems a bit sketchy!
 
-### Variables
+### Input Variables
 
-Variables (or "input variables") are [template parameters](https://developer.hashicorp.com/terraform/language/values/variables). 
+Input variables are [template parameters](https://developer.hashicorp.com/terraform/language/values/variables). 
 
-Variables can be declared in root modules, and/or child modules. At the root level, they are set in the CLI call to Terraform, or as an environment variable. At the module level, they are set in the `module` block.
+Variables can be declared in root modules, and/or child modules. 
+
+At the root level, they are set in either:
+
+* HCP Terraform workspaces
+* With the `-var` command line option, like `terraform apply -var="image_id=ami-abc123"`.
+* As environment variable - prefixed with `TF_VAR` - like `export TF_VAR_image_id=ami-abc123`.
+* In a file called `.tfvars`, like `terraform apply -var-file="testing.tfvars"`.
+
+At the module level, input variables are set in the `module` block.
 
 They are declared in `variable` blocks:
 
@@ -119,8 +128,6 @@ Variables have optional arguments:
 
 Variables are referenced like "`var.image_id`". They may also be interpolated into strings - like `"${var.foo}-bar!"`.
 
-Variables can be set at the level of the environment as well. By convention, they are prefixed with `TF_VAR_[variable]`.
-
 ### Locals
 
 [Local values](https://developer.hashicorp.com/terraform/language/values/locals) are temp variables, expressed in their own types of resource blocks. They function similar to enums. For example:
@@ -155,6 +162,24 @@ Outputs (or "output values") are like function return statements.
 [Modules](https://developer.hashicorp.com/terraform/language/modules) are containers for groups of resources. They consist of `.tf` files in a directory.
 
 Terraform always has a "root" module, and child modules, which bring resources into their own configuration.
+
+### Data Sources
+
+[Data sources](https://developer.hashicorp.com/terraform/language/data-sources) let Terraform load data from outside of Terraform, or from other Terraform configurations.
+
+For example:
+
+```
+data "aws_ami" "example" {
+  most_recent = true
+ 
+  owners = ["self"]
+  tags = {
+    Name   = "app-server"
+    Tested = "true"
+  }
+}
+```
 
 ## Concepts
 
