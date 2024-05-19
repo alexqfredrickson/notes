@@ -203,9 +203,21 @@ $ terraform apply -replace="aws_instance.example"
     }
 ```
 
+### `terraform apply -refresh=False`
+
+This prevents Terraform from refreshing infrastructure state prior to a `terraform apply`. This is used when you want to skip the overhead of Terraform re-checking the remote infrastructure to ensure it matches the current local state.
+
+#### `terraform apply -auto-approve`
+
+This is like a `terraform apply -force`. Normally, `terraform apply` will prompt, requiring manual intervention. Don't use this in production.
+
 ### `terraform state`
 
-* `terraform state mv` - `TODO`
+This is an advanced command used to modify Terraform state directly.
+
+#### `terraform state list`
+
+Shows all resources defined in the current state.
 
 ### `terraform init`
 
@@ -246,6 +258,22 @@ This provides an interacive console for the evaluation of expressions. Confusing
 ### `terraform import`
 
 Imports existing infrastructure into the Terraform state.
+
+### `terraform plan`
+
+This creates a manifest of the resources that will be created on `terraform apply`. This is kind of like a dry-run. It can be saved to an output file and changed for later, with `terraform plan out=[path]`.
+
+### `terraform destroy`
+
+Deletes all infrastructure. This is an alias for `terraform apply -destroy`. This prompts for manual confirmation.
+
+#### `terraform destroy -auto-approve`
+
+This is the same as `terraform destroy`, but it does not prompt for manual confirmation.
+
+### `terraform login`
+
+This logs into HCP Terraform.
 
 ## Vault
 
