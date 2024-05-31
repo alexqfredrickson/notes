@@ -100,6 +100,10 @@ Trusted Advisor offers recommendations related to cost optimization, performance
 
 Inspector is a vulnerability management scanning tool, targeting EC2 instances, ECR container images, and AWS Lambda functions.
 
+### Shield
+
+Shield is a DDoS protection service.
+
 ## Concepts
 
 ### IaaS vs. PaaS vs. SaaS
