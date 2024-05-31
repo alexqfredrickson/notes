@@ -4,6 +4,8 @@
 
 ### S3
 
+S3 is an object storage service.
+
 #### AWS S3 Standard
 
 * Used for frequently-accessed data
@@ -67,9 +69,36 @@ AWS VPC is a "virtual private cloud".
 
 ### EC2
 
-#### EC2 Pricing Models
+#### Pricing
 
-* On-demand instances are billed hourly.
+* On-demand instances are billed by the hour depending on their instance class. You pay full price for an on-demand instance.
+* Spot instances are offered at a (up to) 90% discount. These are "spare" EC2 instances that can be evicted at any time. The use-case is highly niche - stuff like data analysis, batch jobs, background processing, and optional tasks. 
+* Under the "savings plan" model, the end-user commits to a certain amount of hourly usage over the course of 1 (or 3) years. This is very similar to the "reserved instance" model, but intended to be a bit more flexible.
+* Reserved instances offer a (up to) 72% discount, but you lease the server per-instance-class for 1-3 years.
+
+### EMR (Elastic Map Reduce)
+
+EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
+
+### Athena
+
+Athena does SQL queries against S3 buckets.
+
+### ElastiCache
+
+ElastiCache is a managed Redis/Memcached service.
+
+### DynamoDB
+
+DynamoDB is a schemaless NoSQL database service. It scales without incurring downtime. 
+
+### Trusted Advisor
+
+Trusted Advisor offers recommendations related to cost optimization, performance, security, fault tolerance, service limits, and operational excellence.
+
+### Inspector
+
+Inspector is a vulnerability management scanning tool, targeting EC2 instances, ECR container images, and AWS Lambda functions.
 
 ## Concepts
 
