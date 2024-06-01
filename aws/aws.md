@@ -96,6 +96,8 @@ DynamoDB is a schemaless NoSQL database service. It scales without incurring dow
 
 Trusted Advisor offers recommendations related to cost optimization, performance, security, fault tolerance, service limits, and operational excellence.
 
+It's sort of like a best-practices guide.
+
 ### Inspector
 
 Inspector is a vulnerability management scanning tool, targeting EC2 instances, ECR container images, and AWS Lambda functions.
