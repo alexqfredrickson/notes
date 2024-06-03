@@ -21,6 +21,9 @@ DNS root nameservers route queries to TLD (or "top-level domain") nameservers, b
 | A         |  A *host* record. Maps a domain/host to an IP address.           |
 | AAAA         | An *IPv6 host* record.            |
 | PTR         | A *pointer* record. Opposite of a host record. Maps an IP address to a domain/host.            |
+| TXT          | Leveraged mainly for SPF/DKIM/DMARC for email valdation, but this is a generic record.          |
+| SRV | For VoIP, instant messaging, etc. Any kinds of newer protocols. |
+| NS | This is a pointer to one or more authoritative DNS servers, which contain DNS records. | 
 
 ## Sources
 
