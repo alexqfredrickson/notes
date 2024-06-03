@@ -116,8 +116,7 @@ Shield is a DDoS protection service.
 
 ### Route 53
 
-Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching. 
-
+Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching.
 
 ## Concepts
 
