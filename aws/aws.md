@@ -76,6 +76,14 @@ AWS VPC is a "virtual private cloud".
 * Under the "savings plan" model, the end-user commits to a certain amount of hourly usage over the course of 1 (or 3) years. This is very similar to the "reserved instance" model, but intended to be a bit more flexible.
 * Reserved instances offer a (up to) 72% discount, but you lease the server per-instance-class for 1-3 years.
 
+#### UserData
+
+EC2 instances, on-launch, have the option of passing "user data" to the instance, performing automated configuration tasks. They take the form of either (a) shell scripts or (b) cloud-init directives. 
+
+To see user data, view EC2 → Actions → Instance settings → Edit user data.
+
+Userdata only gets invoked at launch time. On CFN update, it does not get invoked.
+
 ### EMR (Elastic Map Reduce)
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
@@ -105,6 +113,11 @@ Inspector is a vulnerability management scanning tool, targeting EC2 instances, 
 ### Shield
 
 Shield is a DDoS protection service.
+
+### Route 53
+
+Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching. 
+
 
 ## Concepts
 

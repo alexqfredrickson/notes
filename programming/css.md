@@ -1,9 +1,12 @@
 # CSS
 
-## Media queries for detecting Apple devices
+## Errata
+
+### Media queries for detecting Apple devices
 via http://stackoverflow.com/a/12848217/3474146
 
-```/* iPhone < 5: */
+```css
+/* iPhone < 5: */
 @media screen and (device-aspect-ratio: 2/3) {
 }
 /* iPhone 5: */
