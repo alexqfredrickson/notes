@@ -28,6 +28,9 @@ DNS root nameservers route queries to TLD (or "top-level domain") nameservers, b
 ## Sources
 
 CompTIA Network+ Study Guide (4e)
+
 https://aws.amazon.com/route53/what-is-dns
+
 https://umbrella.cisco.com/blog/what-is-the-difference-between-authoritative-and-recursive-dns-nameservers
+
 https://www.cloudflare.com/learning/dns/what-is-recursive-dns/
