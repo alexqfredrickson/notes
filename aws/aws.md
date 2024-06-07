@@ -74,7 +74,7 @@ AWS VPC is a "virtual private cloud".
 * On-demand instances are billed by the hour depending on their instance class. You pay full price for an on-demand instance.
 * Spot instances are offered at a (up to) 90% discount. These are "spare" EC2 instances that can be evicted at any time. The use-case is highly niche - stuff like data analysis, batch jobs, background processing, and optional tasks. 
 * Under the "savings plan" model, the end-user commits to a certain amount of hourly usage over the course of 1 (or 3) years. This is very similar to the "reserved instance" model, but intended to be a bit more flexible.
-* Reserved instances offer a (up to) 72% discount, but you lease the server per-instance-class for 1-3 years.
+* Reserved instances offer a (up to) 72% discount, but you lease the server per-instance-class for 1-3 years. RIs are tied to particular accounts, but note that AWS Organizations has a "consolidated billing" feature that lets you use RI leases across accounts (kinda cool!); the accounts are treated as one for the purposes of billing.
 
 #### UserData
 
