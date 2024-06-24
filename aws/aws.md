@@ -152,6 +152,10 @@ Classic load balancers operate at OSI Layer 4 and 7 (TCP/SSL/HTTP/HTTPS).
 
 AWS VPC is a "virtual private cloud".
 
+#### Elastic Network Interfaces
+
+Elastic network interfaces are virtual network cards for VPCs.
+
 ### EC2
 
 #### Pricing
@@ -168,6 +172,28 @@ EC2 instances, on-launch, have the option of passing "user data" to the instance
 To see user data, view EC2 → Actions → Instance settings → Edit user data.
 
 Userdata only gets invoked at launch time. On CFN update, it does not get invoked.
+
+#### Placement Groups
+
+EC2 placement groups can be used when EC2 instances are highly interdependent. They come in three flavors:
+
+1. Cluster placement groups 
+2. Spread placement groups
+3. Partition placement groups
+
+They are *free* and *optional*. 
+
+##### Cluster Placement Groups
+
+Cluster placement groups packs instances close together in the same AZ. This lowers network latency. This can be used for HPC applications.
+
+##### Spread Placement Groups
+
+Spread placement groups spread instances across distinct underlying hardware to reduce correlated failures.
+
+##### Partition Placement Groups
+
+Partition placement groups partition instances across an AZ so that they maintain unique underlying hardware, with unique networks and power sources. This can be used for larger distributed workloads (i.e. Hadoop, Cassandra, and Kafka).
 
 ### EMR (Elastic Map Reduce)
 
