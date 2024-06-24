@@ -2,6 +2,91 @@
 
 ## Services
 
+### IAM
+
+IAM (identity and access management) delegates AWS permissions to *users*, *groups*, and *roles*.
+
+IAM allows you to generate and download reports that list users, and the status of their credentials (such as passwords, access keys, and MFA devices).
+
+#### Principals
+
+IAM principals include users, roles, and the root user.
+
+#### Entities
+
+IAM entities include users and roles.
+
+#### Identities
+
+IAM identities include users, roles, and groups.
+
+#### Users
+
+IAM users represent individuals. Individuals can be assigned to zero-to-many groups. They have their own credentials, independent from root account credentials.
+
+#### Groups
+
+Groups are collections of IAM users. Groups cannot contain nested groups.
+
+#### Roles
+
+IAM roles are sort of like IAM users, but roles are assumable by whoever needs them. They do not have passwords or access keys like users do. Roles are associated with short-term sessons and have temporary security credentials.
+
+Roles are used for:
+
+1. Federated user access (in the event that you have an external identity provider)
+2. Temporary IAM user permissions
+3. Cross-account access (i.e. to delegate privileges to users defined in other AWS accounts)
+4. Cross-service access (three types: "forward access sessions", "service roles", and "service-linked roles")
+5. EC2 instances (these also use IAM instance profiles)
+
+##### Service-linked Roles
+
+A service-linked role is a role associated with, and assigned to, an atomic AWS service. This is similar to how permissions are delegated to IAM users, but service-linked roles are assigned to (and owned by) AWS services themselves.
+
+#### Policies
+
+Policies are attached to IAM identities (i.e. users, groups, roles), defining their permissions. 
+
+Policy statements are JSON documents that include a *version* and a *statement*. The *statement* is a list of (a) effects, (b) actions, (c) resources, and (d) optional conditions.
+
+Policy types include:
+
+1. Identity-based policies
+2. Resource-based policies
+3. Permissions boundaries
+4. Organizations SCPs
+5. ACLs
+6. Session policies
+
+##### Identity-based policies
+
+Identity-based policies are either (a) managed or (b) inline policies attached to IAM identities.
+
+##### Resource-based policies
+
+Resource-based policies are associated with services (i.e. resources); for example: S3 bucket policies. They don't have to be in the same account.
+
+##### Permissions boundaries
+
+Permission boundareis are managed policies that define the *maximum* permissions that identity-based policies can grant to entities. They do not grant permissions.
+
+##### Organizations SCPs
+
+AWS Organizations "service control policies" define maximum permissions for organizational units. They do not grant permissions.
+
+##### ACLs
+
+Access control lists define which principals in cross-accounts can access ACL-bounded resources. They are like resource-based policies, but do not use JSON.
+
+##### Session policies
+
+Session policies are used in tandem with the AWS CLI/API to assume specific roles, thereby limiting the persmissions that are granted to the session.
+
+### IAM Identity Center
+
+IAM Identity Center is an SSO solution that wraps over IAM. It is a free service.
+
 ### S3
 
 S3 is an object storage service.
