@@ -1,3 +1,3 @@
 # notes
 
-Notes on random things - in mostly `.md` format.
+Markdown-based notes on random things.
