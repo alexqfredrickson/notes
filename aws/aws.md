@@ -91,34 +91,41 @@ IAM Identity Center is an SSO solution that wraps over IAM. It is a free service
 
 S3 is an object storage service.
 
-#### AWS S3 Standard
+#### Storage Tiers
+
+S3 bills you for stored objects, depending on their access rates and retrieval speed.
+
+##### AWS S3 Standard
 
 * Used for frequently-accessed data
 * Low latency; high throughput
 * 99.99% availability
 
-#### AWS S3 Intelligent-Tiering
+##### AWS S3 Intelligent-Tiering
 
 * Used when access frequency is unknown
 * Automatically moves data to most cost-effective access tiers, based on access frequency
 * 99.9% availability
 
-#### AWS S3 Express One Zone
+##### AWS S3 Express One Zone
 
 * Faster than S3 Standard, but limited to a specific availability zone
 * 99.95% availability
 
-#### AWS S3 Standard-Infrequent Access (Standard-IA)
+##### AWS S3 Standard-Infrequent Access (Standard-IA)
 
 * Used when data is accessed less frequently, but requires rapid retrival
 * Single-AZ
 * 99.5% availability
 
-#### AWS S3 Glacier
+##### AWS S3 Glacier
 
 * Lowest-cost storage option
 * Has three storage retrieval classes: Instant Retrieval (milliseconds), Flexible Retrieval (minutes-to-hours), and Deep Archive (hours).
 
+#### Replication
+
+Objects can be replicated across regions, or into the same regions.
 
 ### ELB
 
@@ -211,6 +218,10 @@ ElastiCache is a managed Redis/Memcached service.
 
 DynamoDB is a schemaless NoSQL database service. It scales without incurring downtime. 
 
+### Personal Health Dashboard
+
+Personal Health Dashboard is a global service health/status dashboard. It's used when AWS is experiencing outages and/or service degradations.
+
 ### Trusted Advisor
 
 Trusted Advisor offers recommendations related to cost optimization, performance, security, fault tolerance, service limits, and operational excellence.
@@ -228,6 +239,18 @@ Shield is a DDoS protection service.
 ### Route 53
 
 Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching.
+
+### Service Catalog
+
+Service Catalog is a portfolio of IaC templates (CloudFormation and/or Terraform), which Service Catalog administrators can "approve" for use on AWS. It's not entirely clear to me why you'd want to use this, and it was probably built out for a particular enterprise use-case.
+
+### OpsWorks
+
+OpsWorks is an AWS-managed Chef/Puppet service.
+
+### Direct Connect
+
+Direct Connect is a service that allows your network to privately connect directly to AWS via fiber-optic cables. The use-case is increased bandwidth throughput and bypassing ISPs. 1 Gbps and 10 Gbps speeds are available. 
 
 ## Concepts
 
