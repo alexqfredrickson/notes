@@ -127,6 +127,8 @@ S3 bills you for stored objects, depending on their access rates and retrieval s
 
 Objects can be replicated across regions, or into the same regions.
 
+Cross-region replication requires that you enable versioning on the bucket. It also requires an IAM policy to allow S3 to replicate objects on your behalf.
+
 ### ELB
 
 [Elastic Load Balancers](https://aws.amazon.com/elasticloadbalancing/) distribute network traffic across targets/applications in one or more AZs.
@@ -201,6 +203,10 @@ Spread placement groups spread instances across distinct underlying hardware to 
 ##### Partition Placement Groups
 
 Partition placement groups partition instances across an AZ so that they maintain unique underlying hardware, with unique networks and power sources. This can be used for larger distributed workloads (i.e. Hadoop, Cassandra, and Kafka).
+
+#### Enhanced Networking
+
+"Enhanced networking" is a special type of virtualization feature for EC2 that allows for higher bandwidth, higher packet-per-second performance, lower latency between instances, and less jitter.  It's free, but `t2` instances don't support it.
 
 ### EMR (Elastic Map Reduce)
 
