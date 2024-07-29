@@ -135,27 +135,33 @@ Cross-region replication requires that you enable versioning on the bucket. It a
 
 They consist of application, gateway, network, and classic load balancers.
 
-#### ALB
+#### ALB (Application Load Balancers)
 
 ![](alb.png)
 
 Application load balancers operate at OSI Layer 7 (HTTP/HTTPS).
 
-#### GLB
+#### GLB (Gateway Load Balancers)
 
 ![](glb.png)
 
 Gateway load balancers deploy/scale/manage things like firewalls, intrusion detection and prevention systems, and packet inspection systems. They operate at OSI Layer 3 (the network layer).
 
-#### NLB
+#### NLB (Network Load Balancers)
 
 ![](nlb.png)
 
 Network load balancers operate at OSI Layer 4 (TCP/UDP).
 
-#### CLB
+#### CLB (Classic Load Balancers)
 
 Classic load balancers operate at OSI Layer 4 and 7 (TCP/SSL/HTTP/HTTPS).
+
+#### SSL Cipher Suites, SSL Protocols, and Server Order Preference
+
+Clients and load balancers negotiate SSL protocols, and SSL cipher suites as part of the SSL specification. 
+
+Server Order Preference is optionally supported. In "Server Order Preference", the client and the load balancer both communicate to each other which ciphers and protocols they support - ranked in order of preference - and choose which ones they want to use based off of that.
 
 ### VPC
 
