@@ -202,6 +202,16 @@ Spread placement groups spread instances across distinct underlying hardware to 
 
 Partition placement groups partition instances across an AZ so that they maintain unique underlying hardware, with unique networks and power sources. This can be used for larger distributed workloads (i.e. Hadoop, Cassandra, and Kafka).
 
+#### Instance Store
+
+EC2 Instance Store Temporary Block Storage is a feature that allows an EC2 instance to attach to an ephemeral block storage volume. The use case is if you need a temporary cache/buffer for an instance. 
+
+The data is persisted on instance reboot, and deleted on instance stop/hibernate/termination.
+
+#### Elastic IP Addresses
+
+Elastic IP addresses are IP addresses that are accessible from the public internet, and that map to either EC2 instances or network interfaces.
+
 ### EMR (Elastic Map Reduce)
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
