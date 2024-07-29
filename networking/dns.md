@@ -24,6 +24,9 @@ DNS root nameservers route queries to TLD (or "top-level domain") nameservers, b
 | TXT          | Leveraged mainly for SPF/DKIM/DMARC for email valdation, but this is a generic record.          |
 | SRV | For VoIP, instant messaging, etc. Any kinds of newer protocols. |
 | NS | This is a pointer to one or more authoritative DNS servers, which contain DNS records. | 
+| MX | A record that directs email to a mail server domain. | 
+| SPF | A "sender policy framework" record, which is a type of DNS TXT record that lists servers authorized to send emails from a particular domain. This is a component of DMARC. This is also (allegedly) deprecated in favor of TXT-based DNS records in place of SPF. |
+| PTR | This is a record that is used to look up hosts by IP address; used to help populate trace routes and reverse DNS lookups. | 
 
 ## Sources
 
