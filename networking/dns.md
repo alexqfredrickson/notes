@@ -14,6 +14,8 @@ They exist to cache information for authoritative nameservers, who don't want to
 
 DNS root nameservers route queries to TLD (or "top-level domain") nameservers, based on the top-level domain extension of the website address (i.e. '.com', '.net', etc.). IANA/ICAAN manages TLD nameservers.
 
+DNS servers use both TCP and UDP - but are more closely associated with UDP protocol. TCP is used for "zone transfers" (to transfer DNS zones to other servers), large DNS requests, "DNS over TCP/TLS" (for enhanced security), and as a fall-back mechanism when UDP requests are blocked due to firewalls.  UDP is used for regular DNS queries, request caching, and small data transfers.
+
 ## DNS Records
 
 | Record   | Description |

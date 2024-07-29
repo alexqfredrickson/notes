@@ -167,6 +167,10 @@ Elastic network interfaces are virtual network cards for VPCs.
 
 ### EC2
 
+EC2 (or "elastic compute cloud") are virtual machines in AWS.
+
+* The default maximum capacity of EC2 instances per-region is 20. 
+
 #### Pricing
 
 * On-demand instances are billed by the hour depending on their instance class. You pay full price for an on-demand instance.
@@ -217,6 +221,10 @@ Elastic IP addresses are IP addresses that are accessible from the public intern
 #### Enhanced Networking
 
 "Enhanced networking" is a special type of virtualization feature for EC2 that allows for higher bandwidth, higher packet-per-second performance, lower latency between instances, and less jitter.  It's free, but `t2` instances don't support it.
+
+### RDS 
+
+RDS (or "relational database service") are databases in AWS.
 
 ### EMR (Elastic Map Reduce)
 
