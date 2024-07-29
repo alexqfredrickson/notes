@@ -127,6 +127,8 @@ S3 bills you for stored objects, depending on their access rates and retrieval s
 
 Objects can be replicated across regions, or into the same regions.
 
+Cross-region replication requires that you enable versioning on the bucket. It also requires an IAM policy to allow S3 to replicate objects on your behalf.
+
 ### ELB
 
 [Elastic Load Balancers](https://aws.amazon.com/elasticloadbalancing/) distribute network traffic across targets/applications in one or more AZs.
@@ -211,6 +213,10 @@ The data is persisted on instance reboot, and deleted on instance stop/hibernate
 #### Elastic IP Addresses
 
 Elastic IP addresses are IP addresses that are accessible from the public internet, and that map to either EC2 instances or network interfaces.
+
+#### Enhanced Networking
+
+"Enhanced networking" is a special type of virtualization feature for EC2 that allows for higher bandwidth, higher packet-per-second performance, lower latency between instances, and less jitter.  It's free, but `t2` instances don't support it.
 
 ### EMR (Elastic Map Reduce)
 
