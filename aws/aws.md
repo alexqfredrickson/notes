@@ -135,6 +135,13 @@ Cross-region replication requires that you enable versioning on the bucket. It a
 
 They consist of application, gateway, network, and classic load balancers.
 
+Load balancers accept incoming traffic from clients and route the traffic to registered targets in availability zones. They also monitor health of the registered targets. 
+
+Load balancers use "listeners", wich are processes that check for connection requests, with configurations including protocols and port numbers.
+
+Load balancers are isolated to particular availability zones. Application load balancers require a minimum of two targets in separate availability zones.
+
+
 #### ALB (Application Load Balancers)
 
 ![](alb.png)
@@ -166,6 +173,8 @@ Server Order Preference is optionally supported. In "Server Order Preference", t
 ### VPC
 
 AWS VPC is a "virtual private cloud".
+
+You can have up to five VPCs in a region by-default.
 
 #### Elastic Network Interfaces
 
@@ -334,6 +343,26 @@ Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-c
 Redshift is designed for OLAP processing (by contrast, RDS is designed for more traditional OLTP processing).
 
 Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database key, (3) a cluster key, and (4) a root key.
+
+### SNS
+
+AWS SNS (Simple Notification Service) delivers messages asynchronously from "publishers", to "topics", to "subscribers". Subscribers are services like Kinesis Data Firehose, SQS, Lambda, HTTP, email, mobile push notifications, and SMS (text).
+
+An "SNS topic" is a communication channel between a publisher and subscriber. Topics can group multiple endpoints. Once a message is published to a topic, it cannot be deleted. 
+
+SNS subscribers receive all messages published to topics, or they can filter them depending on its policy.
+
+SNS is associated with AWS KMS.
+
+### SQS
+
+AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. 
+
+SQS queues can be "standard", guaranteeing that messages are queued at-least-once, or "FIFO" (first-in, first-out) - which guarantees that messages are send exactly-once.
+
+In general, producers send messages to queues, which are consumed, triggering a "visibility timeout period". The message is then deleted from the queue during the visibility timeout period. Messages stay in a queue for up to 4 days by-default. They can be configured to stay in a queue for 60 seconds to 14 days.
+
+Once a message is sent to an SQS queue, it can be received and deleted. Messages are not automatically deleted after retrieval - you have to be explicit.
 
 ## General Concepts
 
