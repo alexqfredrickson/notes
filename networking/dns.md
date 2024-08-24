@@ -29,6 +29,7 @@ DNS servers use both TCP and UDP - but are more closely associated with UDP prot
 | MX | A record that directs email to a mail server domain. | 
 | SPF | A "sender policy framework" record, which is a type of DNS TXT record that lists servers authorized to send emails from a particular domain. This is a component of DMARC. This is also (allegedly) deprecated in favor of TXT-based DNS records in place of SPF. |
 | PTR | This is a record that is used to look up hosts by IP address; used to help populate trace routes and reverse DNS lookups. | 
+| SOA | This stand for *start of authority*. It represents (perhaps) the email address of the administrator, or when the domain was last updates, or how long the server should wait between refreshes. All DNS zones require an SOA record - this is an IETF standard. That goes for AWS Route 53 records as well. |
 
 ## Sources
 
