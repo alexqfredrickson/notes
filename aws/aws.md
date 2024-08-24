@@ -171,6 +171,10 @@ AWS VPC is a "virtual private cloud".
 
 Elastic network interfaces are virtual network cards for VPCs.
 
+#### Security groups
+
+The default security group for a VPC allows all outbound traffic, restricts all inbound traffic, and allows instances within the security group to communicate with each other.
+
 ### EC2
 
 EC2 (or "elastic compute cloud") are virtual machines in AWS.
@@ -244,6 +248,8 @@ Athena does SQL queries against S3 buckets.
 
 ElastiCache is a managed Redis/Memcached service.
 
+Redis-based ElastiCache instances only contain a single node.
+
 ### DynamoDB
 
 DynamoDB is a schemaless NoSQL database service. It scales without incurring downtime. 
@@ -270,6 +276,19 @@ Shield is a DDoS protection service.
 
 Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching.
 
+#### Routing Policies
+
+When you create Route 53 records, you also select a "routing policy", which determines how Route 53 responds to DNS queries. The options include:
+
+  * *Simple routing*, which are the default
+  * *Failover routing*, which routes to different resources depending on instance health
+  * *Geolocation routing*, which routes traffic depending on the geographic locale of the originating request
+  * *Geoproximity routing*, which routes traffic based on the geographic locale of requested resources
+  * *Latency routing*, when resources are located in multiple regions, and you want to route requests to regions with the best latency
+  * *IP-based routing*, which routes based on IPs of users
+  * *Mutlivalue answer routing*, when you want Route 53 to respond randomly to DNS requests
+  * *Weighted routing*, when you want to probabilistically weight responses
+
 ### Service Catalog
 
 Service Catalog is a portfolio of IaC templates (CloudFormation and/or Terraform), which Service Catalog administrators can "approve" for use on AWS. It's not entirely clear to me why you'd want to use this, and it was probably built out for a particular enterprise use-case.
@@ -292,11 +311,11 @@ AWS CloudFormation is AWS' infrastructure-as-code service.
 
 A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first.
 
-## Polly
+### Polly
 
 Amazon Polly is a text-to-speech service. It's a bit creepy.
 
-## Site-to-Site VPN
+### Site-to-Site VPN
 
 A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. They conceptually include:
 
@@ -308,7 +327,13 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
   * *Virtual private gateways*, which represent the site-to-site VPN endpoint connects to an AWS VPC
   * *Transit gateways*, which connect multiple VPCs and on-premise networks, and which also represent VPN endpoints on the AWS site of the VPN connection
 
-## Concepts
+### Redshift
+
+Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
+
+Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database key, (3) a cluster key, and (4) a root key.
+
+## General Concepts
 
 ### IaaS vs. PaaS vs. SaaS
 
