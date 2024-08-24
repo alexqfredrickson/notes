@@ -282,6 +282,16 @@ OpsWorks is an AWS-managed Chef/Puppet service.
 
 Direct Connect is a service that allows your network to privately connect directly to AWS via fiber-optic cables. The use-case is increased bandwidth throughput and bypassing ISPs. 1 Gbps and 10 Gbps speeds are available. 
 
+### KMS
+
+AWS KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
+
+### CloudFormation
+
+AWS CloudFormation is AWS' infrastructure-as-code service.  
+
+A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first. 
+
 ## Concepts
 
 ### IaaS vs. PaaS vs. SaaS
