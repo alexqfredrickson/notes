@@ -280,7 +280,7 @@ OpsWorks is an AWS-managed Chef/Puppet service.
 
 ### Direct Connect
 
-Direct Connect is a service that allows your network to privately connect directly to AWS via fiber-optic cables. The use-case is increased bandwidth throughput and bypassing ISPs. 1 Gbps and 10 Gbps speeds are available. 
+Direct Connect is a service that allows your network to privately connect directly to AWS via fiber-optic cables. The use-case is increased bandwidth throughput and bypassing ISPs. 1 Gbps and 10 Gbps speeds are available.
 
 ### KMS
 
@@ -290,7 +290,23 @@ AWS KMS (Key Management Service) creates cryptographic keys that can be used nat
 
 AWS CloudFormation is AWS' infrastructure-as-code service.  
 
-A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first. 
+A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first.
+
+## Polly
+
+Amazon Polly is a text-to-speech service. It's a bit creepy.
+
+## Site-to-Site VPN
+
+A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. They conceptually include:
+
+  * *VPN connections*, which connect on-premise equipment with VPCs
+  * *VPN tunnels*, through which encrypted data flows between customer networks and AWS
+  * *Customer gateways*, which provide information about customer gateway devices
+  * *Customer gateway devices*, which are physical devices that sit on the customer side of the VPN connection
+  * *Target gateways*, which represent the on-premise VPN gateway on the AWS side of the VPN connection
+  * *Virtual private gateways*, which represent the site-to-site VPN endpoint connects to an AWS VPC
+  * *Transit gateways*, which connect multiple VPCs and on-premise networks, and which also represent VPN endpoints on the AWS site of the VPN connection
 
 ## Concepts
 
