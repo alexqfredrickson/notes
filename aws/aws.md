@@ -331,6 +331,8 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
 
 Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
 
+Redshift is designed for OLAP processing (by contrast, RDS is designed for more traditional OLTP processing).
+
 Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database key, (3) a cluster key, and (4) a root key.
 
 ## General Concepts
