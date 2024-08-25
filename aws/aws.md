@@ -180,15 +180,53 @@ You can have up to five VPCs in a region by-default.
 
 Elastic network interfaces are virtual network cards for VPCs.
 
+If multiple network interfaces are attached to an instance (in different subnets or different VPCs), the instance is said to be "dual-homed".
+
 #### Security groups
 
 The default security group for a VPC allows all outbound traffic, restricts all inbound traffic, and allows instances within the security group to communicate with each other.
+
+#### VPC Endpoints
+
+A VPC endpoint is used to privately connect to specific AWS services. This is integrated with AWS PrivateLink. The traffic in these cases never leaves the AWS network.
+
+There are two types of VPC endpoints: *interface endpoints* and *gateway endpoints*.
+
+##### Interface endpoints
+
+Interface endpoints are related to AWS PrivateLink. It is a collection of elastic network interfaces with a private IP address that serves as an entry point for traffic destined to a supported service.
+
+##### Gateway endpoints
+
+Gateway endpoints target specific IP routes in an Amazon VPC route table. These are used by DynamoDB and S3. Gateway endpoints are unrelated to AWS PrivateLink.
+
+##### Network ACLs
+
+A network access control list is an optional feature that allows you to specify firewall rules for subnets. This is similar to security groups, but more granular. There is no charge for their usage.
+
+NACLs are stateless, meaning information about previously sent/received traffic is not saved. Security groups are stateful. For instance: an EC2 instance with inbound traffic allowed is allowed to communicate outbound responses with the message sender.
+
+##### Subnets
+
+Subnets (sub-networks) are ranges of IP addresses allocated within a VPC.
+
+A subnet is **private** if it is not attached to an internet gateway. They need NAT devices to access the internet.
+
+A subnet is **public** if it is connected to an internet gateway.
+
+Subnets can communicate with each other by-default in an AWS VPC with default settings.
 
 ### EC2
 
 EC2 (or "elastic compute cloud") are virtual machines in AWS.
 
-* The default maximum capacity of EC2 instances per-region is 20. 
+The default maximum capacity of EC2 instances per-region is 20. 
+
+#### EBS
+
+EBS, or "elastic block store", are block-storage resources that are used with EC2 instances. They can be volumes or snapshots. 
+
+Once created, you cannot modify the resting encryption status.
 
 #### Pricing
 
@@ -207,31 +245,21 @@ Userdata only gets invoked at launch time. On CFN update, it does not get invoke
 
 #### Placement Groups
 
-EC2 placement groups can be used when EC2 instances are highly interdependent. They come in three flavors:
+EC2 placement groups can be used when EC2 instances are highly interdependent. They are *free* and *optional*.  They come in three flavors:
 
-1. Cluster placement groups 
-2. Spread placement groups
-3. Partition placement groups
+1. *Cluster placement groups*, which pack instances close together in the same availability zone: lowering network latency. This can be used for HPC applications.
+2. *Spread placement groups*, which spread instances across distinct underlying hardware to reduce correlated failures. 
+3. *Partition placement groups*, which partition instances across an availability zone so that they maintain unique underlying hardware, with unique networks and power sources. This can be used for larger distributed workloads (i.e. Hadoop, Cassandra, and Kafka).
 
-They are *free* and *optional*. 
-
-##### Cluster Placement Groups
-
-Cluster placement groups packs instances close together in the same AZ. This lowers network latency. This can be used for HPC applications.
-
-##### Spread Placement Groups
-
-Spread placement groups spread instances across distinct underlying hardware to reduce correlated failures.
-
-##### Partition Placement Groups
-
-Partition placement groups partition instances across an AZ so that they maintain unique underlying hardware, with unique networks and power sources. This can be used for larger distributed workloads (i.e. Hadoop, Cassandra, and Kafka).
+Note that dedicated instances are segregated in such a way that they do not share hosts with any other AWS customer.
 
 #### Instance Store
 
 EC2 Instance Store Temporary Block Storage is a feature that allows an EC2 instance to attach to an ephemeral block storage volume. The use case is if you need a temporary cache/buffer for an instance. 
 
 The data is persisted on instance reboot, and deleted on instance stop/hibernate/termination.
+
+Instance stores are *free*.
 
 #### Elastic IP Addresses
 
@@ -244,6 +272,18 @@ Elastic IP addresses are IP addresses that are accessible from the public intern
 ### RDS 
 
 RDS (or "relational database service") are databases in AWS.
+
+#### Multi-AZ deployments
+
+If "multi-AZ" is configured for an instance, either one or two "standby" database instances are created.
+
+If *one* instance is created, it provides failover support but it does not serve read traffic. This is called a "multi-AZ instance". A multi-AZ instance has one write instance and one read replica.
+
+If *two* instances are created, it provides failover support, **and** it serves read traffic. This is called a "multi-AZ cluster". A multi-AZ cluster has one write instance and two read replicas.  
+
+In the event of failover, the traffic is routed to a read replica automatically.
+
+Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
 ### EMR (Elastic Map Reduce)
 
@@ -261,7 +301,20 @@ Redis-based ElastiCache instances only contain a single node.
 
 ### DynamoDB
 
-DynamoDB is a schemaless NoSQL database service. It scales without incurring downtime. 
+DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it.
+
+DynamoDB does not support JOIN operators, and prefers denormalized schemas.
+
+#### API Operations
+
+Some basic API operations include:
+
+| Operation      | Description                                         |
+| -----------    | --------------------------------------------------- |
+| `GetItem`      | Retrieves a single table item.                      |
+| `BatchGetItem` | Retrieves up to 100 items.                          |
+| `Query`        | Retrieves all items with a specified partion key.   |
+| `Scan`         | Retrieve all items in the specified table or index. |
 
 ### Personal Health Dashboard
 
@@ -348,7 +401,7 @@ Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database 
 
 AWS SNS (Simple Notification Service) delivers messages asynchronously from "publishers", to "topics", to "subscribers". Subscribers are services like Kinesis Data Firehose, SQS, Lambda, HTTP, email, mobile push notifications, and SMS (text).
 
-An "SNS topic" is a communication channel between a publisher and subscriber. Topics can group multiple endpoints. Once a message is published to a topic, it cannot be deleted. 
+An "SNS topic" is a communication channel between a publisher and subscriber. Topics can group multiple endpoints. Once a message is published to a topic, it cannot be deleted. SNS topic names are available for re-use about 60 seconds after they have been deleted.
 
 SNS subscribers receive all messages published to topics, or they can filter them depending on its policy.
 
@@ -360,11 +413,39 @@ AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate a
 
 SQS queues can be "standard", guaranteeing that messages are queued at-least-once, or "FIFO" (first-in, first-out) - which guarantees that messages are send exactly-once.
 
-In general, producers send messages to queues, which are consumed, triggering a "visibility timeout period". The message is then deleted from the queue during the visibility timeout period. Messages stay in a queue for up to 4 days by-default. They can be configured to stay in a queue for 60 seconds to 14 days.
+In general, producers send messages to queues, which are consumed, triggering a "visibility timeout period". The message is then deleted from the queue during the visibility timeout period. Messages stay in a queue for up to 4 days by-default - this is known as the default message retention period. They can be configured to stay in a queue for 60 seconds to 14 days.
 
 Once a message is sent to an SQS queue, it can be received and deleted. Messages are not automatically deleted after retrieval - you have to be explicit.
 
+#### Polling
+
+SQS queues can be polled using (1) short and (2) long polling techniques. They are short-polled by-default.
+
+In a *short-polling* schema, responses are returned immediately, even if the SQS queue is empty.
+
+In a *long-polling* schema, responses are returned as soon as they become available. This can reduce SQS costs because empty receives still cost money. The maximum long polling wait time is 20 seconds. 
+
+#### Dead-letter queues
+
+A dead-letter queue is a type of queue that other queues can target and store messages that have not been processed successfully in.  It is considered a best-practice to keep the queue and its associated dead-letter queue in the same AWS account and region.  Messages in a dead-letter queue can be examined, analyzed, etc.
+
+### SWF
+
+AWS Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
+
+  * *Domains*, which workflows run in. A domain can contain multiple workflows that can talk to one another.
+  * *Workflows*, which are a collection of activities that do a high-level thing (e.g. "receive a customer order and take whatever actions are necessary to fulfill it"), and logic that coordinates the activities. Workflows in different domains can't talk to one another.
+  * *Activity workers*, which perform activity tasks. 
+  * *Activity tasks*, which represent logical units of work.
+  * *Deciders*, which schedule activity tasks, and provide them to activity workers.
+
 ## General Concepts
+
+### Regions and Availability Zones
+
+Regions are broad, geographically isolated, unconnected areas containing availability zones. Resources are generally not replicated across regions.
+
+Availability zones are connected with low latency, and consist of one (or more) data centers, each with redundant power, networking, and connectivity, in separate facilities. A single AZ may encompass multiple data centers. 
 
 ### IaaS vs. PaaS vs. SaaS
 

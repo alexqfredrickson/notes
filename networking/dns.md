@@ -16,6 +16,8 @@ DNS root nameservers route queries to TLD (or "top-level domain") nameservers, b
 
 DNS servers use both TCP and UDP - but are more closely associated with UDP protocol. TCP is used for "zone transfers" (to transfer DNS zones to other servers), large DNS requests, "DNS over TCP/TLS" (for enhanced security), and as a fall-back mechanism when UDP requests are blocked due to firewalls.  UDP is used for regular DNS queries, request caching, and small data transfers.
 
+DNS protocol leverages port 53.
+
 ## DNS Records
 
 | Record   | Description |
