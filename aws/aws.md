@@ -8,6 +8,8 @@ IAM (identity and access management) delegates AWS permissions to *users*, *grou
 
 IAM allows you to generate and download reports that list users, and the status of their credentials (such as passwords, access keys, and MFA devices).
 
+It is a global service, and is not region/AZ-specific.
+
 #### Principals
 
 IAM principals include users, roles, and the root user.
@@ -91,6 +93,8 @@ IAM Identity Center is an SSO solution that wraps over IAM. It is a free service
 
 S3 is an object storage service.
 
+Prior to 2020, S3 was "*eventually consistent*" - meaning a `PUT` call would not be immediately visible to `GET` or `LIST` requests. It is now [*strongly consistent*](https://aws.amazon.com/blogs/aws/amazon-s3-update-strong-read-after-write-consistency/).
+
 #### Storage Tiers
 
 S3 bills you for stored objects, depending on their access rates and retrieval speed.
@@ -122,6 +126,8 @@ S3 bills you for stored objects, depending on their access rates and retrieval s
 
 * Lowest-cost storage option
 * Has three storage retrieval classes: Instant Retrieval (milliseconds), Flexible Retrieval (minutes-to-hours), and Deep Archive (hours).
+
+Glacier may have a "vault lock policy" attached to it, which is an immutable policy.
 
 #### Replication
 
@@ -216,11 +222,37 @@ A subnet is **public** if it is connected to an internet gateway.
 
 Subnets can communicate with each other by-default in an AWS VPC with default settings.
 
+#### Routes
+
+Routes are rules (kind of like security groups) that define how subnet/gateway traffic is directed. 
+
+#### NAT Devices
+
+Network Address Translation (NAT) devices allow resources in private subnets to communicate with the internet (or other VPCs, or on-premise networks). They cannot receive unsolicited requests.
+
+A NAT *gateway* can be public or private. If it is public, it allows for outbound internet traffic.  If it is private, it allows for outbound intra-VPC/on-prem traffic. NAT gateways have to be situated in subnets that are distinct from the instances that use them, because NAT gateways route to internet gateways, and instances route to NAT gateways - the operative term being *route*, which defines relationships between subnets/gateways.
+
+A NAT *instance* sits in a public subnet, and allows instances in private subnets to perform outbound internet traffic, by way of the NAT instance, to an Internet Gateway that allows for public internet access. These are end-of-life in favor of NAT gateways.
+
+You seat NAT instances inside VPCs, configure a security group for it, create a NAT AMI, and then create a NAT instance. The NAT instance must have source/destination checks disabled on itself. The NAT instance also its inside of a private subnet, which in turn contains a route table, which in turn contains routes that need to be updated such that NAT instance may communicate with outside resources (such as the Internet).
+
 ### EC2
 
 EC2 (or "elastic compute cloud") are virtual machines in AWS.
 
 The default maximum capacity of EC2 instances per-region is 20. 
+
+#### Auto Scaling
+
+An Auto Scaling Group (ASG) is a collection of EC2 instances that are grouped together for automatic scaling.  You can implement health-check based replacements of instances.
+
+The "desired capacity" determines the amount of instances you want to host by-default. Desired capacity is distributed evenly among availability zones.
+
+Scaling policies modulate instance count between the "minimum" and "maximum" capacity.  The ASG can (1) maintain current levels, (2) be manually scaled up and down, (3) be scheduled to scale up and down, or (3) dynamically change capacity based on traffic changes.
+
+ASGs support both on-demand and spot instances.
+
+ASGs leverage *launch templates*, whichspecify instance configuration, including AMIs, instance types, key pairs, security groups, etc. Launch templates are versioned.
 
 #### EBS
 
@@ -297,13 +329,15 @@ Athena does SQL queries against S3 buckets.
 
 ElastiCache is a managed Redis/Memcached service.
 
-Redis-based ElastiCache instances only contain a single node.
+Redis-based ElastiCache instances only contain a single node. Memcached-based ElastiCache instances support up to 20 nodes by-default.
 
 ### DynamoDB
 
 DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it.
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
+
+One use-case for DynamoDB is for session storage.
 
 #### API Operations
 
@@ -389,6 +423,10 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
   * *Virtual private gateways*, which represent the site-to-site VPN endpoint connects to an AWS VPC
   * *Transit gateways*, which connect multiple VPCs and on-premise networks, and which also represent VPN endpoints on the AWS site of the VPN connection
 
+#### VPN CloudHub
+
+AWS VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
+
 ### Redshift
 
 Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
@@ -439,11 +477,17 @@ AWS Simple Workflow Service is a way to create background jobs that have paralle
   * *Activity tasks*, which represent logical units of work.
   * *Deciders*, which schedule activity tasks, and provide them to activity workers.
 
+### VM Import/Export
+
+AWS VM Import/Export lets customers import virtual machine images from local virtual environments to EC2 instances, and export them back. 
+
+It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
+
 ## General Concepts
 
 ### Regions and Availability Zones
 
-Regions are broad, geographically isolated, unconnected areas containing availability zones. Resources are generally not replicated across regions.
+Regions are broad, geographically isolated, unconnected areas containing availability zones. Resources are generally not replicated across regions unless specifically instructed.
 
 Availability zones are connected with low latency, and consist of one (or more) data centers, each with redundant power, networking, and connectivity, in separate facilities. A single AZ may encompass multiple data centers. 
 
