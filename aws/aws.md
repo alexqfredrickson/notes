@@ -431,6 +431,12 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
 
 AWS VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
 
+### Config
+
+AWS Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send "configuration stream notifications", and then Config can record configuration changes.
+
+Config uses a "delivery channel" to send notifications and update configuration states. 
+
 ### Redshift
 
 Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
@@ -451,15 +457,18 @@ SNS is associated with AWS KMS.
 
 ### SQS
 
-AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. SQS queues can be either "standard" or "FIFO". 
+AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. 
 
-A standard queue guarantees that messages are queued at-least-once, but messages may be delivered more than once. Standard queues can hold up to 120k messages at once. 
+SQS queues can be either "standard" or "FIFO":
 
-A FIFO queue (first-in, first-out) guarantees that messages are sent exactly-once. FIFO queues can hold up to 20k messages at once.
+  * A *standard* queue guarantees that messages are queued at-least-once, but messages may be delivered more than once. Standard queues can hold up to 120k messages at once. 
+  * A *FIFO* queue (first-in, first-out) guarantees that messages are sent exactly-once. FIFO queues can hold up to 20k messages at once.
 
-In general, producers send messages to queues, which are consumed, triggering a "visibility timeout period". The message is then deleted from the queue during the visibility timeout period. Messages stay in a queue for up to 4 days by-default - this is known as the default message retention period. They can be configured to stay in a queue for 60 seconds to 14 days.
+In general, producers send messages to queues. Once a message is sent to an SQS queue, it can be received and deleted. Messages are not automatically deleted after retrieval - you have to be explicit.
 
-Once a message is sent to an SQS queue, it can be received and deleted. Messages are not automatically deleted after retrieval - you have to be explicit.
+Messages are consumed, triggering a "visibility timeout period". The message is invisible to other consumers during the visibility timeout. Following the visibility timeout, the message is deleted. 
+
+Unconsumed messages stay in the queue for up to 4 days by-default - this is known as the default message retention period. They can be configured to stay in a queue for 60 seconds to 14 days.
 
 #### Polling
 
@@ -498,6 +507,12 @@ It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
 AWS Glue is a serverless data integration service that allows end-users to analyze, and perform ETL on data from multiple sources. It is used for ML, analytics, and application development.
 
 Glue has over 70 possible data sources. It loads data into data lakes. The data is then searched/queried using Athena, EMR, and/or Redshift Spectrum.
+
+### Transfer Family
+
+AWS Transfer Family transfers files in and out of S3 and EFS. 
+
+It uses protocols such as SFTP (Secure Shell File Transfer Protocol), AS2 (Application Statement 2), FTPS (File Transfer Protocol Secure), and FTP (File Transfer Protocol). Note that the hilariously named SFTP differs from FTPS in that SFTP leverages SSH, whereas FPTS leverages TLS/SSL.
 
 ## General Concepts
 
