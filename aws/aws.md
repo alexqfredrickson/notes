@@ -105,6 +105,8 @@ S3 bills you for stored objects, depending on their access rates and retrieval s
 * Low latency; high throughput
 * 99.99% availability
 
+S3 Standard replicates data across several availability zones in a region.
+
 ##### AWS S3 Intelligent-Tiering
 
 * Used when access frequency is unknown
@@ -184,7 +186,7 @@ You can have up to five VPCs in a region by-default.
 
 #### Elastic Network Interfaces
 
-Elastic network interfaces are virtual network cards for VPCs.
+Elastic network interfaces are virtual network cards for VPCs. These are attached to EC2 instances launched in a particular availability zone. Each has a private IP address associated with the subnet that it sits in. They cannot be moved across subnets. They can be attached or unattached from EC2 instances freely.
 
 If multiple network interfaces are attached to an instance (in different subnets or different VPCs), the instance is said to be "dual-homed".
 
@@ -241,6 +243,8 @@ You seat NAT instances inside VPCs, configure a security group for it, create a 
 EC2 (or "elastic compute cloud") are virtual machines in AWS.
 
 The default maximum capacity of EC2 instances per-region is 20. 
+
+Private IP addresses for EC2 instances fall between 10.0.0.0 and 10.255.255.255, 172.16.0.0 and 172.31.255.255, and 192.168.0.0 and 192.168.255.255.
 
 #### Auto Scaling
 
@@ -447,9 +451,11 @@ SNS is associated with AWS KMS.
 
 ### SQS
 
-AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. 
+AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. SQS queues can be either "standard" or "FIFO". 
 
-SQS queues can be "standard", guaranteeing that messages are queued at-least-once, or "FIFO" (first-in, first-out) - which guarantees that messages are send exactly-once.
+A standard queue guarantees that messages are queued at-least-once, but messages may be delivered more than once. Standard queues can hold up to 120k messages at once. 
+
+A FIFO queue (first-in, first-out) guarantees that messages are sent exactly-once. FIFO queues can hold up to 20k messages at once.
 
 In general, producers send messages to queues, which are consumed, triggering a "visibility timeout period". The message is then deleted from the queue during the visibility timeout period. Messages stay in a queue for up to 4 days by-default - this is known as the default message retention period. They can be configured to stay in a queue for 60 seconds to 14 days.
 
@@ -477,11 +483,21 @@ AWS Simple Workflow Service is a way to create background jobs that have paralle
   * *Activity tasks*, which represent logical units of work.
   * *Deciders*, which schedule activity tasks, and provide them to activity workers.
 
+### LightSail
+
+AWS LightSail is a service like Elastic BeanStalk that automatically provisions instances, containers, managed databases, CDN distributions, load balancers, SSD-storage, static IP addresses, DNS management, and snapshots.
+
 ### VM Import/Export
 
 AWS VM Import/Export lets customers import virtual machine images from local virtual environments to EC2 instances, and export them back. 
 
 It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
+
+### Glue
+
+AWS Glue is a serverless data integration service that allows end-users to analyze, and perform ETL on data from multiple sources. It is used for ML, analytics, and application development.
+
+Glue has over 70 possible data sources. It loads data into data lakes. The data is then searched/queried using Athena, EMR, and/or Redshift Spectrum.
 
 ## General Concepts
 
