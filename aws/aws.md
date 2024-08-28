@@ -337,11 +337,18 @@ Redis-based ElastiCache instances only contain a single node. Memcached-based El
 
 ### DynamoDB
 
-DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it.
+DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it. A potential use-case for DynamoDB is for session storage. DynamoDB stores data in *partitions*, which are replicated across AZs within a region.
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
-One use-case for DynamoDB is for session storage.
+A *parition key* is mandatory, and partitions data. Data is grouped according to the partition key. A *sort key* is optional. It determines the order of data being stored along the lines of the partition key.
+
+Primary keys in DynamoDB can be *simple* (using only a partition key) or *composite* (a tuple leveraging a partition key and sort key). The primary key should be chosen to maximize uniformity.
+
+Primary indices are (probably) determined by the primary key. You can define secondary indices as well - either *global* or *local* - which are specific to a table.
+
+  * A *global secondary index* is an index with a composite key (a partition key coupled with a sort key). It is called a "global" index because queries against the index span all partitions.
+  * A *local secondary index* is an index with the same partition key as its base table, but which uses a different sort key.
 
 #### API Operations
 
