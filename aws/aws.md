@@ -339,11 +339,11 @@ Redis-based ElastiCache instances only contain a single node. Memcached-based El
 
 DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it. A potential use-case for DynamoDB is for session storage. DynamoDB stores data in *partitions*, which are replicated across AZs within a region.
 
+In general, DynamoDB is optimized to query against a particular primary key. Primary keys in DynamoDB can be *simple* (using only a partition key) or *composite* (a tuple leveraging a partition key and sort key). The primary key should be chosen to maximize uniformity.
+
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
 A *parition key* is mandatory, and partitions data. Data is grouped according to the partition key. A *sort key* is optional. It determines the order of data being stored along the lines of the partition key.
-
-Primary keys in DynamoDB can be *simple* (using only a partition key) or *composite* (a tuple leveraging a partition key and sort key). The primary key should be chosen to maximize uniformity.
 
 Primary indices are (probably) determined by the primary key. You can define secondary indices as well - either *global* or *local* - which are specific to a table.
 
@@ -520,6 +520,26 @@ Glue has over 70 possible data sources. It loads data into data lakes. The data 
 AWS Transfer Family transfers files in and out of S3 and EFS. 
 
 It uses protocols such as SFTP (Secure Shell File Transfer Protocol), AS2 (Application Statement 2), FTPS (File Transfer Protocol Secure), and FTP (File Transfer Protocol). Note that the hilariously named SFTP differs from FTPS in that SFTP leverages SSH, whereas FPTS leverages TLS/SSL.
+
+### Storage Gateway
+
+AWS Storage Gateway comprises four separate services: S3 File Gateway, FSx File Gateway, Tape Gateway, and Volume Gateway.
+
+S3 File Gateway is a file interface into S3, that allows retrieval of S3 objects via NFS.
+
+### CloudTrail
+
+AWS CloudTrail records actions taken by users, roles, or AWS services. It provides:
+
+  1. An *event history*, a searchable and immutable record of actions taken in the past 90 days
+  2. A *CloudTrail Lake*, which is a managed data lake
+  3. *Trails*, which represent records of AWS activities, are stored in S3, and can be delivered to CloudWatch logs or EventBridge 
+
+CloudTrail *events* are comprised of:
+
+  1. *Management* events, which is related to actions performed **on** resources, and may consist of security configurations, new device registrations, rule configurations, logging, etc.
+  2. *Data* events, which provide information about the operations performed **within** resources, and may consist of S3 API activities, Lambda executions, CloudTrail `PutAuditEvents`, SNS publish operations, etc.
+  3. *Insight* events, which capture unusual API calls or error rates
 
 ## General Concepts
 
