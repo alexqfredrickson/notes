@@ -258,6 +258,16 @@ ASGs support both on-demand and spot instances.
 
 ASGs leverage *launch templates*, whichspecify instance configuration, including AMIs, instance types, key pairs, security groups, etc. Launch templates are versioned.
 
+#### Spot Instances
+
+A *spot instance* uses spare data center EC2 capacity, and costs less than a typical on-demand instance. 
+
+  * *Spot prices* are set by AWS.
+  * *Spot capacity pools* are sets of spot instances with a given instance type, in a specific availabilty zone.
+  * *Spot instance requests* are requests to AWS to fulfill EC2 demand when capacity is available. It can be a one-time thing, or continual (persistent). Persistent spot instance requests are filed automatically on-instance-interruption.
+  * During a *spot instance interruption*, AWS terminates/stops/hibernates the given spot instance, giving you a two minute warning.
+  * AWS lets you know when spot instances are at high risk of interruption via *EC2 instance rebalance recommendations*.
+
 #### EBS
 
 EBS, or "elastic block store", are block-storage resources that are used with EC2 instances. They can be volumes or snapshots. 
