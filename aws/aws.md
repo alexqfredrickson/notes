@@ -551,6 +551,26 @@ CloudTrail *events* are comprised of:
   2. *Data* events, which provide information about the operations performed **within** resources, and may consist of S3 API activities, Lambda executions, CloudTrail `PutAuditEvents`, SNS publish operations, etc.
   3. *Insight* events, which capture unusual API calls or error rates
 
+## Kinesis Video Streams
+
+AWS Kinesis Video Streams is a live-video-streaming-related service, allowing end-users to:
+
+  * Stream live video from physical devices to AWS
+  * Perform real-time video processing
+  * Perform batch analytics on videos 
+
+## Kinesis Data Streams
+
+AWS Kinesis Data Streams collects, and processes, streams of data, in real-time.
+
+Streaming data is defined as being:
+
+  * *Chronologically-significant*, or time-series-based
+  * *Continuously flowing*, with no beginning or end
+  * *Unique*, meaning retransmission is limited
+  * *Non-homogeneous*, meaning belonging to multiple different kinds of specifications
+  * *Imperfect*, meaning data may have gaps or missing elements
+
 ## General Concepts
 
 ### Regions and Availability Zones
