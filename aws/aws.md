@@ -393,6 +393,8 @@ Shield is a DDoS protection service.
 
 Route 53 features include domain registration, DNS, traffic flow, health checking, and failover.  Route 53 does not support DHCP, routing or caching.
 
+Domains can be registered from Route 53, and Route 53 can also manage external domains. 
+
 #### Routing Policies
 
 When you create Route 53 records, you also select a "routing policy", which determines how Route 53 responds to DNS queries. The options include:
@@ -454,6 +456,8 @@ AWS Config is a view of how AWS resources are configured, how they relate, and t
 
 Config uses a "delivery channel" to send notifications and update configuration states. 
 
+An AWS Config "configuration item" represents attributes of a supported AWS resource, at some point-in-time. It includes metadata, attributes, relationships, current configuration, and related events. A configuration item is created whenever it detects a change to a recorded resource. Configuration items can't be manually deleted, but Config can delete them after a minimum of 30 days.
+
 ### Redshift
 
 Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
@@ -491,7 +495,7 @@ Unconsumed messages stay in the queue for up to 4 days by-default - this is know
 
 SQS queues can be polled using (1) short and (2) long polling techniques. They are short-polled by-default.
 
-In a *short-polling* schema, responses are returned immediately, even if the SQS queue is empty.
+In a *short-polling* schema, responses are returned immediately, even if the SQS queue is empty. Short polling may fail to deliver messages.
 
 In a *long-polling* schema, responses are returned as soon as they become available. This can reduce SQS costs because empty receives still cost money. The maximum long polling wait time is 20 seconds. 
 
@@ -551,7 +555,7 @@ CloudTrail *events* are comprised of:
   2. *Data* events, which provide information about the operations performed **within** resources, and may consist of S3 API activities, Lambda executions, CloudTrail `PutAuditEvents`, SNS publish operations, etc.
   3. *Insight* events, which capture unusual API calls or error rates
 
-## Kinesis Video Streams
+### Kinesis Video Streams
 
 AWS Kinesis Video Streams is a live-video-streaming-related service, allowing end-users to:
 
@@ -559,7 +563,7 @@ AWS Kinesis Video Streams is a live-video-streaming-related service, allowing en
   * Perform real-time video processing
   * Perform batch analytics on videos 
 
-## Kinesis Data Streams
+### Kinesis Data Streams
 
 AWS Kinesis Data Streams collects, and processes, streams of data, in real-time.
 
@@ -570,6 +574,22 @@ Streaming data is defined as being:
   * *Unique*, meaning retransmission is limited
   * *Non-homogeneous*, meaning belonging to multiple different kinds of specifications
   * *Imperfect*, meaning data may have gaps or missing elements
+
+### CloudFront
+
+AWS CloudFront is a content distribution network that caches static/dynamic site content to serve to users. The data centers that cache requests are called "edge locations".
+
+When a user requests content, CloudFront deliverrs it immediately from the edge location with the lowest latency - or it retrives it from an origin you define (like S3, MediaPackage, or HTTP servers), and then caches it to the edge location.
+
+It is well-suited for static website content (like images, CSS files, JS files, etc.), or live-streaming video.
+
+### Billing and Cost Management
+
+AWS Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
+
+You get two free budgets per-account.
+
+AWS Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
 
 ## General Concepts
 
