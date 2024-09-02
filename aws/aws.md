@@ -137,6 +137,10 @@ Objects can be replicated across regions, or into the same regions.
 
 Cross-region replication requires that you enable versioning on the bucket. It also requires an IAM policy to allow S3 to replicate objects on your behalf.
 
+#### Server Access Logging
+
+You can enable logging to derive the following bucket specific information: the bucket owner, the bucket, the action time, the IP address (or requester and request ID), the type of operation, the S3 bucket key, HTTP response status, etc.
+
 ### ELB
 
 [Elastic Load Balancers](https://aws.amazon.com/elasticloadbalancing/) distribute network traffic across targets/applications in one or more AZs.
@@ -183,6 +187,12 @@ Server Order Preference is optionally supported. In "Server Order Preference", t
 AWS VPC is a "virtual private cloud".
 
 You can have up to five VPCs in a region by-default.
+
+#### Internet Gateways
+
+An internet gateway is a horizontally scaled VPC component that allows resources in public subnets of the VPC to communicate back-and-forth with the internet over IPv4 and IPv6, provided they have a public IP address.
+
+Internet Gateways are targeted by VPC route tables to route traffic out to the internet. Internet gateways perform network address translation (NAT).
 
 #### Elastic Network Interfaces
 
@@ -590,6 +600,18 @@ AWS Billing and Cost Management is a suite of features that stes up billing, ret
 You get two free budgets per-account.
 
 AWS Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
+
+### Cognito
+
+AWS Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
+
+#### User Pools
+
+When you want to provide authentication or authorization to an app or API, you create a Cognito User Pool. It functions as a user directory. It can also act as an OIDC identity provider or service provider. It is SAML 2.0-compliant.
+
+#### Identity Pools
+
+When you want to provide authenticated or anonymous users to AWS resources, use an identity pool. It issues AWS credentials for your application to serve resources to end-users. You authenticate with a user pool or a SAML 2.0-compliant service. It can issue credentials for guest users. It can be role-based or attribute-based. They do not have to be integrated with a user pool.
 
 ## General Concepts
 
