@@ -268,6 +268,8 @@ ASGs support both on-demand and spot instances.
 
 ASGs leverage *launch templates*, whichspecify instance configuration, including AMIs, instance types, key pairs, security groups, etc. Launch templates are versioned.
 
+You can set policies such as step scaling, and simple scaling. Scaling policies are invoked by breaching CloudWatch alarms. Simple and step scaling are almost identical, but step scaling is preferred by AWS.
+
 #### Spot Instances
 
 A *spot instance* uses spare data center EC2 capacity, and costs less than a typical on-demand instance. 
