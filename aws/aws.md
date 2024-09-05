@@ -603,6 +603,12 @@ You get two free budgets per-account.
 
 AWS Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
 
+###  Serverless Application Model
+
+AWS Serverless Application Model is an open-source CLI IaC framework that deploys serverless applications. It's kind of like a CloudFormation code generation tool, but presumably with limited scope. AWS claims that it can result in a ~90% LoC reduction vis a vis CloudFormation, but I'm not sure why you'd want to accept the additional technical sprawl. `sam init` generates a local SAM project.
+
+The delcared resources are `AWS::Serverless::*`, where `*` is an `API`, `Application`, `Connector`, `Function`, `GraphQLApi`, `HttpApi`, `LayerVersion`, `SimpleTable`, or `StateMachine`. For example, `AWS::Serverless::Function` will generate an AWS Lambda function (and associated resources like IAM roles and event source mappings).
+
 ### Cognito
 
 AWS Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
