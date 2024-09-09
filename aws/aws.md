@@ -515,6 +515,16 @@ In a *long-polling* schema, responses are returned as soon as they become availa
 
 A dead-letter queue is a type of queue that other queues can target and store messages that have not been processed successfully in.  It is considered a best-practice to keep the queue and its associated dead-letter queue in the same AWS account and region.  Messages in a dead-letter queue can be examined, analyzed, etc.
 
+### Lambda
+
+AWS Lambda is a function-as-a-service tool. It operates elastically and does not require servers. 
+
+Some use-cases include:
+ 
+  * File processing, e.g. doing something after a file is uploaded to S3
+  * Stream processing, e.g. using Lambda and Kinesis to process real-time streaming data, like application activity tracking, transaction order processing, etc.
+  * Web applications, IoT backends, mobile backends
+
 ### SWF
 
 AWS Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
