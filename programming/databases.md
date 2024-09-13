@@ -1,4 +1,4 @@
-# Databases vs. Data Warehouses vs. Data Lakes
+# Databases
 
 ## Normalization
 
@@ -39,6 +39,17 @@ A database conforms to 1NF principles if:
 *Databases* are generally optimized for *OLTP* ("online transaction processing") operations. OLTP is optimized for `INSERT`, `UPDATE`, and `DELETE` transactions.
 
 *Data warehouses* are generally optimized for *OLAP* ("online analytical processing") operations.
+
+## The Closed World Assumption 
+
+The "closed world assumption" states that relational variables at a given point in time contain all/only tuples that represent instantiations of predicates corresponding to the relational variables that evaluate to `True` at that given time (whew!).
+
+## Joins
+
+ * Inner joins find the intersection of two sets.
+ * Left-outer joins contain all members of the left set, and matching members from the right set.
+ * Right-outer joins work similarly.
+ * Full outer joins return matching records from two sets.
 
 ## TODO
 
