@@ -383,6 +383,10 @@ Some basic API operations include:
 | `Query`        | Retrieves all items with a specified partion key.   |
 | `Scan`         | Retrieve all items in the specified table or index. |
 
+#### DynamoDB Streams
+
+DynamoDB Streams track and log item-level modifications in DynamoDB tables for up to 24 hours. 
+
 ### Personal Health Dashboard
 
 Personal Health Dashboard is a global service health/status dashboard. It's used when AWS is experiencing outages and/or service degradations.
@@ -436,11 +440,19 @@ Direct Connect is a service that allows your network to privately connect direct
 
 AWS KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
 
+### CloudHSM
+
+AWS CloudHSM provisions and manages HSMs (hardware security modules) which let you generate your own encryption keys.
+
 ### CloudFormation
 
 AWS CloudFormation is AWS' infrastructure-as-code service.  
 
 A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first.
+
+Stacks can be "nested" via the `AWS::CloudFormation::Stack` resource. 
+
+`AWS::CloudFormation::WaitCondition` are special resources that track stack resource creation, and configuration process status. It (presumably) allows CFN to "wait" before provisioning more resources. They contain `Count`, `Handle`, and `Timeout` properties. `Count` is the number of success signals that CFN had to receive before it continues creating a stack. `Handle` points to a `AWS::CloudFormation::WaitConditionHandle`, which is a pre-signed URL that kicks off the `WaitCondition`. It's a bit mysterious. `Timeout` is the number of seconds to wait for CFN success signals to count. This is superceded by `CreationPolicies` in cases where you are working with EC2 and ASG resources.
 
 ### Polly
 
@@ -461,6 +473,21 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
 #### VPN CloudHub
 
 AWS VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
+
+### CodePipeline
+
+AWS CodePipeline is a managed continuous delivery (CD) service. It uses the following terminology and components:
+
+  * *Pipelines* encapsulate multiple *stages*. They are stateful, and can be `InProgress`, `Stopping`, `Stopped`, `Succeeded`, `Superseded`, or `Failed`.
+  * *Stages* are atomic actions performed against application *artifacts*. They might be build, test, or deployment stages. They encapsulate *actions*. Stages are locked during a pipeline execution.
+  * *Transitions* occur between *stages*. Transitions can be temporarily disabled.
+  * *Actions* are operations performed against application code. For example: a "deployment action" might deploy code to EC2 or Lambda. Action types are `source`, `build`, `test`, `deploy`, `approval`, and `invoke`. They can run serially, or in parallel.
+  * *Pipeline executions* are sets of changes released by a pipeline. They have their own unique IDs. They can be manually stopped.
+  * *Artifacts* consist of things like source code, built applications, dependencies, definition files, templates, etc.
+  * *Triggers* kick off pipelines.
+  * *Variables* configure actions in pipelines.
+  * *Conditions* are sets of *rules* for entering stages.
+  * *Rules* are like atomic "stage condition checks".
 
 ### Config
 
@@ -621,6 +648,10 @@ When you want to provide authentication or authorization to an app or API, you c
 
 When you want to provide authenticated or anonymous users to AWS resources, use an identity pool. It issues AWS credentials for your application to serve resources to end-users. You authenticate with a user pool or a SAML 2.0-compliant service. It can issue credentials for guest users. It can be role-based or attribute-based. They do not have to be integrated with a user pool.
 
+### API Gateway
+
+AWS API Gateway is a service for creating, publishing, monitoring, maintaining, and securing REST, HTTP, and WebSocket-based APIs. 
+
 ## General Concepts
 
 ### Regions and Availability Zones
@@ -634,3 +665,9 @@ Availability zones are connected with low latency, and consist of one (or more) 
 * "Infrastructure-as-a-Service" refers to providing infrastructure, such as networking, virtual machines, and storage (i.e. AWS EC2).
 * "Platform-as-a-Service" refers to providing development environments with automated deployments (i.e. AWS Lambda). 
 * "Software-as-a-Service" refer to providing a completely managed software application over the internet.
+
+### CI vs CD
+
+*Continuous delivery* automates releases. All changes are automatically built, tested, and deployed to production. Production deployments are generally gated.
+
+*Continuous integration* pushes code to a shared VCS (version control system) and integrate to a shared branch (such as `main`). Changes are built and verified to detect integration errors.
