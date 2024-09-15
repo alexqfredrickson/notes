@@ -343,13 +343,37 @@ In the event of failover, the traffic is routed to a read replica automatically.
 
 Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
+### Cloud9
+
+AWS Cloud9 is a deprecated in-browser IDE.
+
+### CloudShell
+
+AWS CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
+
 ### EMR (Elastic Map Reduce)
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
 
 ### Athena
 
-Athena does SQL queries against S3 buckets.
+Athena does SQL queries against S3 buckets. It analyzes CSV, JSON, or columnar data. It integrates with QuickSight to visualize data. It generates reports.
+
+### AppSync
+
+AWS AppSync is a service that generates GraphQL endpoints for applications.
+
+### AppConfig
+
+AWS AppConfig is an SSM feature that is a "managed feature flag" kind of service. You manage your configuration in AWS (as an AppConfig artifact), create an "application namespace", define "environments" (like containers, Lambda functions, etc.), create a "configuration profile", deploy configuration data, and retrieve configurations with a local AppConfig agent.
+
+### Copilot
+
+AWS Copilot is a CLI intended to bootstrap ECS, Fargate, and App Runner projects. 
+
+### CodeWhisperer
+
+AWS CodeWhisperer is an ML-based code generation tool. It also scans for security issues. It integrates with the command line, VSCode, JetBrains, etc. It is being semi-deprecated (i.e. integrated with Amazon Q Developer).
 
 ### ElastiCache
 
@@ -551,6 +575,16 @@ Some use-cases include:
   * File processing, e.g. doing something after a file is uploaded to S3
   * Stream processing, e.g. using Lambda and Kinesis to process real-time streaming data, like application activity tracking, transaction order processing, etc.
   * Web applications, IoT backends, mobile backends
+
+#### Destinations
+
+When invoked asynchronously, Lambda sends events to an internal queue to be executed later. Destinations allow Lambda to route asynchronous function results to some resource like Lambda, SNS, SQS, or EventBridge.
+
+#### Event Source Mappings
+
+Event source mappings are Lambda resources that read items from streams and queues. DocumentDB, DynamoDB, Kinesis, MQ, MSK, Kafka, and SQS use event source mappings to call Lambda functions.
+
+They are different from triggers. S3, SNS, and API Gateway invoke Lambda via triggers. Event source mappings are designed for higher throughput processing, and automatically batch requests to Lambda.
 
 ### SWF
 
