@@ -381,22 +381,36 @@ ElastiCache is a managed Redis/Memcached service.
 
 Redis-based ElastiCache instances only contain a single node. Memcached-based ElastiCache instances support up to 20 nodes by-default.
 
+#### Caching Strategies
+
+*Lazy loading* is a strategy in which one caches data *only when necessary*. An application calls a cache - then if it doesn't find the data there (e.g. a "cache miss"), it loads it from somewhere else, and then populates the cache. Later, it will call the cache and likely perform a "cache hit". Note that (a) cache misses are expensive, and (b) cached data can become stale if you only write data to the cache on-cache-miss. 
+
+*Write-through* is a strategy in which the data in the cache is updated whenever data is written to the database. Note that (a) new cache nodes will not contain historical data, and (b) most data is never read from the cache.
+
+*Time-to-live* is a value you can add to cached data to explain when data goes stale, to ensure that the data is relatively up-to-date. 
+
 ### DynamoDB
 
-DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it. A potential use-case for DynamoDB is for session storage. DynamoDB stores data in *partitions*, which are replicated across AZs within a region.
+DynamoDB is a schemaless, serverless NoSQL database service. It scales without incurring downtime. It is fully-managed, and you don't have to patch it. A potential use-case for DynamoDB is for session storage.
 
-In general, DynamoDB is optimized to query against a particular primary key. Primary keys in DynamoDB can be *simple* (using only a partition key) or *composite* (a tuple leveraging a partition key and sort key). The primary key should be chosen to maximize uniformity.
+DynamoDB stores data as groups of *items* (i.e. "attributes" or "rows"), across *partitions* which are replicated across AZs within a region. A partition is an up-to-10GB storage unit.
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
-A *parition key* is mandatory, and partitions data. Data is grouped according to the partition key. A *sort key* is optional. It determines the order of data being stored along the lines of the partition key.
+#### Keys
+
+DynamoDB primary keys require a *partition key*, and may include an optional *sort key*. The primary key should be chosen to maximize uniformity. In general, DynamoDB is optimized to query against a particular primary key. Data is grouped according to the partition key. The *sort key* determines the order of data being stored along the lines of the partition key.
+
+Partition keys are supplied to internal hash functions as inputs. The hash functions determine the partition where the item/row is stored. If a collection of items exceeds 10GB, the *sort key* is then used to split partitions.
+
+#### Indices
 
 Primary indices are (probably) determined by the primary key. You can define secondary indices as well - either *global* or *local* - which are specific to a table.
 
   * A *global secondary index* is an index with a composite key (a partition key coupled with a sort key). It is called a "global" index because queries against the index span all partitions.
   * A *local secondary index* is an index with the same partition key as its base table, but which uses a different sort key.
 
-#### API Operations
+#### API 
 
 Some basic API operations include:
 
@@ -407,9 +421,13 @@ Some basic API operations include:
 | `Query`        | Retrieves all items with a specified partion key.   |
 | `Scan`         | Retrieve all items in the specified table or index. |
 
-#### DynamoDB Streams
+#### Streams
 
 DynamoDB Streams track and log item-level modifications in DynamoDB tables for up to 24 hours. 
+
+#### Throttling
+
+DynamoDB will throttle requests beyond provisioned RCU (read capacity unit)s and/or WCU (write capacity unit)s for the database. This can be due to poor partition key choices.
 
 ### Personal Health Dashboard
 
@@ -695,6 +713,16 @@ When you want to provide authenticated or anonymous users to AWS resources, use 
 ### API Gateway
 
 AWS API Gateway is a service for creating, publishing, monitoring, maintaining, and securing REST, HTTP, and WebSocket-based APIs. 
+
+Once a REST API has been created you need to deploy it and make it callable. When deploying a REST API, you can use "stage variables" as pseudo-environment-variables. A use-case for stage variables is to specify different back-end endpoints.
+
+You also need to associate it with a "stage", which is like a version or environment tag. 
+
+### SES
+
+AWS Simple Email Service (SES) is an email platform that lets you send and receive email with a custom address/domain.
+
+SES calls are limited by an account's maximum send rate.
 
 ## General Concepts
 
