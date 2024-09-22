@@ -543,6 +543,33 @@ AWS CodePipeline is a managed continuous delivery (CD) service. It uses the foll
   * *Conditions* are sets of *rules* for entering stages.
   * *Rules* are like atomic "stage condition checks".
 
+### CodeDeploy
+
+AWS CodeDeploy is a service that automates application deployments to ECS, EC2, on-premise instances, and Lambdas.
+
+CodeDeploy scripts are defined in `AppSpec.yml` files located in repository roots.
+
+#### Hooks
+
+If you want to run scripts during a deployment, you would define `hooks` in your `AppSpec.yml` file. 
+
+In an ECS context, these include:
+
+ * `BeforeInstall`: Runs a task before a replacement task set is created.
+ * `AfterInstall`: Runs a task after a replacement task set is created.
+ * `AfterAllowTestTraffic`: Runs a task after the rest listener serves traffic to a replacement task set.
+ * `BeforeAllowTraffic`: Runs a task after a second target group is associated with a replacement task set, and before traffic is shifted to it.
+ * `AfterAllowTraffic`: Runs a task after a second target group serves traffic to a replacement task set.
+
+ A "task set" refers to a bundle of configurations in regard to ECS - i.e. an "ECS task set". It includes data such as the desired number of tasks to run, how many are running, and whether or not they serve production traffic.
+ 
+In a Lambda context, these include:
+
+ * `BeforeAllowTraffic`: Runs tasks before traffic is shifted to a deployed Lambda function version.
+ * `AfterAllowTraffic`: Runs tasks after traffic is shifted to a deployed Lambda function version.
+
+In an EC2 context, there are [tons of different possible hooks](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server). In general, the application stops, "bundles" are downloaded (i.e. CodeDeploy will copy application revision files to temporary locations), installation steps, occur, the application starts, services are validated, and then traffic-related hooks occur.
+
 ### Config
 
 AWS Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send "configuration stream notifications", and then Config can record configuration changes.
@@ -605,6 +632,8 @@ Some use-cases include:
   * File processing, e.g. doing something after a file is uploaded to S3
   * Stream processing, e.g. using Lambda and Kinesis to process real-time streaming data, like application activity tracking, transaction order processing, etc.
   * Web applications, IoT backends, mobile backends
+
+Lambda functions support environment variables, to a maximum of 4 kilobytes per function. There is no upper limit on the amount of environment variables you are allowed to define.
 
 #### Destinations
 
