@@ -280,7 +280,7 @@ A *spot instance* uses spare data center EC2 capacity, and costs less than a typ
   * During a *spot instance interruption*, AWS terminates/stops/hibernates the given spot instance, giving you a two minute warning.
   * AWS lets you know when spot instances are at high risk of interruption via *EC2 instance rebalance recommendations*.
 
-#### EBS
+#### Elastic Block Store
 
 EBS, or "elastic block store", are block-storage resources that are used with EC2 instances. They can be volumes or snapshots. 
 
@@ -354,6 +354,18 @@ AWS CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
 ### EMR (Elastic Map Reduce)
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
+
+#### Elastic Beanstalk
+
+AWS Elastic Beanstalk is a service that deploys web applications and groups of web application-related services automatically.
+
+EBS supports multiple "deployment strategies":
+
+ * *All-at-once*: Deploys in-place to all instances.
+ * *Rolling*: Splits instances into batches, and deploys to one batch at a time.
+ * *Rolling with additional batch*: Creates a batch of EC2 instances, then splits instances into batches, and deploys to each batch at a time.
+ * *Immutable*: Deploys to new instances.
+ * *Traffic splitting*: Deploys to new instances, forwards some percentage of traffic to new instances over time, and then shuts down the old instances.
 
 ### Athena
 
@@ -472,7 +484,7 @@ Service Catalog is a portfolio of IaC templates (CloudFormation and/or Terraform
 
 ### OpsWorks
 
-OpsWorks is an AWS-managed Chef/Puppet service.
+OpsWorks is a deprecated AWS-managed Chef/Puppet service.
 
 ### Direct Connect
 
