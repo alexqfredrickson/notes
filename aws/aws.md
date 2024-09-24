@@ -387,7 +387,11 @@ Athena does SQL queries against S3 buckets. It analyzes CSV, JSON, or columnar d
 
 ### AppSync
 
-AWS AppSync is a service that generates GraphQL endpoints for applications.
+AWS AppSync is a service that generates GraphQL endpoints for applications. 
+
+AppSync can subscribe to applications to implement  real-time updates. Clients invoke the subscription operations, which creates a WebSocket connection, which is maintained by AppSync. In this way, applications can distribute data in real-time.
+
+It has integrations with DynamoDB.
 
 ### AppConfig
 
@@ -507,6 +511,10 @@ Direct Connect is a service that allows your network to privately connect direct
 ### KMS
 
 AWS KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
+
+#### Envelope encryption
+
+Envelope encryption refers to the practice of using one key to encrypt another key.
 
 ### CloudHSM
 
@@ -661,6 +669,14 @@ Event source mappings are Lambda resources that read items from streams and queu
 
 They are different from triggers. S3, SNS, and API Gateway invoke Lambda via triggers. Event source mappings are designed for higher throughput processing, and automatically batch requests to Lambda.
 
+#### Execution roles
+
+Lambda leverages IAM roles to grant a given Lambda function permission to access other AWS services; this is called an "execution role".
+
+You shouldn't use `sts:AssumeRole` within the Lambda code to assume a given role - because Lambda functions will always execute under a given execution role.
+
+Execution roles must have trust policies that specify the Lambda service principal as a trusted service.
+
 ### SWF
 
 AWS Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
@@ -759,6 +775,8 @@ The delcared resources are `AWS::Serverless::*`, where `*` is an `API`, `Applica
 
 AWS Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
 
+Cognito can be integrated with AWS Lambda to execute functions pre-sign-up, post-confirmation, pre-/post-authntication, etc. - via Lambda triggers.
+
 #### User Pools
 
 When you want to provide authentication or authorization to an app or API, you create a Cognito User Pool. It functions as a user directory. It can also act as an OIDC identity provider or service provider. It is SAML 2.0-compliant.
@@ -773,7 +791,15 @@ AWS API Gateway is a service for creating, publishing, monitoring, maintaining, 
 
 Once a REST API has been created you need to deploy it and make it callable. When deploying a REST API, you can use "stage variables" as pseudo-environment-variables. A use-case for stage variables is to specify different back-end endpoints.
 
-You also need to associate it with a "stage", which is like a version or environment tag. 
+You also need to associate it with a "stage", which is like a version or environment tag.
+
+#### Resource policies
+
+API Gateway has JSON-based resource policies that you can attach to the API to control whether principals (usually IAM roles or groups) can invoke a given API. This can restrict the use the API to specific AWS account users, source IP addresses/CIDR blocks, VPCs, VPC endpoints, etc.
+
+This is different from IAM identity-based policies, which are attached to IAM users/groups/roles.
+
+In cases where the use of an API Gateway instance is restricted to users from another account, it can leverage the SigV4 signing protocol in conjunction with resource policies, to ensure that nobody except for users in other accounts can invoke the API.
 
 ### SES
 
