@@ -355,7 +355,21 @@ AWS CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
 
-#### Elastic Beanstalk
+#### Apache Hive on Amazon EMR
+
+Apache Hive is a petabyte-scale data warehousing tool. It is open-source, distributed, and fault-tolerant. It is natively supported in AWS EMR.
+
+### X-Ray
+
+AWS X-Ray is a data collection, visualization, and analysis service. It tries to find areas of optimization for a given application, using "trace data" that it receives from it.
+
+Some services are integrated with X-Ray and can send tracing headers automatically. For example, Lambda can send data to X-Ray.
+
+Clients can also leverage the X-Ray SDK to send JSON documents to a local X-ray daemon, which batch-uploads the data to X-Ray over UDP.
+
+X-Ray uses the data to generate "trace maps", which display various client/service data to help find bottlenecks, latency spikes, etc.
+
+### Elastic Beanstalk
 
 AWS Elastic Beanstalk is a service that deploys web applications and groups of web application-related services automatically.
 
@@ -634,6 +648,8 @@ Some use-cases include:
   * Web applications, IoT backends, mobile backends
 
 Lambda functions support environment variables, to a maximum of 4 kilobytes per function. There is no upper limit on the amount of environment variables you are allowed to define.
+
+You can deploy .zip files *and/or* container images to be used with Lambda. If you use a container image, it has to be either an AWS "base image" with language runtimes and interfaces installed to it - or you can make your own, as long as you include a runtime interface.
 
 #### Destinations
 
