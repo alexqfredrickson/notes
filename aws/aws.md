@@ -427,6 +427,24 @@ DynamoDB stores data as groups of *items* (i.e. "attributes" or "rows"), across 
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
+#### DynamoDB Accelerator (DAX)
+
+AWS DynamoDB Accelerator ia a DynamoDB caching service that provides microsecond-level performance (compared to native DynamoDB millisecond performance). It is designed for eventually consistent data. It supports server-side encryption-at-rest and encryption-in-transit via TLS/x509.
+
+It is designed for applications such as:
+
+ * Real-time bidding, gaming, and trading applications
+ * Applications that read some items more frequently than others (DynamoDB by contrast can have "hot" partitions)
+ * Read-intensive and cost-sensitive applications
+ * Applications that require repeated reads against big data sets
+
+It is not designed for:
+
+ * Applications requiring strongly-consistent reads
+ * Applications that don't need microsecond response times
+ * Write-intensive applications
+ * Applications without many repeated reads
+
 #### Keys
 
 DynamoDB primary keys require a *partition key*, and may include an optional *sort key*. The primary key should be chosen to maximize uniformity. In general, DynamoDB is optimized to query against a particular primary key. Data is grouped according to the partition key. The *sort key* determines the order of data being stored along the lines of the partition key.
@@ -676,6 +694,16 @@ Lambda leverages IAM roles to grant a given Lambda function permission to access
 You shouldn't use `sts:AssumeRole` within the Lambda code to assume a given role - because Lambda functions will always execute under a given execution role.
 
 Execution roles must have trust policies that specify the Lambda service principal as a trusted service.
+
+#### Concurrency
+
+Lambda concurrency means the number of in-flight requests that a function can handle. Concurrency can be *provisioned* or *reserved*.
+
+*Provisioned* concurrency means that execution environments are pre-initialized and ready to respond immediately to function requests. It reduces "cold start" latencies.
+
+*Reserved* concurrency represents the maximum number of concurrent instances allocated to a function. It guarantees some level of concurrency for a given function.
+
+Accounts have concurrency limits of 1,000 concurrent function executions across all functions in a region. You would use reserved concurrency if you want to guarantee that one Lambda function, within an ecosystem of other Lambda functions, gets to execute, despite these limits.
 
 ### SWF
 
