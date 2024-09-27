@@ -787,6 +787,8 @@ When a user requests content, CloudFront deliverrs it immediately from the edge 
 
 It is well-suited for static website content (like images, CSS files, JS files, etc.), or live-streaming video.
 
+CloudFront can serve *private* content by either (a) requiring signed URLs or signed cookies, or (b) require that users access content via CloudFront URLs. In the event that you use *signed URLs*, you need a *signer*. This is either (a) a trusted key group created in CloudFront, or (b) an AWS account that contains a CloudFront key pair. AWS recommends using a trusted key group. You use `openssl` to generate a private SSH-2 RSA key in `.pem` format, and upload the public key to CloudFront. The signer is then added to a distribution.
+
 ### Billing and Cost Management
 
 AWS Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
