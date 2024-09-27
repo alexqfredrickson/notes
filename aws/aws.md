@@ -376,10 +376,10 @@ AWS Elastic Beanstalk is a service that deploys web applications and groups of w
 EBS supports multiple "deployment strategies":
 
  * *All-at-once*: Deploys in-place to all instances.
- * *Rolling*: Splits instances into batches, and deploys to one batch at a time.
- * *Rolling with additional batch*: Creates a batch of EC2 instances, then splits instances into batches, and deploys to each batch at a time.
- * *Immutable*: Deploys to new instances.
- * *Traffic splitting*: Deploys to new instances, forwards some percentage of traffic to new instances over time, and then shuts down the old instances.
+ * *Rolling*: Splits EC2 instances into batches, and deploys to one batch at a time. During a batch, EBS detaches all EC2 instances from the load balancer, deploys the new application version to them, and then reattaches those instances. It moves through the batches until all instances report successful health checks.
+ * *Rolling with additional batch*: Creates a batch of EC2 instances, then splits instances into batches, and deploys to each batch at a time. This is used specifically when you need to maintain full capacity during a deployment. It is otherwise identical to rolling deployments.
+ * *Immutable*: Deploys to new instances altogether, and tears down the old ASG/instances at the end. This is to ensure overall stability and safety.
+ * *Traffic splitting*: Identical to an immutable deployment, but forwards some percentage of traffic to new instances over time, and then shuts down the old instances. This is to enable "canary-like" deployments.
 
 ### Athena
 
