@@ -549,6 +549,8 @@ AWS CodeDeploy is a service that automates application deployments to ECS, EC2, 
 
 CodeDeploy scripts are defined in `AppSpec.yml` files located in repository roots.
 
+CodeDeploy supports [blue/green, linear, and canary deployments targeting ECS Fargate clusters](https://aws.amazon.com/blogs/containers/aws-codedeploy-now-supports-linear-and-canary-deployments-for-amazon-ecs/). The idea is that you create an ECS service, use CodeDeploy as the controller, create a deployment group using a "linear configuration", and trigger a CodeDeploy blue/green deployment using a preset linear deployment configuration, routing 10% of traffic every minute (for instance).
+
 #### Hooks
 
 If you want to run scripts during a deployment, you would define `hooks` in your `AppSpec.yml` file. 
