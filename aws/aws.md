@@ -355,7 +355,21 @@ AWS CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
 
 EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce"-based analysis on big data, which is used to do parallelized data analysis.
 
-#### Elastic Beanstalk
+#### Apache Hive on Amazon EMR
+
+Apache Hive is a petabyte-scale data warehousing tool. It is open-source, distributed, and fault-tolerant. It is natively supported in AWS EMR.
+
+### X-Ray
+
+AWS X-Ray is a data collection, visualization, and analysis service. It tries to find areas of optimization for a given application, using "trace data" that it receives from it.
+
+Some services are integrated with X-Ray and can send tracing headers automatically. For example, Lambda can send data to X-Ray.
+
+Clients can also leverage the X-Ray SDK to send JSON documents to a local X-ray daemon, which batch-uploads the data to X-Ray over UDP.
+
+X-Ray uses the data to generate "trace maps", which display various client/service data to help find bottlenecks, latency spikes, etc.
+
+### Elastic Beanstalk
 
 AWS Elastic Beanstalk is a service that deploys web applications and groups of web application-related services automatically.
 
@@ -373,7 +387,11 @@ Athena does SQL queries against S3 buckets. It analyzes CSV, JSON, or columnar d
 
 ### AppSync
 
-AWS AppSync is a service that generates GraphQL endpoints for applications.
+AWS AppSync is a service that generates GraphQL endpoints for applications. 
+
+AppSync can subscribe to applications to implement  real-time updates. Clients invoke the subscription operations, which creates a WebSocket connection, which is maintained by AppSync. In this way, applications can distribute data in real-time.
+
+It has integrations with DynamoDB.
 
 ### AppConfig
 
@@ -408,6 +426,24 @@ DynamoDB is a schemaless, serverless NoSQL database service. It scales without i
 DynamoDB stores data as groups of *items* (i.e. "attributes" or "rows"), across *partitions* which are replicated across AZs within a region. A partition is an up-to-10GB storage unit.
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
+
+#### DynamoDB Accelerator (DAX)
+
+AWS DynamoDB Accelerator ia a DynamoDB caching service that provides microsecond-level performance (compared to native DynamoDB millisecond performance). It is designed for eventually consistent data. It supports server-side encryption-at-rest and encryption-in-transit via TLS/x509.
+
+It is designed for applications such as:
+
+ * Real-time bidding, gaming, and trading applications
+ * Applications that read some items more frequently than others (DynamoDB by contrast can have "hot" partitions)
+ * Read-intensive and cost-sensitive applications
+ * Applications that require repeated reads against big data sets
+
+It is not designed for:
+
+ * Applications requiring strongly-consistent reads
+ * Applications that don't need microsecond response times
+ * Write-intensive applications
+ * Applications without many repeated reads
 
 #### Keys
 
@@ -493,6 +529,10 @@ Direct Connect is a service that allows your network to privately connect direct
 ### KMS
 
 AWS KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
+
+#### Envelope encryption
+
+Envelope encryption refers to the practice of using one key to encrypt another key.
 
 ### CloudHSM
 
@@ -637,6 +677,8 @@ Some use-cases include:
 
 Lambda functions support environment variables, to a maximum of 4 kilobytes per function. There is no upper limit on the amount of environment variables you are allowed to define.
 
+You can deploy .zip files *and/or* container images to be used with Lambda. If you use a container image, it has to be either an AWS "base image" with language runtimes and interfaces installed to it - or you can make your own, as long as you include a runtime interface.
+
 #### Destinations
 
 When invoked asynchronously, Lambda sends events to an internal queue to be executed later. Destinations allow Lambda to route asynchronous function results to some resource like Lambda, SNS, SQS, or EventBridge.
@@ -646,6 +688,24 @@ When invoked asynchronously, Lambda sends events to an internal queue to be exec
 Event source mappings are Lambda resources that read items from streams and queues. DocumentDB, DynamoDB, Kinesis, MQ, MSK, Kafka, and SQS use event source mappings to call Lambda functions.
 
 They are different from triggers. S3, SNS, and API Gateway invoke Lambda via triggers. Event source mappings are designed for higher throughput processing, and automatically batch requests to Lambda.
+
+#### Execution roles
+
+Lambda leverages IAM roles to grant a given Lambda function permission to access other AWS services; this is called an "execution role".
+
+You shouldn't use `sts:AssumeRole` within the Lambda code to assume a given role - because Lambda functions will always execute under a given execution role.
+
+Execution roles must have trust policies that specify the Lambda service principal as a trusted service.
+
+#### Concurrency
+
+Lambda concurrency means the number of in-flight requests that a function can handle. Concurrency can be *provisioned* or *reserved*.
+
+*Provisioned* concurrency means that execution environments are pre-initialized and ready to respond immediately to function requests. It reduces "cold start" latencies.
+
+*Reserved* concurrency represents the maximum number of concurrent instances allocated to a function. It guarantees some level of concurrency for a given function.
+
+Accounts have concurrency limits of 1,000 concurrent function executions across all functions in a region. You would use reserved concurrency if you want to guarantee that one Lambda function, within an ecosystem of other Lambda functions, gets to execute, despite these limits.
 
 ### SWF
 
@@ -745,6 +805,8 @@ The delcared resources are `AWS::Serverless::*`, where `*` is an `API`, `Applica
 
 AWS Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
 
+Cognito can be integrated with AWS Lambda to execute functions pre-sign-up, post-confirmation, pre-/post-authntication, etc. - via Lambda triggers.
+
 #### User Pools
 
 When you want to provide authentication or authorization to an app or API, you create a Cognito User Pool. It functions as a user directory. It can also act as an OIDC identity provider or service provider. It is SAML 2.0-compliant.
@@ -759,7 +821,15 @@ AWS API Gateway is a service for creating, publishing, monitoring, maintaining, 
 
 Once a REST API has been created you need to deploy it and make it callable. When deploying a REST API, you can use "stage variables" as pseudo-environment-variables. A use-case for stage variables is to specify different back-end endpoints.
 
-You also need to associate it with a "stage", which is like a version or environment tag. 
+You also need to associate it with a "stage", which is like a version or environment tag.
+
+#### Resource policies
+
+API Gateway has JSON-based resource policies that you can attach to the API to control whether principals (usually IAM roles or groups) can invoke a given API. This can restrict the use the API to specific AWS account users, source IP addresses/CIDR blocks, VPCs, VPC endpoints, etc.
+
+This is different from IAM identity-based policies, which are attached to IAM users/groups/roles.
+
+In cases where the use of an API Gateway instance is restricted to users from another account, it can leverage the SigV4 signing protocol in conjunction with resource policies, to ensure that nobody except for users in other accounts can invoke the API.
 
 ### SES
 
