@@ -327,6 +327,12 @@ Elastic IP addresses are IP addresses that are accessible from the public intern
 
 "Enhanced networking" is a special type of virtualization feature for EC2 that allows for higher bandwidth, higher packet-per-second performance, lower latency between instances, and less jitter.  It's free, but `t2` instances don't support it.
 
+### ECS
+
+AWS Elastic Container Service (ECS) is a container orchestration service used to run containers.
+
+A single task definition can describe up to 10 containers to launch at a time. 
+
 ### RDS 
 
 RDS (or "relational database service") are databases in AWS.
