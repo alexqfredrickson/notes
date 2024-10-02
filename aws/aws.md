@@ -42,6 +42,13 @@ Roles are used for:
 4. Cross-service access (three types: "forward access sessions", "service roles", and "service-linked roles")
 5. EC2 instances (these also use IAM instance profiles)
 
+Roles have two policies:
+
+1. A *permissions policy*, which grants the user of the role the permissions to perform a task
+2. A *trust policy*, which specifies which account members can assume a role
+
+A *trust policy* is a JSON/resource-based policy attached to an IAM role that specifies users, roles, accounts, and services.
+
 ##### Service-linked Roles
 
 A service-linked role is a role associated with, and assigned to, an atomic AWS service. This is similar to how permissions are delegated to IAM users, but service-linked roles are assigned to (and owned by) AWS services themselves.
@@ -54,36 +61,15 @@ Policy statements are JSON documents that include a *version* and a *statement*.
 
 Policy types include:
 
-1. Identity-based policies
-2. Resource-based policies
-3. Permissions boundaries
-4. Organizations SCPs
-5. ACLs
-6. Session policies
 
-##### Identity-based policies
-
-Identity-based policies are either (a) managed or (b) inline policies attached to IAM identities.
-
-##### Resource-based policies
-
-Resource-based policies are associated with services (i.e. resources); for example: S3 bucket policies. They don't have to be in the same account.
-
-##### Permissions boundaries
-
-Permission boundareis are managed policies that define the *maximum* permissions that identity-based policies can grant to entities. They do not grant permissions.
-
-##### Organizations SCPs
-
-AWS Organizations "service control policies" define maximum permissions for organizational units. They do not grant permissions.
-
-##### ACLs
-
-Access control lists define which principals in cross-accounts can access ACL-bounded resources. They are like resource-based policies, but do not use JSON.
-
-##### Session policies
-
-Session policies are used in tandem with the AWS CLI/API to assume specific roles, thereby limiting the persmissions that are granted to the session.
+| Policy Type               | Description                                         |
+| -----------               | --------------------------------------------------- |
+| `Identity-based policies` | Managed or inline policies attached to IAM identities. |
+| `Resource-based policies` | Associated with services (i.e. resources); for example: S3 bucket policies. They don't have to be in the same account. |
+| `Permissions boundaries`  | Managed policies that define the *maximum* permissions that identity-based policies can grant to entities. They do not grant permissions. |
+| `Organizations SCPs`      | AWS Organizations concept which defines maximum permissions for organizational units. They do not grant permissions. |
+| `ACLs`                    | Define which principals in cross-accounts can access ACL-bounded resources. They are like resource-based policies, but do not use JSON. |
+| `Session policies`        | Used in tandem with the AWS CLI/API to assume specific roles, thereby limiting the persmissions that are granted to the session. |
 
 ### IAM Identity Center
 
@@ -140,6 +126,10 @@ Cross-region replication requires that you enable versioning on the bucket. It a
 #### Server Access Logging
 
 You can enable logging to derive the following bucket specific information: the bucket owner, the bucket, the action time, the IP address (or requester and request ID), the type of operation, the S3 bucket key, HTTP response status, etc.
+
+### Serverless Application Repository
+
+AWS Serverless Application Repository is a managed repository for serverless applications. They are pre-built applications with SAM templates that defines the AWS resources used.
 
 ### ELB
 
@@ -552,6 +542,8 @@ A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC
 
 Stacks can be "nested" via the `AWS::CloudFormation::Stack` resource. 
 
+StackSets allow you to create stacks across multiple accounts, and/or multiple AWS regions.
+
 `AWS::CloudFormation::WaitCondition` are special resources that track stack resource creation, and configuration process status. It (presumably) allows CFN to "wait" before provisioning more resources. They contain `Count`, `Handle`, and `Timeout` properties. `Count` is the number of success signals that CFN had to receive before it continues creating a stack. `Handle` points to a `AWS::CloudFormation::WaitConditionHandle`, which is a pre-signed URL that kicks off the `WaitCondition`. It's a bit mysterious. `Timeout` is the number of seconds to wait for CFN success signals to count. This is superceded by `CreationPolicies` in cases where you are working with EC2 and ASG resources.
 
 ### Polly
@@ -685,9 +677,9 @@ Lambda functions support environment variables, to a maximum of 4 kilobytes per 
 
 You can deploy .zip files *and/or* container images to be used with Lambda. If you use a container image, it has to be either an AWS "base image" with language runtimes and interfaces installed to it - or you can make your own, as long as you include a runtime interface.
 
-#### Destinations
+Lambda Authorizers are used to create custom authentication schemes.
 
-When invoked asynchronously, Lambda sends events to an internal queue to be executed later. Destinations allow Lambda to route asynchronous function results to some resource like Lambda, SNS, SQS, or EventBridge.
+Lambda Destinations allow Lambda to route asynchronous function results to some resource like Lambda, SNS, SQS, or EventBridge. When Lambda is invoked asynchronously, Lambda sends events to an internal queue to be executed later. 
 
 #### Event Source Mappings
 
@@ -795,6 +787,8 @@ It is well-suited for static website content (like images, CSS files, JS files, 
 
 CloudFront can serve *private* content by either (a) requiring signed URLs or signed cookies, or (b) require that users access content via CloudFront URLs. In the event that you use *signed URLs*, you need a *signer*. This is either (a) a trusted key group created in CloudFront, or (b) an AWS account that contains a CloudFront key pair. AWS recommends using a trusted key group. You use `openssl` to generate a private SSH-2 RSA key in `.pem` format, and upload the public key to CloudFront. The signer is then added to a distribution.
 
+CloudFront key pairs can only be created by the root user of the AWS account.
+
 ### Billing and Cost Management
 
 AWS Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
@@ -815,13 +809,17 @@ AWS Cognito is a service that allows authorization, authentication, and provisio
 
 Cognito can be integrated with AWS Lambda to execute functions pre-sign-up, post-confirmation, pre-/post-authntication, etc. - via Lambda triggers.
 
+Cognito Sync is a service that syncs user data across multiple devices.
+
 #### User Pools
 
-When you want to provide authentication or authorization to an app or API, you create a Cognito User Pool. It functions as a user directory. It can also act as an OIDC identity provider or service provider. It is SAML 2.0-compliant.
+When you want to provide **authenticated or authorized access to an app or API**, you create a Cognito User Pool. It functions as a user directory. It can also act as an OIDC identity provider or service provider. It is SAML 2.0-compliant.
+
+Cognito User Pools can [remember and track devices](https://aws.amazon.com/blogs/mobile/tracking-and-remembering-devices-using-amazon-cognito-your-user-pools/) when users are logging in from devices in general.
 
 #### Identity Pools
 
-When you want to provide authenticated or anonymous users to AWS resources, use an identity pool. It issues AWS credentials for your application to serve resources to end-users. You authenticate with a user pool or a SAML 2.0-compliant service. It can issue credentials for guest users. It can be role-based or attribute-based. They do not have to be integrated with a user pool.
+When you want to provide **access to AWS resources towards authenticated or anonymous users**, use an identity pool. It issues AWS credentials for your application to serve resources to end-users. You authenticate with a user pool or a SAML 2.0-compliant service. It can issue credentials for guest users. It can be role-based or attribute-based. They do not have to be integrated with a user pool.
 
 ### API Gateway
 
@@ -830,6 +828,11 @@ AWS API Gateway is a service for creating, publishing, monitoring, maintaining, 
 Once a REST API has been created you need to deploy it and make it callable. When deploying a REST API, you can use "stage variables" as pseudo-environment-variables. A use-case for stage variables is to specify different back-end endpoints.
 
 You also need to associate it with a "stage", which is like a version or environment tag.
+
+API Gateway supports "usage plans", which specify who can access API stages (versions) and methods. They also allow you to throttle requests by setting a target request rate. Plans associate API keys with clients.
+
+API Gateway also supports "mapping templates", which transforms data found in payloads from integration requests/responses.
+
 
 #### Resource policies
 

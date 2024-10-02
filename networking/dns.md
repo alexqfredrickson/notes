@@ -24,6 +24,7 @@ DNS protocol leverages port 53.
 | -------- | -------     |
 | A         |  A *host* record. Maps a domain/host to an IP address.           |
 | AAAA         | An *IPv6 host* record.            |
+| CNAME         | A *canonical name* record; points from an alias to a canonical domain. It is used in lieu of an `A` record, when a subdomain or domain is an alias of another domain. They always point to domains.            |
 | PTR         | A *pointer* record. Opposite of a host record. Maps an IP address to a domain/host.            |
 | TXT          | Leveraged mainly for SPF/DKIM/DMARC for email valdation, but this is a generic record.          |
 | SRV | For VoIP, instant messaging, etc. Any kinds of newer protocols. |
