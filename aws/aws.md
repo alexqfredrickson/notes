@@ -345,6 +345,14 @@ In the event of failover, the traffic is routed to a read replica automatically.
 
 Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
+### CloudWatch
+
+AWS CloudWatch is a monitoring service that has alarms and dashboards.
+
+#### Metric Filters
+
+CloudWatch can alarm on logfile content by way of *metric filters*, which define patterns upon which to scan incoming CloudWatch Logs data, and turn those patterns into CloudWatch metrics. It does not retroactively perform this type of filtering.
+
 ### Cloud9
 
 AWS Cloud9 is a deprecated in-browser IDE.
