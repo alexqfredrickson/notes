@@ -49,6 +49,12 @@ Roles have two policies:
 
 A *trust policy* is a JSON/resource-based policy attached to an IAM role that specifies users, roles, accounts, and services.
 
+##### Cross-account Roles
+
+AWS allows for resources in one account being shared with users in a different account through cross-account roles. This is so users don't have to have two different user accounts (one per AWS account) and they don't have to log in twice. This is NOT an AWS best-practice. AWS recommends to use federation with an IdP instead, delegating access through temporary credentials instead of long-term IAM users.
+
+To do this, you set up a role in the *destination* account, defining the *origin* account as a "trusting entity", and defining a permissions policy for a given resource in the destination account. Then you have a user switch roles to test the new access.
+
 ##### Service-linked Roles
 
 A service-linked role is a role associated with, and assigned to, an atomic AWS service. This is similar to how permissions are delegated to IAM users, but service-linked roles are assigned to (and owned by) AWS services themselves.
