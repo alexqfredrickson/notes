@@ -1,5 +1,18 @@
 # Kubernetes
 
+Kubernetes atempts to solve the following problems:
+
+ * Service discovery: exposing containers via DNS or IP
+ * Load balancing
+ * Storage orchestration: allowing local storage, cloud providers, etc.
+ * Automated deployments and rollbacks: using desired state configurations
+ * Automatic bin packing: you give Kuberenetes nodes, tell it how much CPU/RAM each container needs, and Kubernetes figures it out
+ * Self-healing: restarting failing containers
+ * Secrets/configuration management: for sidecar OAuth tokens, SSH keys, password, etc. 
+ * Batch execution-based management: if desired
+ * Horizontal autoscaling
+ * IPv4/IPv6 dual-stack address allocation for pods/services
+
 ## Associated Frameworks
 
 ### OpenFaaS
