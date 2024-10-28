@@ -68,9 +68,7 @@ Provisioners execute imperative scripts. This breaks Terraform's declarative mod
 
 ### Input Variables
 
-Input variables are [template parameters](https://developer.hashicorp.com/terraform/language/values/variables). 
-
-Variables can be declared in root modules, and/or child modules. 
+Input variables are [template parameters](https://developer.hashicorp.com/terraform/language/values/variables). They can be declared in root modules and/or child modules. 
 
 At the root level, they are set in either:
 
@@ -81,7 +79,7 @@ At the root level, they are set in either:
 
 At the module level, input variables are set in the `module` block.
 
-They are declared in `variable` blocks:
+Variables are referenced by way of `variable` blocks - for instance:
 
 ```hcl
 # base case
@@ -113,8 +111,6 @@ variable "docker_ports" {
 }
 ```
 
-All variables are required unless `default` is declared.
-
 Variables have optional arguments:
 
 | Argument    | Description |
@@ -127,6 +123,8 @@ Variables have optional arguments:
 | nullable    | If `true`, a null value is permitted.    |
 
 Variables are referenced like "`var.image_id`". They may also be interpolated into strings - like `"${var.foo}-bar!"`.
+
+Note that from a practical standpoint, you're probably going to hardcode variables in a `terraform.tfvars` file (which is usually `.gitignore`d) and then create a `variables.tf` file to actually instantiate variable blocks. Both are required to make this work.
 
 ### Locals
 
