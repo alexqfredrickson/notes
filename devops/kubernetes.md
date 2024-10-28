@@ -13,6 +13,36 @@ Kubernetes atempts to solve the following problems:
  * Horizontal autoscaling
  * IPv4/IPv6 dual-stack address allocation for pods/services
 
+## Control Plane
+
+The Kubernetes *control plane* is really just a shorthand way of referring to five distinct services: `kube-apiserver`, `etcd`, `kube-scheduler`, `kube-controller-manager`, and `cloud-controller-manager`.
+
+They usually run on the same box - generally a box that does not house other containers - but each service is distinct and can be scaled out independently of the others, creating a distributed control plane.
+
+### `kube-apiserver`
+
+`kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster.
+
+### `etcd`
+
+`etcd` is a [key-value store](https://etcd.io/) that Kubernetes uses to store cluster data. 
+
+### `kube-scheduler`
+
+`kube-scheduler` places K8S pods in K8S nodes, based on resource requirements, hardware/software constraints, and policy constraints. Also based on "affinity specifications", "data locality", and "inter-workfload interference", but [the Kubernetes documentation](https://kubernetes.io/docs/concepts/architecture/#kube-scheduler) is vague on what that actually means.
+
+### `kube-controller-manager`
+
+`kube-controller-manager` runs controller processes. A controller watches the shared cluster state in a loop, via the `kube-apiserver`, and makes changes to the cluster, attempting to move towards desired state.
+
+Controllers are separate processes *logically*, but they run in a single binary/process to reduce complexity.
+
+Controllers include things like "node controllers" which respond when nodes go down, "job controllers" which create pods for one-off tasks, "endpoint slice controllers" which provide links between K8S services and K8S pods, "service account controllers" which create ServiceAccounts for new namespaces, etc. 
+
+### `cloud-controller-manager`
+
+`cloud-controller-manager` provides capabilities to interact with cloud services - delegating some responsibilities to them. For example: "node controllers" in this context will interact with nodes located in the cloud.
+
 ## Pods
 
 Pods (like a pod of whales) is a group of one or more containers. They share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
