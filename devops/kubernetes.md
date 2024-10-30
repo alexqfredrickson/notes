@@ -1,6 +1,6 @@
 # Kubernetes
 
-Kubernetes atempts to solve the following problems:
+Kubernetes attempts to solve the following problems:
 
  * Service discovery: exposing containers via DNS or IP
  * Load balancing
@@ -12,6 +12,8 @@ Kubernetes atempts to solve the following problems:
  * Batch execution-based management: if desired
  * Horizontal autoscaling
  * IPv4/IPv6 dual-stack address allocation for pods/services
+
+Kubernetes supports `containerd`, `CRI-O`, `Docker Engine`, and `Mirantis Container Runtime` container runtimes.
 
 ## Control Plane
 
@@ -92,6 +94,24 @@ Jobs are one-off Pods that run to completion, and then terminate.
 ### CronJobs
 
 CronJobs are Jobs that run on a schedule.
+
+## Production Recommendations
+
+[The Kubernetes documentation](https://kubernetes.io/docs/setup/production-environment/) has some recommendations for how to set up a production K8S environment. It's pretty good general advice.
+
+1. Create a highly-available cluster by:
+  * Ensuring that control plane components are not running on worker nodes 
+  * Replicating control plane components to multiple nodes
+  * Ensuring the API server ingress traffic is load-balanced
+  * Ensuring you have enough worker nodes
+2. You really don't need to worry about scaling if your traffic patterns are predictable.
+3. Use RBAC authorization and set limits on resources that users/workloads can access, via policies and container resources.
+4. Consider turnkey solution providers (e.g. AWS EKS) for (a) managed, serverless infrastructure (b) a managed control plane (c) managed worker nodes, or (d) cloud providers to integrate K8S with storage, container registries, third-party auth, etc.
+5. Follow K8S guidance for production worker nodes/control planes.
+6. Enable authentication against `apiserver` calls via client certificates, or bearer tokens, or authenticating proxies, or HTTP basic auth, or LDAP/Kerberos via plugins.
+7. Determine if you want to use RBAC (role-based) or ABAC (attribute-based) access control models for users. In RBAC, you can assign permissions for namespaces ("roles") or clusters ("cluster roles") - then "role bindings" or "cluster role bindings" are attached to users. In ABAC, policies are based on resource attributes.
+8. Set up per-namespace quotas on CPU and memory (this is called a "namespace limit").
+9. DNS services need to be scaled up if workloads scale up.
 
 ## Associated Frameworks
 
