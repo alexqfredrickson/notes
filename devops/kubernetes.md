@@ -21,6 +21,8 @@ The Kubernetes *control plane* is really just a shorthand way of referring to fi
 
 They usually run on the same box - generally a box that does not house other containers - but each service is distinct and can be scaled out independently of the others, creating a distributed control plane.
 
+The CLI used to communicate with the K8S control plane is calle `kubectl`. It derives configuration from `kubeconfig` files, which organize information about K8S clusters, users, namespaces, and authentication mechanisms.
+
 ### `kube-apiserver`
 
 `kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster.
