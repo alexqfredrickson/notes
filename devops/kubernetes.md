@@ -154,3 +154,12 @@ KubeVert is a Kubernetes-based solution for orchestrating virtual machines using
 ### OpenTelemetry
 
 Kubernetes leverages OpenTelemetry (or "OTel") to generate, aggregate, export, and orchestrate the collection of telemetry data. OpenTelemetry is an open-source framework.
+
+### Container Failures
+
+If a container fails within a pod:
+
+1. K8S attempts an immediate restart, according to the `restartPolicy` in the pod's specification.
+2. K8S continues to restart the continer, using an exponential backoff delay, which is also in the `restartPolicy`.
+3. The container enters a `CrashLoopBackOff` state, indicating that the container is in a crash loop.
+4. Once a container comes up successfully, the backoff delay is reset.
