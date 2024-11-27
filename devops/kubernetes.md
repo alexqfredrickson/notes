@@ -47,15 +47,33 @@ Controllers include things like "node controllers" which respond when nodes go d
 
 `cloud-controller-manager` provides capabilities to interact with cloud services - delegating some responsibilities to them. For example: "node controllers" in this context will interact with nodes located in the cloud.
 
+## Nodes
+
+Nodes are worker machines that are managed by the K8S control plane. They can be virtual or physical. They run pods.
+
+Nodes contain `kubelet`s (which communicate with the control plane), and a container runtime (which pulls containers from registries, unpacks them, and runs them).
+
 ## Pods
 
-Pods (like a pod of whales) is a group of one or more containers. They share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
+Pods (like a pod of whales) is a group of one or more containers running on a node. They share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
 
 Pods are isolated by way of Linux namespaces, `cgroup`s, etc. - the same ways in which *containers* are generally isolated under-the-hood. They are designed to be ephemeral and disposable, like containers are.
 
 Pods represent either (a) an atomic container or (b) a set of tightly coupled containers.
 
 Pods are generally not created directly. They are created automatically when you are working with workloads.
+
+### Pod Lifecycles
+
+Pods move from `Pending` states, to `Running` states, to `Succeeded` or `Failed` states.
+
+During `Pending`, K8S recognizes the request to set up containers, but they aren't ready yet. Scheduled pods sit in this state for a while.
+
+During `Running`, a pod is bound to a node, and its containers have been created.
+
+During `Succeeded`, the pod's containers have terminated successfully.
+
+During `Failed`, at least one of the pod's containers has terminated with a non-zero exit code.
 
 ## Workloads
 
