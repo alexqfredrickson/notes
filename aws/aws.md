@@ -32,7 +32,7 @@ Groups are collections of IAM users. Groups cannot contain nested groups.
 
 #### Roles
 
-IAM roles are sort of like IAM users, but roles are assumable by whoever needs them. They do not have passwords or access keys like users do. Roles are associated with short-term sessons and have temporary security credentials.
+IAM roles are like *temporary* IAM users. Roles are assumable by whoever needs them. They do not have passwords or access keys like users do. Roles are associated with short-term sessons and have temporary security credentials.
 
 Roles are used for:
 
@@ -243,6 +243,10 @@ A NAT *gateway* can be public or private. If it is public, it allows for outboun
 A NAT *instance* sits in a public subnet, and allows instances in private subnets to perform outbound internet traffic, by way of the NAT instance, to an Internet Gateway that allows for public internet access. These are end-of-life in favor of NAT gateways.
 
 You seat NAT instances inside VPCs, configure a security group for it, create a NAT AMI, and then create a NAT instance. The NAT instance must have source/destination checks disabled on itself. The NAT instance also its inside of a private subnet, which in turn contains a route table, which in turn contains routes that need to be updated such that NAT instance may communicate with outside resources (such as the Internet).
+
+#### Transit Gateway
+
+Transit Gateways are used to connect VPCs with on-premise networks. Routes can be automatically propagated to transit gateway route tables.
 
 ### EC2
 
@@ -531,6 +535,12 @@ Service Catalog is a portfolio of IaC templates (CloudFormation and/or Terraform
 ### OpsWorks
 
 OpsWorks is a deprecated AWS-managed Chef/Puppet service.
+
+### Organizations
+
+AWS Organizations is used to group acounts, apply governance policies, and simplify billing by using one payment method for all accounts. It can automatically provision new accounts.
+
+New accounts are grouped into *organizational units*. The idea is that individual AWS accounts exist within these OUs - and then policies are applied to the OUs - creating an inheritance structure. Those policies are either service control policies or resource control policies. Both are *subtractive*, in the sense that they define the outer-bounds of what services/resources in an account can do, and they do not grant permissions. SCPs affect IAM users/roles, whereas RCPs affect specific services (such as S3).
 
 ### Direct Connect
 
