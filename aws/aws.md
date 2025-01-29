@@ -353,9 +353,11 @@ Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
 AWS CloudWatch is a monitoring service that has alarms and dashboards.
 
-#### Metric Filters
-
 CloudWatch can alarm on logfile content by way of *metric filters*, which define patterns upon which to scan incoming CloudWatch Logs data, and turn those patterns into CloudWatch metrics. It does not retroactively perform this type of filtering.
+
+CloudWatch is also a log storage solution. It can access logs from EC2 instances, CloudTrail, Route 53, etc. CloudWatch logs are *standard class* or *infrequent access class*. Logs can be queried and indexed. It ships with a service called Live Tail to troubleshoot in real time. Sensitive data can be masked. DNS queries can be logged. 
+
+Logs can be *manually* exported to S3 buckets that are SSE-KMS (server-side encryption with key management service) encrypted, or have S3 Object Lock enabled with a given duration period. However, this is not recommended - and AWS suggests using *subscription filters* instead. Log data can be shipped to AWS Kinesis streams, Data Firehose streams, and/or Lambda functions, via *subscription filters*. It takes about three minutes for those logs to matriculate in.
 
 ### Cloud9
 
@@ -497,9 +499,9 @@ Personal Health Dashboard is a global service health/status dashboard. It's used
 
 ### Trusted Advisor
 
-Trusted Advisor offers recommendations related to cost optimization, performance, security, fault tolerance, service limits, and operational excellence.
+Trusted Advisor offers recommendations related to cost optimization, performance, security, fault tolerance, service limits, and operational excellence. It's sort of like a best-practices guide.
 
-It's sort of like a best-practices guide.
+Trusted Advisor can emit events to EventBridge - for example, to call a Lambda function when an account reaches a particular type of service limit. 
 
 ### Inspector
 
@@ -541,6 +543,14 @@ OpsWorks is a deprecated AWS-managed Chef/Puppet service.
 AWS Organizations is used to group acounts, apply governance policies, and simplify billing by using one payment method for all accounts. It can automatically provision new accounts.
 
 New accounts are grouped into *organizational units*. The idea is that individual AWS accounts exist within these OUs - and then policies are applied to the OUs - creating an inheritance structure. Those policies are either service control policies or resource control policies. Both are *subtractive*, in the sense that they define the outer-bounds of what services/resources in an account can do, and they do not grant permissions. SCPs affect IAM users/roles, whereas RCPs affect specific services (such as S3).
+
+### DataSync
+
+AWS DataSync is a data transfer/migration service.
+
+On-premise storage can communicate with local DataSync agents via NFS, SMB (Server Message Block), HDFS (Hadoop Distributed File System), or S3 - which in turn sends data via TLS to DataSync - which in turn sends data to EFS, S3, or FSx for Windows File Server/Lustre/OpenZFS/NetApp ONTAP.
+
+The aforementioned AWS storage services (EFS, S3, FSx) can also exchange data using DataSync.
 
 ### Direct Connect
 
@@ -761,6 +771,17 @@ AWS Transfer Family transfers files in and out of S3 and EFS.
 
 It uses protocols such as SFTP (Secure Shell File Transfer Protocol), AS2 (Application Statement 2), FTPS (File Transfer Protocol Secure), and FTP (File Transfer Protocol). Note that the hilariously named SFTP differs from FTPS in that SFTP leverages SSH, whereas FPTS leverages TLS/SSL.
 
+### EventBridge
+
+AWS EventBridge connects application components together to support event-driven architecture. An *event* in this context is a record of a past event, described in JSON format, which contains some metadata about the event. 
+
+It uses *event buses* and *pipes* to decouple application components. An *event bus* receives events, and delivers them to targets. *Rules* are evaluated when messages are received, to determine if events should be delivered. *Pipes* are similar, but they route events from single sources to single targets.
+
+Events can come from AWS services, your own application, and/or various SaaS providers.
+
+EventBridge and SQS are similar, but EventBridge only processes one event at a time, whereas SQS performs batch processing on events. Also, in SQS, events are removed after successful processing, which is not the case in *event buses*. EventBridge can also send messages to multiple targets.
+
+
 ### Storage Gateway
 
 AWS Storage Gateway comprises four separate services: S3 File Gateway, FSx File Gateway, Tape Gateway, and Volume Gateway.
@@ -788,10 +809,10 @@ AWS Kinesis Video Streams is a live-video-streaming-related service, allowing en
   * Stream live video from physical devices to AWS
   * Perform real-time video processing
   * Perform batch analytics on videos 
-
+  
 ### Kinesis Data Streams
 
-AWS Kinesis Data Streams collects, and processes, streams of data, in real-time.
+AWS Kinesis Data Streams collect and process streams of data in real-time.
 
 Streaming data is defined as being:
 
@@ -800,6 +821,10 @@ Streaming data is defined as being:
   * *Unique*, meaning retransmission is limited
   * *Non-homogeneous*, meaning belonging to multiple different kinds of specifications
   * *Imperfect*, meaning data may have gaps or missing elements
+
+### Amazon Data Firehose
+
+Amazon Data Firehose can read records from Kinesis streams and deliver real-time data to S3, Redshift, OpenSearch, Splunk, Datadog, MongoDB, New Relic, etc. It can also transform records and convert formats prior to delivery.
 
 ### CloudFront
 
