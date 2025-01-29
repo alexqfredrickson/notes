@@ -135,7 +135,7 @@ You can enable logging to derive the following bucket specific information: the 
 
 ### Serverless Application Repository
 
-AWS Serverless Application Repository is a managed repository for serverless applications. They are pre-built applications with SAM templates that defines the AWS resources used.
+Serverless Application Repository is a managed repository for serverless applications. They are pre-built applications with SAM templates that defines the AWS resources used.
 
 ### ELB
 
@@ -180,7 +180,7 @@ Server Order Preference is optionally supported. In "Server Order Preference", t
 
 ### VPC
 
-AWS VPC is a "virtual private cloud".
+VPC is a "virtual private cloud".
 
 You can have up to five VPCs in a region by-default.
 
@@ -329,7 +329,7 @@ Elastic IP addresses are IP addresses that are accessible from the public intern
 
 ### ECS
 
-AWS Elastic Container Service (ECS) is a container orchestration service used to run containers.
+Elastic Container Service (ECS) is a container orchestration service used to run containers.
 
 A single task definition can describe up to 10 containers to launch at a time. 
 
@@ -351,7 +351,7 @@ Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
 ### CloudWatch
 
-AWS CloudWatch is a monitoring service that has alarms and dashboards.
+CloudWatch is a monitoring service that has alarms and dashboards.
 
 CloudWatch can alarm on logfile content by way of *metric filters*, which define patterns upon which to scan incoming CloudWatch Logs data, and turn those patterns into CloudWatch metrics. It does not retroactively perform this type of filtering.
 
@@ -361,11 +361,11 @@ Logs can be *manually* exported to S3 buckets that are SSE-KMS (server-side encr
 
 ### Cloud9
 
-AWS Cloud9 is a deprecated in-browser IDE.
+Cloud9 is a deprecated in-browser IDE.
 
 ### CloudShell
 
-AWS CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
+CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
 
 ### EMR (Elastic Map Reduce)
 
@@ -377,7 +377,7 @@ Apache Hive is a petabyte-scale data warehousing tool. It is open-source, distri
 
 ### X-Ray
 
-AWS X-Ray is a data collection, visualization, and analysis service. It tries to find areas of optimization for a given application, using "trace data" that it receives from it.
+X-Ray is a data collection, visualization, and analysis service. It tries to find areas of optimization for a given application, using "trace data" that it receives from it.
 
 Some services are integrated with X-Ray and can send tracing headers automatically. For example, Lambda can send data to X-Ray.
 
@@ -387,7 +387,7 @@ X-Ray uses the data to generate "trace maps", which display various client/servi
 
 ### Elastic Beanstalk
 
-AWS Elastic Beanstalk is a service that deploys web applications and groups of web application-related services automatically.
+Elastic Beanstalk is a service that deploys web applications and groups of web application-related services automatically.
 
 EBS supports multiple "deployment strategies":
 
@@ -403,23 +403,27 @@ Athena does SQL queries against S3 buckets. It analyzes CSV, JSON, or columnar d
 
 ### AppSync
 
-AWS AppSync is a service that generates GraphQL endpoints for applications. 
+AppSync is a service that generates GraphQL endpoints for applications. 
 
 AppSync can subscribe to applications to implement  real-time updates. Clients invoke the subscription operations, which creates a WebSocket connection, which is maintained by AppSync. In this way, applications can distribute data in real-time.
 
 It has integrations with DynamoDB.
 
+### AppFlow
+
+AppFlow is an integration service that transfers SaaS data between Salesforce, SAP, Google Analytics, Facebook Ads, ServiceNow, AWS S3, and AWS Redshift.
+
 ### AppConfig
 
-AWS AppConfig is an SSM feature that is a "managed feature flag" kind of service. You manage your configuration in AWS (as an AppConfig artifact), create an "application namespace", define "environments" (like containers, Lambda functions, etc.), create a "configuration profile", deploy configuration data, and retrieve configurations with a local AppConfig agent.
+AppConfig is an SSM feature that is a "managed feature flag" kind of service. You manage your configuration in AWS (as an AppConfig artifact), create an "application namespace", define "environments" (like containers, Lambda functions, etc.), create a "configuration profile", deploy configuration data, and retrieve configurations with a local AppConfig agent.
 
 ### Copilot
 
-AWS Copilot is a CLI intended to bootstrap ECS, Fargate, and App Runner projects. 
+Copilot is a CLI intended to bootstrap ECS, Fargate, and App Runner projects. 
 
 ### CodeWhisperer
 
-AWS CodeWhisperer is an ML-based code generation tool. It also scans for security issues. It integrates with the command line, VSCode, JetBrains, etc. It is being semi-deprecated (i.e. integrated with Amazon Q Developer).
+CodeWhisperer is an ML-based code generation tool. It also scans for security issues. It integrates with the command line, VSCode, JetBrains, etc. It is being semi-deprecated (i.e. integrated with Amazon Q Developer).
 
 ### ElastiCache
 
@@ -445,7 +449,7 @@ DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
 #### DynamoDB Accelerator (DAX)
 
-AWS DynamoDB Accelerator ia a DynamoDB caching service that provides microsecond-level performance (compared to native DynamoDB millisecond performance). It is designed for eventually consistent data. It supports server-side encryption-at-rest and encryption-in-transit via TLS/x509.
+DynamoDB Accelerator ia a DynamoDB caching service that provides microsecond-level performance (compared to native DynamoDB millisecond performance). It is designed for eventually consistent data. It supports server-side encryption-at-rest and encryption-in-transit via TLS/x509.
 
 It is designed for applications such as:
 
@@ -540,13 +544,13 @@ OpsWorks is a deprecated AWS-managed Chef/Puppet service.
 
 ### Organizations
 
-AWS Organizations is used to group acounts, apply governance policies, and simplify billing by using one payment method for all accounts. It can automatically provision new accounts.
+Organizations is used to group acounts, apply governance policies, and simplify billing by using one payment method for all accounts. It can automatically provision new accounts.
 
 New accounts are grouped into *organizational units*. The idea is that individual AWS accounts exist within these OUs - and then policies are applied to the OUs - creating an inheritance structure. Those policies are either service control policies or resource control policies. Both are *subtractive*, in the sense that they define the outer-bounds of what services/resources in an account can do, and they do not grant permissions. SCPs affect IAM users/roles, whereas RCPs affect specific services (such as S3).
 
 ### DataSync
 
-AWS DataSync is a data transfer/migration service.
+DataSync is a data transfer/migration service.
 
 On-premise storage can communicate with local DataSync agents via NFS, SMB (Server Message Block), HDFS (Hadoop Distributed File System), or S3 - which in turn sends data via TLS to DataSync - which in turn sends data to EFS, S3, or FSx for Windows File Server/Lustre/OpenZFS/NetApp ONTAP.
 
@@ -558,7 +562,7 @@ Direct Connect is a service that allows your network to privately connect direct
 
 ### KMS
 
-AWS KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
+KMS (Key Management Service) creates cryptographic keys that can be used natively with specific services like EC2, EBS, and S3 (etc.).
 
 #### Envelope encryption
 
@@ -566,11 +570,11 @@ Envelope encryption refers to the practice of using one key to encrypt another k
 
 ### CloudHSM
 
-AWS CloudHSM provisions and manages HSMs (hardware security modules) which let you generate your own encryption keys.
+CloudHSM provisions and manages HSMs (hardware security modules) which let you generate your own encryption keys.
 
 ### CloudFormation
 
-AWS CloudFormation is AWS' infrastructure-as-code service.  
+CloudFormation is AWS' infrastructure-as-code service.  
 
 A CloudFormation stack is a group of AWS resources defined in CloudFormation IaC. Stacks may import and export values from other stacks. A stack that contains exports cannot be deleted until each stack that leverages those exports (as imports) are deleted first.
 
@@ -598,11 +602,11 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
 
 #### VPN CloudHub
 
-AWS VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
+VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
 
 ### CodePipeline
 
-AWS CodePipeline is a managed continuous delivery (CD) service. It uses the following terminology and components:
+CodePipeline is a managed continuous delivery (CD) service. It uses the following terminology and components:
 
   * *Pipelines* encapsulate multiple *stages*. They are stateful, and can be `InProgress`, `Stopping`, `Stopped`, `Succeeded`, `Superseded`, or `Failed`.
   * *Stages* are atomic actions performed against application *artifacts*. They might be build, test, or deployment stages. They encapsulate *actions*. Stages are locked during a pipeline execution.
@@ -617,7 +621,7 @@ AWS CodePipeline is a managed continuous delivery (CD) service. It uses the foll
 
 ### CodeDeploy
 
-AWS CodeDeploy is a service that automates application deployments to ECS, EC2, on-premise instances, and Lambdas.
+CodeDeploy is a service that automates application deployments to ECS, EC2, on-premise instances, and Lambdas.
 
 CodeDeploy scripts are defined in `AppSpec.yml` files located in repository roots.
 
@@ -646,7 +650,7 @@ In an EC2 context, there are [tons of different possible hooks](https://docs.aws
 
 ### Config
 
-AWS Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send "configuration stream notifications", and then Config can record configuration changes.
+Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send "configuration stream notifications", and then Config can record configuration changes.
 
 Config uses a "delivery channel" to send notifications and update configuration states. 
 
@@ -662,7 +666,7 @@ Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database 
 
 ### SNS
 
-AWS SNS (Simple Notification Service) delivers messages asynchronously from "publishers", to "topics", to "subscribers". Subscribers are services like Kinesis Data Firehose, SQS, Lambda, HTTP, email, mobile push notifications, and SMS (text).
+SNS (Simple Notification Service) delivers messages asynchronously from "publishers", to "topics", to "subscribers". Subscribers are services like Kinesis Data Firehose, SQS, Lambda, HTTP, email, mobile push notifications, and SMS (text).
 
 An "SNS topic" is a communication channel between a publisher and subscriber. Topics can group multiple endpoints. Once a message is published to a topic, it cannot be deleted. SNS topic names are available for re-use about 60 seconds after they have been deleted.
 
@@ -672,7 +676,7 @@ SNS is associated with AWS KMS.
 
 ### SQS
 
-AWS SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. 
+SQS (Simple Queue Service) is a queueing service allowing you to integrate and decouple distributed software systems and components. 
 
 SQS queues can be either "standard" or "FIFO":
 
@@ -699,7 +703,7 @@ A dead-letter queue is a type of queue that other queues can target and store me
 
 ### Lambda
 
-AWS Lambda is a function-as-a-service tool. It operates elastically and does not require servers. 
+Lambda is a function-as-a-service tool. It operates elastically and does not require servers. 
 
 Some use-cases include:
  
@@ -741,7 +745,7 @@ Accounts have concurrency limits of 1,000 concurrent function executions across 
 
 ### SWF
 
-AWS Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
+Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
 
   * *Domains*, which workflows run in. A domain can contain multiple workflows that can talk to one another.
   * *Workflows*, which are a collection of activities that do a high-level thing (e.g. "receive a customer order and take whatever actions are necessary to fulfill it"), and logic that coordinates the activities. Workflows in different domains can't talk to one another.
@@ -751,29 +755,29 @@ AWS Simple Workflow Service is a way to create background jobs that have paralle
 
 ### LightSail
 
-AWS LightSail is a service like Elastic BeanStalk that automatically provisions instances, containers, managed databases, CDN distributions, load balancers, SSD-storage, static IP addresses, DNS management, and snapshots.
+LightSail is a service like Elastic BeanStalk that automatically provisions instances, containers, managed databases, CDN distributions, load balancers, SSD-storage, static IP addresses, DNS management, and snapshots.
 
 ### VM Import/Export
 
-AWS VM Import/Export lets customers import virtual machine images from local virtual environments to EC2 instances, and export them back. 
+VM Import/Export lets customers import virtual machine images from local virtual environments to EC2 instances, and export them back. 
 
 It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
 
 ### Glue
 
-AWS Glue is a serverless data integration service that allows end-users to analyze, and perform ETL on data from multiple sources. It is used for ML, analytics, and application development.
+Glue is a serverless data integration service that allows end-users to analyze, and perform ETL on data from multiple sources. It is used for ML, analytics, and application development.
 
 Glue has over 70 possible data sources. It loads data into data lakes. The data is then searched/queried using Athena, EMR, and/or Redshift Spectrum.
 
 ### Transfer Family
 
-AWS Transfer Family transfers files in and out of S3 and EFS. 
+Transfer Family transfers files in and out of S3 and EFS. 
 
 It uses protocols such as SFTP (Secure Shell File Transfer Protocol), AS2 (Application Statement 2), FTPS (File Transfer Protocol Secure), and FTP (File Transfer Protocol). Note that the hilariously named SFTP differs from FTPS in that SFTP leverages SSH, whereas FPTS leverages TLS/SSL.
 
 ### EventBridge
 
-AWS EventBridge connects application components together to support event-driven architecture. An *event* in this context is a record of a past event, described in JSON format, which contains some metadata about the event. 
+EventBridge connects application components together to support event-driven architecture. An *event* in this context is a record of a past event, described in JSON format, which contains some metadata about the event. 
 
 It uses *event buses* and *pipes* to decouple application components. An *event bus* receives events, and delivers them to targets. *Rules* are evaluated when messages are received, to determine if events should be delivered. *Pipes* are similar, but they route events from single sources to single targets.
 
@@ -784,13 +788,13 @@ EventBridge and SQS are similar, but EventBridge only processes one event at a t
 
 ### Storage Gateway
 
-AWS Storage Gateway comprises four separate services: S3 File Gateway, FSx File Gateway, Tape Gateway, and Volume Gateway.
+Storage Gateway comprises four separate services: S3 File Gateway, FSx File Gateway, Tape Gateway, and Volume Gateway.
 
 S3 File Gateway is a file interface into S3, that allows retrieval of S3 objects via NFS.
 
 ### CloudTrail
 
-AWS CloudTrail records actions taken by users, roles, or AWS services. It provides:
+CloudTrail records actions taken by users, roles, or AWS services. It provides:
 
   1. An *event history*, a searchable and immutable record of actions taken in the past 90 days
   2. A *CloudTrail Lake*, which is a managed data lake
@@ -804,7 +808,7 @@ CloudTrail *events* are comprised of:
 
 ### Kinesis Video Streams
 
-AWS Kinesis Video Streams is a live-video-streaming-related service, allowing end-users to:
+Kinesis Video Streams is a live-video-streaming-related service, allowing end-users to:
 
   * Stream live video from physical devices to AWS
   * Perform real-time video processing
@@ -812,7 +816,7 @@ AWS Kinesis Video Streams is a live-video-streaming-related service, allowing en
   
 ### Kinesis Data Streams
 
-AWS Kinesis Data Streams collect and process streams of data in real-time.
+Kinesis Data Streams collect and process streams of data in real-time.
 
 Streaming data is defined as being:
 
@@ -828,7 +832,7 @@ Amazon Data Firehose can read records from Kinesis streams and deliver real-time
 
 ### CloudFront
 
-AWS CloudFront is a content distribution network that caches static/dynamic site content to serve to users. The data centers that cache requests are called "edge locations".
+CloudFront is a content distribution network that caches static/dynamic site content to serve to users. The data centers that cache requests are called "edge locations".
 
 When a user requests content, CloudFront deliverrs it immediately from the edge location with the lowest latency - or it retrives it from an origin you define (like S3, MediaPackage, or HTTP servers), and then caches it to the edge location.
 
@@ -840,21 +844,21 @@ CloudFront key pairs can only be created by the root user of the AWS account.
 
 ### Billing and Cost Management
 
-AWS Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
+Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
 
 You get two free budgets per-account.
 
-AWS Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
+Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
 
 ###  Serverless Application Model
 
-AWS Serverless Application Model is an open-source CLI IaC framework that deploys serverless applications. It's kind of like a CloudFormation code generation tool, but presumably with limited scope. AWS claims that it can result in a ~90% LoC reduction vis a vis CloudFormation, but I'm not sure why you'd want to accept the additional technical sprawl. `sam init` generates a local SAM project.
+Serverless Application Model is an open-source CLI IaC framework that deploys serverless applications. It's kind of like a CloudFormation code generation tool, but presumably with limited scope. AWS claims that it can result in a ~90% LoC reduction vis a vis CloudFormation, but I'm not sure why you'd want to accept the additional technical sprawl. `sam init` generates a local SAM project.
 
 The delcared resources are `AWS::Serverless::*`, where `*` is an `API`, `Application`, `Connector`, `Function`, `GraphQLApi`, `HttpApi`, `LayerVersion`, `SimpleTable`, or `StateMachine`. For example, `AWS::Serverless::Function` will generate an AWS Lambda function (and associated resources like IAM roles and event source mappings).
 
 ### Cognito
 
-AWS Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
+Cognito is a service that allows authorization, authentication, and provisionment of user directories to web and mobile applications. It leverages OAuth 2.0 access tokens and AWS credentials. It allows users to authenticate via Google and Facebook.
 
 Cognito can be integrated with AWS Lambda to execute functions pre-sign-up, post-confirmation, pre-/post-authntication, etc. - via Lambda triggers.
 
@@ -872,7 +876,7 @@ When you want to provide **access to AWS resources towards authenticated or anon
 
 ### API Gateway
 
-AWS API Gateway is a service for creating, publishing, monitoring, maintaining, and securing REST, HTTP, and WebSocket-based APIs. 
+API Gateway is a service for creating, publishing, monitoring, maintaining, and securing REST, HTTP, and WebSocket-based APIs. 
 
 Once a REST API has been created you need to deploy it and make it callable. When deploying a REST API, you can use "stage variables" as pseudo-environment-variables. A use-case for stage variables is to specify different back-end endpoints.
 
@@ -893,7 +897,7 @@ In cases where the use of an API Gateway instance is restricted to users from an
 
 ### SES
 
-AWS Simple Email Service (SES) is an email platform that lets you send and receive email with a custom address/domain.
+Simple Email Service (SES) is an email platform that lets you send and receive email with a custom address/domain.
 
 SES calls are limited by an account's maximum send rate.
 
