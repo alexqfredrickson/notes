@@ -359,6 +359,8 @@ CloudWatch is also a log storage solution. It can access logs from EC2 instances
 
 Logs can be *manually* exported to S3 buckets that are SSE-KMS (server-side encryption with key management service) encrypted, or have S3 Object Lock enabled with a given duration period. However, this is not recommended - and AWS suggests using *subscription filters* instead. Log data can be shipped to AWS Kinesis streams, Data Firehose streams, and/or Lambda functions, via *subscription filters*. It takes about three minutes for those logs to matriculate in.
 
+CloudWatch Events are a real-time stream of system events that occur when AWS resources change. They can respond to those events by sending messages, activating functions, making changes, and capturing state information.
+
 ### Cloud9
 
 Cloud9 is a deprecated in-browser IDE.
@@ -447,6 +449,10 @@ DynamoDB stores data as groups of *items* (i.e. "attributes" or "rows"), across 
 
 DynamoDB does not support JOIN operators, and prefers denormalized schemas.
 
+DynamoDB Streams track item-level modifications in DynamoDB tables for up to 24 hours, and log them. Lambda can trigger in response to a DynamoDB event.
+
+DynamoDB will throttle requests beyond provisioned RCU (read capacity unit)s and/or WCU (write capacity unit)s for the database. This can be due to poor partition key choices.
+
 #### DynamoDB Accelerator (DAX)
 
 DynamoDB Accelerator ia a DynamoDB caching service that provides microsecond-level performance (compared to native DynamoDB millisecond performance). It is designed for eventually consistent data. It supports server-side encryption-at-rest and encryption-in-transit via TLS/x509.
@@ -489,13 +495,7 @@ Some basic API operations include:
 | `Query`        | Retrieves all items with a specified partion key.   |
 | `Scan`         | Retrieve all items in the specified table or index. |
 
-#### Streams
 
-DynamoDB Streams track and log item-level modifications in DynamoDB tables for up to 24 hours. 
-
-#### Throttling
-
-DynamoDB will throttle requests beyond provisioned RCU (read capacity unit)s and/or WCU (write capacity unit)s for the database. This can be due to poor partition key choices.
 
 ### Personal Health Dashboard
 
@@ -619,6 +619,12 @@ CodePipeline is a managed continuous delivery (CD) service. It uses the followin
   * *Conditions* are sets of *rules* for entering stages.
   * *Rules* are like atomic "stage condition checks".
 
+### CodeBuild
+
+CodeBuild is a managed build service that compiles source code, runs tests, and produces artifacts. It contains prepackaged build environments for Maven, Gradle, etc. It can be executed via CLI, or via CodePipeline.
+
+CodeBuild leverages *build projects* and *build environments*. A *build project* contains information about build steps, source code locale, build environments, build commands, and where to put the build output. A *build environment* consists of an operating system, a language runtime, and other tools to help CodeBuild run builds. *Build environments* are created from *build projects*. Source code is downloaded to the *build environment*. *Buildspec* files are found in build projects, or the source code, which contain build commands and settings in YAML format. Builds are uploaded to S3. Build logs are sent to CodeBuild and/or CloudWatch Logs.
+
 ### CodeDeploy
 
 CodeDeploy is a service that automates application deployments to ECS, EC2, on-premise instances, and Lambdas.
@@ -650,11 +656,13 @@ In an EC2 context, there are [tons of different possible hooks](https://docs.aws
 
 ### Config
 
-Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send "configuration stream notifications", and then Config can record configuration changes.
+Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send *configuration stream notifications*, and then Config can record configuration changes.
 
-Config uses a "delivery channel" to send notifications and update configuration states. 
+Config uses a *delivery channel* to send notifications and update configuration states. 
 
-An AWS Config "configuration item" represents attributes of a supported AWS resource, at some point-in-time. It includes metadata, attributes, relationships, current configuration, and related events. A configuration item is created whenever it detects a change to a recorded resource. Configuration items can't be manually deleted, but Config can delete them after a minimum of 30 days.
+*Configuration items* represent attributes of a supported AWS resource, at some point-in-time. It includes metadata, attributes, relationships, current configuration, and related events. A configuration item is created whenever it detects a change to a recorded resource. Configuration items can't be manually deleted, but Config can delete them after a minimum of 30 days.
+
+*Rules* continually track configuration changes amongst resources, and checks whether or not changes comply or don't comply. *Managed rules* evaluate whether or not AWS resources comply with best practices - for example, if EBS volumes are encrypted. *Custom rules* use Lambda functions or [CloudFormation Guard](https://github.com/aws-cloudformation/cloudformation-guard).
 
 ### Redshift
 
