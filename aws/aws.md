@@ -133,6 +133,10 @@ Cross-region replication requires that you enable versioning on the bucket. It a
 
 You can enable logging to derive the following bucket specific information: the bucket owner, the bucket, the action time, the IP address (or requester and request ID), the type of operation, the S3 bucket key, HTTP response status, etc.
 
+### Serverless Application Model (SAM)
+
+Serverless Application Model is an IaC template, with a corresponding CLI, which generates CloudFormation templates for Lambda functions.
+
 ### Serverless Application Repository
 
 Serverless Application Repository is a managed repository for serverless applications. They are pre-built applications with SAM templates that defines the AWS resources used.
@@ -548,6 +552,8 @@ Organizations is used to group acounts, apply governance policies, and simplify 
 
 New accounts are grouped into *organizational units*. The idea is that individual AWS accounts exist within these OUs - and then policies are applied to the OUs - creating an inheritance structure. Those policies are either service control policies or resource control policies. Both are *subtractive*, in the sense that they define the outer-bounds of what services/resources in an account can do, and they do not grant permissions. SCPs affect IAM users/roles, whereas RCPs affect specific services (such as S3).
 
+*Trusted access* is a setting that can be enabled with AWS Organizations that allows the administrator of the management account to update contact details for each Organizations-enabled member account.
+
 ### DataSync
 
 DataSync is a data transfer/migration service.
@@ -771,6 +777,10 @@ VM Import/Export lets customers import virtual machine images from local virtual
 
 It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
 
+### GuardDuty
+
+GuardDuty is a continual monitoring system that scans an AWS account for malicious activity. It looks at S3 events, EKS control planes and audit logs, ECS, EC2, malware on EBS volumes, malware on S3, brute force attacks against RDS (and suspicious login attempts), VPC flow logs, and Lambda functions communicating with threat actors.
+
 ### Glue
 
 Glue is a serverless data integration service that allows end-users to analyze, and perform ETL on data from multiple sources. It is used for ML, analytics, and application development.
@@ -849,6 +859,8 @@ It is well-suited for static website content (like images, CSS files, JS files, 
 CloudFront can serve *private* content by either (a) requiring signed URLs or signed cookies, or (b) require that users access content via CloudFront URLs. In the event that you use *signed URLs*, you need a *signer*. This is either (a) a trusted key group created in CloudFront, or (b) an AWS account that contains a CloudFront key pair. AWS recommends using a trusted key group. You use `openssl` to generate a private SSH-2 RSA key in `.pem` format, and upload the public key to CloudFront. The signer is then added to a distribution.
 
 CloudFront key pairs can only be created by the root user of the AWS account.
+
+*Lambda@Edge* is a CloudFront feature that runs Lambda functions in response to CloudFront CDN events.
 
 ### Billing and Cost Management
 
