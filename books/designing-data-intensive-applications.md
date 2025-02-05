@@ -61,4 +61,16 @@ Good operations looks like:
  
 # Chapter 2: Data Models and Query Languages
 
-# todo
+Real-world things are modeled as objects, or data structures. APIs manipulate those structures. When stored, the structures are converted to general-purpose data models, such as JSON, XML, YAML, database tables, graph models, etc. Database engineers represent those in terms of memory or network or disk-persisted data structures. Hardware engineers represent bytes through electrical currents, light pulses, magnetic fields, etc. All of these cohere into tiered layers of complex abstractions.
+
+SQL is the most common data model. Network models and hierarchical models are alternatives for data storage and querying. NoSQL (or non-relational databases) were designed for large datasets requiring high write throughput. ORM frameworks arose from an "impedance mismatch" between application objects and database tables.
+
+Database IDs are used for consistent style and spelling, avoiding ambiguity (if things are same-or-similarly named), ease of updating redundant data, localization support, and enhancing search operations. Removing redundancy/duplication in databases is essentially what normalization is all about.
+
+One-to-many relationships are difficult for document databases such as MongoDB/CouchDB/RethinkDB/etc. Many-to-many relationships are annoying for JSON because you can't form tree-like structures without duplicating data. 
+
+JSON is a form of a *hierarchical model* in the sense that it represents data as a tree. *Network models* would model objects in graph structures, with complicated series of pointers to other objects through the use of *access paths*. *Relational models* also use access paths (sort of), in the form of query optimizers, which do that automatically. But in network models, this would be done manually, which made it hard to update records, but very optimal for slow network drives (i.e. tape records in the 1970s). 
+
+Document data models are nice choices when flexible schemas are required, or the underlying data model of the application closely resembles the back-end data model. For example: a database which records log lines or events. Relational models are better where one-to-many or many-to-many relationships are required, or when you need joins. If application data is fundamentally *tree-like*, then document models aren't a bad choice. 
+
+# todo: pg. 42+
