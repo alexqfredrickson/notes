@@ -71,6 +71,7 @@ One-to-many relationships are difficult for document databases such as MongoDB/C
 
 JSON is a form of a *hierarchical model* in the sense that it represents data as a tree. *Network models* would model objects in graph structures, with complicated series of pointers to other objects through the use of *access paths*. *Relational models* also use access paths (sort of), in the form of query optimizers, which do that automatically. But in network models, this would be done manually, which made it hard to update records, but very optimal for slow network drives (i.e. tape records in the 1970s). 
 
+Document data models are nice choices when flexible schemas are required, or the underlying data model of the application closely resembles the back-end data model. For example: a database which records log lines or events. Relational models are better where one-to-many or many-to-many relationships are required, or when you need joins. If application data is fundamentally *tree-like*, then document models aren't a bad choice. If a database natively supports JSON/XML datatypes, then it can be considered a hybrid document/relational model.
 
 SQL uses a declarative syntax. MapReduce uses a hybrid imperative/declarative functional syntax, which is designed to target distributed clusters of machines. `Map` collects data, and `Reduce` filters down. This requires two queries instead of one (vis-a-vis SQL).
 
