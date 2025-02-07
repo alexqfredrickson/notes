@@ -83,5 +83,18 @@ In triple-store models, all information is stored in subject-predicate-object no
 
 # Chapter 3: Storage and Retrieval
 
-# todo
+You can make a database with a text file and a shell script that does an `echo >>` for sets and a `grep | sed` for gets with a `tail -n 1` because there's no delete/overwrite methods. Many databases use append-only log files. But the `grep | sed` has poor performance at *O(n)*. 
 
+*Indexes* are used to speed up reads. One simple indexing method is to use an in-memory hash map, mapping database keys to their byte offsets from the beginning of the logfile. This slows down writes a little.
+
+*Compaction* is used to prevent the database from filling up. Data is partitioned into *segments*, where each segment is a collection of key-value pairs. Segments are periodically merged together, and the older keys are forgotten. Then, during a lookup, each segment is assigned its own index, and the search iterates over each segment until a key is found.
+
+CSVs are bad for logs - binary format is better for the aforementioned reasons. When a record needs to be deleted, a new "delete" record is added to the data file, and the key is deleted during the next segment merge. If a database crashes, then the in-memory hash maps are lost. Those can be persisted to disk instead. Checksums can be used to ensure that records aren't *partially* written (i.e. the database crashes during a write). There is generally only one write thread, and multiple read threads (as data file segments are read-only and immutable).
+
+Sequential writes are faster than random writes - even on SSDs. Crash recovery is easier if writes are sequential. Segment merges avoid fragmentation. Therefore, the append-only model is preferable to the update-in-place model.
+
+If keys are sorted within segments, they can be merge-sorted into new compacted segments. This is called a *Sorted String Table* or an *SSTable*. In-memory indices can still help if some key byte offsets are marked, but you can `grep` between them, so you don't need a lot of them.  
+
+In the SSTable approach, incoming writes are added to in-memory balanced tree structures (e.g. red-black trees), or *memtables*. Memtables are periodically written to disk as SSTables once some threshold is hit. Reads come in through the memtables, and reads *fall back* on the SSTable structures. SSTables are then periodically compacted. If the memtables crash before the SSTable segments are generated, this is a problem - so a smaller memtable log can be persisted to disk for recovery.
+
+# todo pg 76
