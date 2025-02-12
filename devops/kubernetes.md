@@ -115,6 +115,31 @@ Jobs are one-off Pods that run to completion, and then terminate.
 
 CronJobs are Jobs that run on a schedule.
 
+## Services
+
+Services expose network applications as single outward-facing endpoints. 
+
+Pods have IP addresses, but those change if those pods are destroyed - so if pods are dependent on one another, services are needed to ensure a loose coupling between those components. 
+
+This is an example of a service:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+```
+
+`port` represents the outward-facing TCP port. Requests to port 80 are routed to the container's `targetPort` on port 9376.
+
+
 ## Production Recommendations
 
 [The Kubernetes documentation](https://kubernetes.io/docs/setup/production-environment/) has some recommendations for how to set up a production K8S environment. It's pretty good general advice.
