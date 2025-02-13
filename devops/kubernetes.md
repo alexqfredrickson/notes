@@ -77,13 +77,15 @@ During `Failed`, at least one of the pod's containers has terminated with a non-
 
 ## Workloads
 
-Workloads are applications that run on Kubernetes. They run in sets of pods. Workload resource manage those pods.
+Workloads are applications that run on Kubernetes. They run in sets of pods. Workload resources manage those pods.
 
 Workload resources include *deployments*, *replica sets*, *stateful sets*, *daemon sets*, *jobs*, and *cron jobs*.
 
 *Replication controllers* are deprecated.
 
 ### Deployments
+
+A Deployment specifies how an application should run, and the amount of replicas that should run. Deployments manage ReplicaSets.
 
 Deployments manage non-stateful application workloads. They provide declarative updates for Pods and ReplicaSets. You describe a desired state, and a Deployment Controller changes the pods to the desired state. 
 
@@ -139,6 +141,12 @@ spec:
 
 `port` represents the outward-facing TCP port. Requests to port 80 are routed to the container's `targetPort` on port 9376.
 
+## Cluster Administration
+
+### Node Autoscaling
+
+Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autoscaling special interest group (SIG) for K8S: Cluster Autoscaler and Karpenter. [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/README.md) automatically adjusts the size of a Kubernetes cluster if (a) pods failed to run in a cluster due to insufficient resources or (b) nodes are underutilized and their pods can be placed in other nodes.
+
 
 ## Production Recommendations
 
@@ -160,6 +168,14 @@ spec:
 
 ## Associated Frameworks
 
+### Open Container Initiative
+
+The Open Container Intiative was a project established by Docker which contains three specifications: the Runtime Specification, the Distribution Specification, and the Image Specification. 
+
+  * The *Image Specification* proposes how a filesystem is bundled into an image (e.g. Docker, `podman`, etc.).
+  * The *Runtime Specification* proposes how a "filesystem bundle" is unpacked onto a disk and executed (i.e. *ran*).
+  * The *Distribution Specification* proposes how container images are distributed to clients (e.g. the Docker Registry).
+
 ### OpenFaaS
 
 OpenFaaS allows "serverless" functions to be more easily deployed to Kubernetes clusters.
@@ -180,6 +196,25 @@ KubeVert is a Kubernetes-based solution for orchestrating virtual machines using
 
 Kubernetes leverages OpenTelemetry (or "OTel") to generate, aggregate, export, and orchestrate the collection of telemetry data. OpenTelemetry is an open-source framework.
 
+## CloudEvents
+
+[CloudEvents](https://cloudevents.io/) is a specification for events, with the hopes of standardizing the way that events are consumed. It's a pretty ... lightweight spec. For example:
+
+```json
+{
+    "specversion" : "1.0",
+    "type" : "com.github.pull_request.opened",
+    "source" : "https://github.com/cloudevents/spec/pull",
+    "subject" : "123",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
+    "comexampleextension1" : "value",
+    "comexampleothervalue" : 5,
+    "datacontenttype" : "text/xml",
+    "data" : "<much wow=\"xml\"/>"
+}
+```
+
 ### Container Failures
 
 If a container fails within a pod:
@@ -188,3 +223,13 @@ If a container fails within a pod:
 2. K8S continues to restart the continer, using an exponential backoff delay, which is also in the `restartPolicy`.
 3. The container enters a `CrashLoopBackOff` state, indicating that the container is in a crash loop.
 4. Once a container comes up successfully, the backoff delay is reset.
+
+## Cloud Native
+
+Cloud Native is a buzzword used to describe continerized ecosystems deployed to the cloud, with the intention of making applications that are resilient, agile, operational, and observable. 
+
+Resilency means fault-tolerence, with redundancy, failover strategies, the ability to gracefully degrade, self-healing and automated recovery. Agility means the ability to implement agile for application development, and to quickly build and deploy applications. It also implies that microservices and CD pipelines are somehow an agile thing. Operability implies the ease of deployment and running applications, coupled with IaC. Observability is the ability to log, monitor, and trace applications. 
+
+Self-healing is implemented through Deployments with ReplicaSets. Automation can be implemented with configuration management and IaC tools. CI implies code commits kicking off build/test pipelines, followed by a release pipeline. CD implies CI with automated deployment to production. Security-by-default implies zero-trust ("never trust, always verify") using mutual authentication, with secure communication channels between services, and least-privilege for components. Services need simple ways to detect other services on a network with minimal configuration.
+
+Severless applications implement "scale-to-zero", meaning that you don't always need servers to be running for a given application - for example, a Lambda application needs to "warm up" sometimes if it hasn't been invoked in a while, and you don't get charged for idle server time.
