@@ -233,3 +233,28 @@ Resilency means fault-tolerence, with redundancy, failover strategies, the abili
 Self-healing is implemented through Deployments with ReplicaSets. Automation can be implemented with configuration management and IaC tools. CI implies code commits kicking off build/test pipelines, followed by a release pipeline. CD implies CI with automated deployment to production. Security-by-default implies zero-trust ("never trust, always verify") using mutual authentication, with secure communication channels between services, and least-privilege for components. Services need simple ways to detect other services on a network with minimal configuration.
 
 Severless applications implement "scale-to-zero", meaning that you don't always need servers to be running for a given application - for example, a Lambda application needs to "warm up" sometimes if it hasn't been invoked in a while, and you don't get charged for idle server time.
+
+## Containers
+
+### History
+
+In the 1960s-70s, CP/CMS was a mainframe operating system that allowed for "time sharing", which was a method that allowed multiple users to access the mainframe's CPU/storage concurrently. Each user got their own virtual operating system within the machine.
+
+In 1979, `chroot` was developed for Unix, which allowed you to change the root directory for a running process and its children - so the process is sandboxed insofar as it doesn't know the rest of the file system exists. However, `chroot` did not sandbox hostnames and IP addresses, it can't run as `su`, and the directories must be owned by `root:root`.
+
+In 2000, FreeBSD introduced Jails, which allowed for a Unix system to be partitioned with separate users, processes, file systems, and networking stacks - but it was difficult to use.
+
+Sun Solaris and HP-UX were early forerunners of multiple isolated virtual environments. Later, VMWare developed hypervisors like ESXi, which allow multiple virtual machines to run on a single physical machine. 
+
+In 2002, the Linux kernel added support for `namespaces`, which partition kernel resources across:
+
+  1. `user`, which provide privilege isolation and user ID segregation across sets of processes
+  2. `pid`, which allowed processes in a namespace to have their own unique process IDs
+  3. `network`, which allowed processes in a namepace to have their own networking stacks, and which allowed processes to communicate with one another
+  4. `mount`, which allowed processes to mount filesystems
+  5. `uts`, or Unix Time Sharing, which allowed for processes to have isolated hostnames/domains
+  6. `ipc`, which set up message queues for processes
+  
+In 2006, Google developed `cgroups`, also known as *process containers*. These isolate resource limits (CPU / memory / network allocation / I/O), priority allocations, monitoring/reporting of resource limits, and process control (start/stop/frozen/restarted).
+
+In 2010, Docker was founded, leveraging `namespaces` and `cgroups`, to define container runtimes, which share the same kernel as the host operating system. Containers receive their own users / hostnames / IPs / mounts / resource allocations.
