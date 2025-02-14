@@ -263,13 +263,36 @@ In 2010, Docker was founded, leveraging `namespaces` and `cgroups`, to define co
 
 Container images are portable, self-contained bundles of software along with dependenies. Container images are OCI-compliant - meaning that they can run on Docker, K8S, AWS ECS, etc. A container is an *instance* of a container image - an Nginx container image can spawn multiple redundant Nginx containers. Images are stacks of layers overlaid on one another. 
 
-Image tags distinguish versions of container images. The `latest` tag is the default. 
+Image tags distinguish versions of container images. The `latest` tag is the default.
+
+### Dockerfiles
+
+Dockerfiles are used to build images.
+
+One approach to building a Dockerfile is to start with a blank base image, start an interactive session with it, do whatever you need to do, and use `history` to get a list of the commands used to bootstrap the container, and copy those commands into a Dockerfile. 
+
+Docker caches layers used in builds - the fewer layers, the better for build times. Multi-stage builds reduce the size of the final container image.
+
+  * You start with a `FROM` directive which specifies a base image (like `alpine`).
+  * `MAINTAINER` is used to specify who is maintaining a container. `LABEL` is an alternative. 
+  * `RUN` executes shell commands that run when the container is built.
+  * `CMD` executes shell commands that run when the container *starts*.
+  * `WORKDIR` creates a directory if it doesn't exist, and provides a filesystem context for `RUN` commands.
+  * `COPY` can be used to borrow things from other containers, thus making a child (or inherited) container a bit smaller.
+  * `USER` specifies a non-root user for the container to run in. Note that the user has to actually exist.
+  * `ENTRYPOINT` specifies that any CLI arguments passed to `docker run [image]` will then be passed to some executable running in the Docker container. For example: if `CMD` needs arguments at `docker run`-time, then you should replace `CMD` with `ENTRYPOINT`.
 
 ### Docker
 
 Docker commands generally follow `docker [noun] [verb]` syntax.
 
-`docker run -it` means start a *interactive*, *teletype interface* session with a container (i.e. using a terminal). `--rm` will remove a container once it exits.
+`docker run -it` means start a *interactive*, *teletype interface* session with a container (i.e. using a terminal).
+
+  * `--rm` will remove a container once it exits.
+  * `-d` runs in the background (i.e. *detached*).
+  * `-P` publishes all ports, which is like the `EXPOSE` directive in a Dockerfile, which exposes all ports (using a random port).
+  * `-p 12345:80` will publish a container's ports to the host. The first parameter is the *host port*, and the second parameter is the *container port* to which it is mapped. `12345` in this case is the external port used to access some application running on port `80` within the running container.
+  * `-v` provides a volume mount so that a running container can access the file system of the host machine running the container.
 
 `docker images` shows local images. Image digests differ from image IDs - a *digest* is a checksum from a container registry and an image ID is a checksum of the local container image.
 
@@ -285,3 +308,16 @@ Docker commands generally follow `docker [noun] [verb]` syntax.
 
 `docker rm` accepts a container ID or name, and it removes a container.
 
+`docker stop` will stop a running container.
+
+`docker exec` will execute a command from within a running container. `docker exec -it [container ID] bash` will start an interactive bash session within a running container.
+
+`docker build . -t foo/bar` builds the current directory to an image.
+
+`docker login` logs into DockerHub.
+
+`docker buildx` is used to build a Docker container to different processor architectures.
+
+`docker rmi` removes a local image.
+
+`docker system prune` removes stopped containers, networks, dangling images, caches, etc.
