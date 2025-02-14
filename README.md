@@ -1,3 +1,3 @@
 # notes
 
-Markdown-based notes on random things.
+Markdown notes on various topics.
