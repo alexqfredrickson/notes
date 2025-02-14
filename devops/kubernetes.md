@@ -258,3 +258,30 @@ In 2002, the Linux kernel added support for `namespaces`, which partition kernel
 In 2006, Google developed `cgroups`, also known as *process containers*. These isolate resource limits (CPU / memory / network allocation / I/O), priority allocations, monitoring/reporting of resource limits, and process control (start/stop/frozen/restarted).
 
 In 2010, Docker was founded, leveraging `namespaces` and `cgroups`, to define container runtimes, which share the same kernel as the host operating system. Containers receive their own users / hostnames / IPs / mounts / resource allocations.
+
+### Overview
+
+Container images are portable, self-contained bundles of software along with dependenies. Container images are OCI-compliant - meaning that they can run on Docker, K8S, AWS ECS, etc. A container is an *instance* of a container image - an Nginx container image can spawn multiple redundant Nginx containers. Images are stacks of layers overlaid on one another. 
+
+Image tags distinguish versions of container images. The `latest` tag is the default. 
+
+### Docker
+
+Docker commands generally follow `docker [noun] [verb]` syntax.
+
+`docker run -it` means start a *interactive*, *teletype interface* session with a container (i.e. using a terminal). `--rm` will remove a container once it exits.
+
+`docker images` shows local images. Image digests differ from image IDs - a *digest* is a checksum from a container registry and an image ID is a checksum of the local container image.
+
+`docker manifest` shows the mainfest from some registry, along with layers.
+
+`docker save` saves an image to a local file for backup/import.
+
+`docker version` shows the local Docker version. Docker Desktop uses `containerd` and `runc`, which have their own versions.
+
+`docker pull foo/bar` downloads a container from DockerHub, or another registry if you specify one.
+
+`docker ps` shows you running containers. `docker ps -a` will show containers that have exited.
+
+`docker rm` accepts a container ID or name, and it removes a container.
+
