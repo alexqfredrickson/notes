@@ -75,6 +75,15 @@ During `Succeeded`, the pod's containers have terminated successfully.
 
 During `Failed`, at least one of the pod's containers has terminated with a non-zero exit code.
 
+### Container Failures
+
+If a container fails within a pod:
+
+1. K8S attempts an immediate restart, according to the `restartPolicy` in the pod's specification.
+2. K8S continues to restart the continer, using an exponential backoff delay, which is also in the `restartPolicy`.
+3. The container enters a `CrashLoopBackOff` state, indicating that the container is in a crash loop.
+4. Once a container comes up successfully, the backoff delay is reset.
+
 ## Workloads
 
 Workloads are applications that run on Kubernetes. They run in sets of pods. Workload resources manage those pods.
@@ -165,159 +174,3 @@ Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autos
 7. Determine if you want to use RBAC (role-based) or ABAC (attribute-based) access control models for users. In RBAC, you can assign permissions for namespaces ("roles") or clusters ("cluster roles") - then "role bindings" or "cluster role bindings" are attached to users. In ABAC, policies are based on resource attributes.
 8. Set up per-namespace quotas on CPU and memory (this is called a "namespace limit").
 9. DNS services need to be scaled up if workloads scale up.
-
-## Associated Frameworks
-
-### Open Container Initiative
-
-The Open Container Intiative was a project established by Docker which contains three specifications: the Runtime Specification, the Distribution Specification, and the Image Specification. 
-
-  * The *Image Specification* proposes how a filesystem is bundled into an image (e.g. Docker, `podman`, etc.).
-  * The *Runtime Specification* proposes how a "filesystem bundle" is unpacked onto a disk and executed (i.e. *ran*).
-  * The *Distribution Specification* proposes how container images are distributed to clients (e.g. the Docker Registry).
-
-### OpenFaaS
-
-OpenFaaS allows "serverless" functions to be more easily deployed to Kubernetes clusters.
-
-### Cilium
-
-Cilium is a container network interface for Kubernetes that provides enhanced eBPF-based networking, observability, and security features. It is intended as a replacement for `iptables`. eBPF runs sandboxed programs in Linux kernels.
-
-### Knative
-
-Knative is a platform-agnostic solution for running serverless deployments.
-
-### KubeVirt
-
-KubeVert is a Kubernetes-based solution for orchestrating virtual machines using Kubernetes.
-
-### OpenTelemetry
-
-Kubernetes leverages OpenTelemetry (or "OTel") to generate, aggregate, export, and orchestrate the collection of telemetry data. OpenTelemetry is an open-source framework.
-
-## CloudEvents
-
-[CloudEvents](https://cloudevents.io/) is a specification for events, with the hopes of standardizing the way that events are consumed. It's a pretty ... lightweight spec. For example:
-
-```json
-{
-    "specversion" : "1.0",
-    "type" : "com.github.pull_request.opened",
-    "source" : "https://github.com/cloudevents/spec/pull",
-    "subject" : "123",
-    "id" : "A234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "datacontenttype" : "text/xml",
-    "data" : "<much wow=\"xml\"/>"
-}
-```
-
-### Container Failures
-
-If a container fails within a pod:
-
-1. K8S attempts an immediate restart, according to the `restartPolicy` in the pod's specification.
-2. K8S continues to restart the continer, using an exponential backoff delay, which is also in the `restartPolicy`.
-3. The container enters a `CrashLoopBackOff` state, indicating that the container is in a crash loop.
-4. Once a container comes up successfully, the backoff delay is reset.
-
-## Cloud Native
-
-Cloud Native is a buzzword used to describe continerized ecosystems deployed to the cloud, with the intention of making applications that are resilient, agile, operational, and observable. 
-
-Resilency means fault-tolerence, with redundancy, failover strategies, the ability to gracefully degrade, self-healing and automated recovery. Agility means the ability to implement agile for application development, and to quickly build and deploy applications. It also implies that microservices and CD pipelines are somehow an agile thing. Operability implies the ease of deployment and running applications, coupled with IaC. Observability is the ability to log, monitor, and trace applications. 
-
-Self-healing is implemented through Deployments with ReplicaSets. Automation can be implemented with configuration management and IaC tools. CI implies code commits kicking off build/test pipelines, followed by a release pipeline. CD implies CI with automated deployment to production. Security-by-default implies zero-trust ("never trust, always verify") using mutual authentication, with secure communication channels between services, and least-privilege for components. Services need simple ways to detect other services on a network with minimal configuration.
-
-Severless applications implement "scale-to-zero", meaning that you don't always need servers to be running for a given application - for example, a Lambda application needs to "warm up" sometimes if it hasn't been invoked in a while, and you don't get charged for idle server time.
-
-## Containers
-
-### History
-
-In the 1960s-70s, CP/CMS was a mainframe operating system that allowed for "time sharing", which was a method that allowed multiple users to access the mainframe's CPU/storage concurrently. Each user got their own virtual operating system within the machine.
-
-In 1979, `chroot` was developed for Unix, which allowed you to change the root directory for a running process and its children - so the process is sandboxed insofar as it doesn't know the rest of the file system exists. However, `chroot` did not sandbox hostnames and IP addresses, it can't run as `su`, and the directories must be owned by `root:root`.
-
-In 2000, FreeBSD introduced Jails, which allowed for a Unix system to be partitioned with separate users, processes, file systems, and networking stacks - but it was difficult to use.
-
-Sun Solaris and HP-UX were early forerunners of multiple isolated virtual environments. Later, VMWare developed hypervisors like ESXi, which allow multiple virtual machines to run on a single physical machine. 
-
-In 2002, the Linux kernel added support for `namespaces`, which partition kernel resources across:
-
-  1. `user`, which provide privilege isolation and user ID segregation across sets of processes
-  2. `pid`, which allowed processes in a namespace to have their own unique process IDs
-  3. `network`, which allowed processes in a namepace to have their own networking stacks, and which allowed processes to communicate with one another
-  4. `mount`, which allowed processes to mount filesystems
-  5. `uts`, or Unix Time Sharing, which allowed for processes to have isolated hostnames/domains
-  6. `ipc`, which set up message queues for processes
-  
-In 2006, Google developed `cgroups`, also known as *process containers*. These isolate resource limits (CPU / memory / network allocation / I/O), priority allocations, monitoring/reporting of resource limits, and process control (start/stop/frozen/restarted).
-
-In 2010, Docker was founded, leveraging `namespaces` and `cgroups`, to define container runtimes, which share the same kernel as the host operating system. Containers receive their own users / hostnames / IPs / mounts / resource allocations.
-
-### Overview
-
-Container images are portable, self-contained bundles of software along with dependenies. Container images are OCI-compliant - meaning that they can run on Docker, K8S, AWS ECS, etc. A container is an *instance* of a container image - an Nginx container image can spawn multiple redundant Nginx containers. Images are stacks of layers overlaid on one another. 
-
-Image tags distinguish versions of container images. The `latest` tag is the default.
-
-### Dockerfiles
-
-Dockerfiles are used to build images.
-
-One approach to building a Dockerfile is to start with a blank base image, start an interactive session with it, do whatever you need to do, and use `history` to get a list of the commands used to bootstrap the container, and copy those commands into a Dockerfile. 
-
-Docker caches layers used in builds - the fewer layers, the better for build times. Multi-stage builds reduce the size of the final container image.
-
-  * You start with a `FROM` directive which specifies a base image (like `alpine`).
-  * `MAINTAINER` is used to specify who is maintaining a container. `LABEL` is an alternative. 
-  * `RUN` executes shell commands that run when the container is built.
-  * `CMD` executes shell commands that run when the container *starts*.
-  * `WORKDIR` creates a directory if it doesn't exist, and provides a filesystem context for `RUN` commands.
-  * `COPY` can be used to borrow things from other containers, thus making a child (or inherited) container a bit smaller.
-  * `USER` specifies a non-root user for the container to run in. Note that the user has to actually exist.
-  * `ENTRYPOINT` specifies that any CLI arguments passed to `docker run [image]` will then be passed to some executable running in the Docker container. For example: if `CMD` needs arguments at `docker run`-time, then you should replace `CMD` with `ENTRYPOINT`.
-
-### Docker
-
-Docker commands generally follow `docker [noun] [verb]` syntax.
-
-`docker run -it` means start a *interactive*, *teletype interface* session with a container (i.e. using a terminal).
-
-  * `--rm` will remove a container once it exits.
-  * `-d` runs in the background (i.e. *detached*).
-  * `-P` publishes all ports, which is like the `EXPOSE` directive in a Dockerfile, which exposes all ports (using a random port).
-  * `-p 12345:80` will publish a container's ports to the host. The first parameter is the *host port*, and the second parameter is the *container port* to which it is mapped. `12345` in this case is the external port used to access some application running on port `80` within the running container.
-  * `-v` provides a volume mount so that a running container can access the file system of the host machine running the container.
-
-`docker images` shows local images. Image digests differ from image IDs - a *digest* is a checksum from a container registry and an image ID is a checksum of the local container image.
-
-`docker manifest` shows the mainfest from some registry, along with layers.
-
-`docker save` saves an image to a local file for backup/import.
-
-`docker version` shows the local Docker version. Docker Desktop uses `containerd` and `runc`, which have their own versions.
-
-`docker pull foo/bar` downloads a container from DockerHub, or another registry if you specify one.
-
-`docker ps` shows you running containers. `docker ps -a` will show containers that have exited.
-
-`docker rm` accepts a container ID or name, and it removes a container.
-
-`docker stop` will stop a running container.
-
-`docker exec` will execute a command from within a running container. `docker exec -it [container ID] bash` will start an interactive bash session within a running container.
-
-`docker build . -t foo/bar` builds the current directory to an image.
-
-`docker login` logs into DockerHub.
-
-`docker buildx` is used to build a Docker container to different processor architectures.
-
-`docker rmi` removes a local image.
-
-`docker system prune` removes stopped containers, networks, dangling images, caches, etc.
