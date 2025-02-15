@@ -13,55 +13,27 @@ Kubernetes attempts to solve the following problems:
  * Horizontal autoscaling
  * IPv4/IPv6 dual-stack address allocation for pods/services
 
-Kubernetes supports `containerd`, `CRI-O`, `Docker Engine`, and `Mirantis Container Runtime` container runtimes.
-
-## Control Plane
-
-The Kubernetes *control plane* is really just a shorthand way of referring to five distinct services: `kube-apiserver`, `etcd`, `kube-scheduler`, `kube-controller-manager`, and `cloud-controller-manager`.
-
-They usually run on the same box - generally a box that does not house other containers - but each service is distinct and can be scaled out independently of the others, creating a distributed control plane.
-
-The CLI used to communicate with the K8S control plane is calle `kubectl`. It derives configuration from `kubeconfig` files, which organize information about K8S clusters, users, namespaces, and authentication mechanisms.
-
-### `kube-apiserver`
-
-`kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster.
-
-### `etcd`
-
-`etcd` is a [key-value store](https://etcd.io/) that Kubernetes uses to store cluster data. 
-
-### `kube-scheduler`
-
-`kube-scheduler` places K8S pods in K8S nodes, based on resource requirements, hardware/software constraints, and policy constraints. Also based on "affinity specifications", "data locality", and "inter-workfload interference", but [the Kubernetes documentation](https://kubernetes.io/docs/concepts/architecture/#kube-scheduler) is vague on what that actually means.
-
-### `kube-controller-manager`
-
-`kube-controller-manager` runs controller processes. A controller watches the shared cluster state in a loop, via the `kube-apiserver`, and makes changes to the cluster, attempting to move towards desired state.
-
-Controllers are separate processes *logically*, but they run in a single binary/process to reduce complexity.
-
-Controllers include things like "node controllers" which respond when nodes go down, "job controllers" which create pods for one-off tasks, "endpoint slice controllers" which provide links between K8S services and K8S pods, "service account controllers" which create ServiceAccounts for new namespaces, etc. 
-
-### `cloud-controller-manager`
-
-`cloud-controller-manager` provides capabilities to interact with cloud services - delegating some responsibilities to them. For example: "node controllers" in this context will interact with nodes located in the cloud.
+Kubernetes supports `containerd`/`runc`, `CRI-O`, `Docker Engine`, and `Mirantis Container Runtime` container runtimes.
 
 ## Nodes
 
-Nodes are worker machines that are managed by the K8S control plane. They can be virtual or physical. They run pods.
+Nodes are worker machines that are managed by the Kubernetes Control Plane. They can be virtual or physical. They run pods.
 
-Nodes contain `kubelet`s (which communicate with the control plane), and a container runtime (which pulls containers from registries, unpacks them, and runs them).
+Nodes contain `kubelet`s (which communicate with the control plane), and a container runtime (which pulls containers from registries, unpacks them, and runs them). Kubelets also run on the control plane.
 
 ## Pods
 
-Pods (like a pod of whales) is a group of one or more containers running on a node. They share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
+Pods (like a *pod* of whales) is a group of one or more containers running on a node (i.e. any Kubernetes worker machine).
+
+Pods share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
 
 Pods are isolated by way of Linux namespaces, `cgroup`s, etc. - the same ways in which *containers* are generally isolated under-the-hood. They are designed to be ephemeral and disposable, like containers are.
 
-Pods represent either (a) an atomic container or (b) a set of tightly coupled containers.
-
 Pods are generally not created directly. They are created automatically when you are working with workloads.
+
+### Static Pods
+
+If a `kubelet` daemon creates a pod on some node, and doesn't want `kube-apiserver` (i.e. the Kubernetes control plane) to observe it or manage it, then it is called a *static pod*. A better term might be a *protected pod*. 
 
 ### Pod Lifecycles
 
@@ -84,6 +56,48 @@ If a container fails within a pod:
 3. The container enters a `CrashLoopBackOff` state, indicating that the container is in a crash loop.
 4. Once a container comes up successfully, the backoff delay is reset.
 
+## Kubelets
+
+Kubelets run on control planes and nodes. They maintain pods. They use *pod specs*, which are descriptions of pods in YAML/JSON format. They receive pod specs via API or by monitoring directories of YAML files (i.e. `/etc/kubernetes/manifests`).
+
+In a control plane context, `kubelet`s receive pod specs, and pass them to high-level container runtimes (such as `containerd`), which pass those off to low-level container runtimes (such as `runc`), which create *static pods*.
+
+## Control Plane
+
+The Kubernetes *control plane* is a shorthand way of referring to five distinct services: `kube-apiserver`, `etcd`, `kube-scheduler`, `kube-controller-manager`, and `cloud-controller-manager`.
+
+They usually run on the same box - generally a box that does not house other containers - but each service is distinct and can be scaled out independently of the others, creating a distributed control plane.
+
+The CLI used to communicate with the K8S control plane is calle `kubectl`. It derives configuration from `kubeconfig` files, which organize information about K8S clusters, users, namespaces, and authentication mechanisms.
+
+The control plane contains a `kubelet` which communicates with other `kubelet`s on Nodes.
+
+### `kube-apiserver`
+
+`kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster. Its data is stored in `etcd`. It runs in a static pod in the control plane. `kube-apiserver` communicates with `kubelet`s on nodes. `kubectl` frontloads requests to `kube-apiserver`.
+
+### `etcd`
+
+`etcd` is a [key-value store](https://etcd.io/) that Kubernetes uses to store all cluster data. It runs in a static pod in the control plane. 
+
+In a production context, it is recommended to run multiple instances of `etc`, at any odd number. 
+
+### `kube-scheduler`
+
+`kube-scheduler` places Kubernetes pods in nodes, based on: resource requirements, hardware/software constraints, and policy constraints. Also based on "affinity specifications", "data locality", and "inter-workfload interference", but [the Kubernetes documentation](https://kubernetes.io/docs/concepts/architecture/#kube-scheduler) is vague on what that actually means. It runs in a static pod in the control plane. 
+
+### `kube-controller-manager`
+
+`kube-controller-manager` runs controller processes. A controller watches the shared cluster state in a loop, via the `kube-apiserver`, and makes changes to the cluster, attempting to move towards desired state.
+
+Controllers are separate processes *logically*, but they run in a single binary/process to reduce complexity.
+
+Controllers include things like "node controllers" which respond when nodes go down, "job controllers" which create pods for one-off tasks, "endpoint slice controllers" which provide links between K8S services and K8S pods, "service account controllers" which create ServiceAccounts for new namespaces, etc. 
+
+### `cloud-controller-manager`
+
+`cloud-controller-manager` provides capabilities to interact with cloud services - delegating some responsibilities to them. For example: "node controllers" in this context will interact with nodes located in the cloud.
+
 ## Workloads
 
 Workloads are applications that run on Kubernetes. They run in sets of pods. Workload resources manage those pods.
@@ -100,6 +114,10 @@ Deployments manage non-stateful application workloads. They provide declarative 
 
 You would use a Deployment to roll out ReplicaSets, declare new pod state, roll back to earlier deployment revision, scale up a deploymnet to facilitate more load, pause deployments, or clean up old ReplicaSets.
 
+#### CoreDNS
+
+CoreDNS is a type of Kubernetes deployment which depends on `kube-controller-manager`.
+
 ### ReplicaSets
 
 ReplicaSets try to maintain sets of replica Pods. It tries to guarantee availability of those identical Pods. They are managed by Deployments.
@@ -114,9 +132,14 @@ You would use a StatefulSet if you need stable network identifiers, stable stora
 
 ### DaemonSets
 
-DaemonSets ensure that all Nodes run some kind of Pod. DaemonSets guarantee that new Nodes will have a given Pod.
+A DaemonSet is a configuration that requires that all nodes run a specific pod. It ensures that new nodes will contain some pod or another (i.e. a *daemon*, sort of).
 
 You would use a DaemonSet if you need to run a cluster storage, log collection, or node monitoring daemon on every node.
+
+#### `kube-proxy`
+
+`kube-proxy` is a K8S network proxy, running on each node. It performs TCP, UDP, and SCTP (stream control transmission protocol) stream forwarding. It is allegedly a type of DaemonSet, although [the documentation makes no obvious mention of this](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/). It is a normal pod, not a static pod. It communicates with `kube-apiserver`, and provides DNS resolution.
+
 
 ### Jobs
 
@@ -125,6 +148,7 @@ Jobs are one-off Pods that run to completion, and then terminate.
 ### CronJobs
 
 CronJobs are Jobs that run on a schedule.
+
 
 ## Services
 
