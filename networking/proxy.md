@@ -5,3 +5,5 @@ A *forward proxy* sits between users and the internet, intercepting requests fro
 A *transparent proxy* automatically intercepts all TCP traffic, at the layer 4 switch level, and forwards it through.
 
 A *reverse proxy* sits between the internet and *web applications*, intercepting requests from the internet, and forwarding those to application servers. They can be used to obfuscate an application's identity - so that a website is harder to DDOS. A reverse proxy can also act as a load balancer. A reverse proxy may also cache content in a local data store to quickly serve data. A reverse proxy may also handle SSL handshakes.
+
+In this way, proxies are intermediaries between users and web applications. Kind of like a "my lawyers will talk to your lawyers" sort of thing.  

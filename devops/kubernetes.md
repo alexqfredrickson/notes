@@ -15,7 +15,6 @@ Kubernetes attempts to solve the following problems:
 
 Kubernetes supports `containerd`/`runc`, `CRI-O`, `Docker Engine`, and `Mirantis Container Runtime` container runtimes.
 
-
 ## Nodes
 
 Nodes are worker machines that are managed by the Kubernetes Control Plane. They can be virtual or physical. They run pods.
@@ -177,13 +176,34 @@ spec:
 
 `port` represents the outward-facing TCP port. Requests to port 80 are routed to the container's `targetPort` on port 9376.
 
+
+## Namespaces
+
+Namespaces isolate groups of resources (such as pods) in a cluster. They must be unique.
+
+The default namespaces are `default`, `kube-node-lease` (for Lease objects, and for `kubelet`s to send heartbeats to detect node failure via the control plane), `kube-public` (if resources need to be globally public), and `kube-system` (for objects created by Kubernetes).
+
+ResourcesQuotas set budgets on usage of CPU/memory resources within a namespace.
+
+LimitRanges set resource limits at the pod/container level.
+
+Namespaces can have RBAC access policies associated with them.
+
+
 ## Cluster Administration
 
-### `kubectl`
+### Node Autoscaling
+
+Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autoscaling special interest group (SIG) for K8S: Cluster Autoscaler and Karpenter. [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/README.md) automatically adjusts the size of a Kubernetes cluster if (a) pods failed to run in a cluster due to insufficient resources or (b) nodes are underutilized and their pods can be placed in other nodes.
+
+
+## `kubectl`
 
 `kubectl run [pod]` runs a pod. This does not require a YAML configuration.
 
 `kubectl get pods` lists all pods in a cluster.
+
+`kubectl get namespaces` or `kubectl get ns` lists all namespaces in a cluster.
 
 `kubectl logs [pod]` queries logs for a given pod. It is possible to see logs from crashed containers with the `-p` (previous) flag
 
@@ -197,10 +217,7 @@ spec:
 
 `kubectl create` is imperative (and may result in configuration drift), whereas `kubectl apply` is declarative.
 
-
-### Node Autoscaling
-
-Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autoscaling special interest group (SIG) for K8S: Cluster Autoscaler and Karpenter. [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/README.md) automatically adjusts the size of a Kubernetes cluster if (a) pods failed to run in a cluster due to insufficient resources or (b) nodes are underutilized and their pods can be placed in other nodes.
+`kubectl api-resources` lists short names for API commands (like how `kubectl get namespaces` can be shortened to `kubectl get ns`).
 
 
 ## Production Recommendations
