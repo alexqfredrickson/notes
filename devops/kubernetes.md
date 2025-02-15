@@ -15,6 +15,7 @@ Kubernetes attempts to solve the following problems:
 
 Kubernetes supports `containerd`/`runc`, `CRI-O`, `Docker Engine`, and `Mirantis Container Runtime` container runtimes.
 
+
 ## Nodes
 
 Nodes are worker machines that are managed by the Kubernetes Control Plane. They can be virtual or physical. They run pods.
@@ -25,7 +26,11 @@ Nodes contain `kubelet`s (which communicate with the control plane), and a conta
 
 Pods (like a *pod* of whales) is a group of one or more containers running on a node (i.e. any Kubernetes worker machine).
 
-Pods share storage and network resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
+Each container within a pod shares network resources provided by the pod. Every pod is assigned a unique IP address in the cluster.
+
+Containers within a pod can communicate with one another via IPC (inter-process communication).
+
+Pods share storage resources. They share the same specification on how to run the containers. They are co-located. A pod may have init containers. You can inject ephemeral containers into a pod for debugging purposes.
 
 Pods are isolated by way of Linux namespaces, `cgroup`s, etc. - the same ways in which *containers* are generally isolated under-the-hood. They are designed to be ephemeral and disposable, like containers are.
 
@@ -74,7 +79,7 @@ The control plane contains a `kubelet` which communicates with other `kubelet`s 
 
 ### `kube-apiserver`
 
-`kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster. Its data is stored in `etcd`. It runs in a static pod in the control plane. `kube-apiserver` communicates with `kubelet`s on nodes. `kubectl` frontloads requests to `kube-apiserver`.
+`kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster. Its data is stored in `etcd`. It runs in a static pod in the control plane. `kube-apiserver` communicates with `kubelet`s on nodes. `kubectl` frontloads requests to `kube-apiserver`. The API server is generally replicated across multiple static pods, and load balanced.
 
 ### `etcd`
 
@@ -140,7 +145,6 @@ You would use a DaemonSet if you need to run a cluster storage, log collection, 
 
 `kube-proxy` is a K8S network proxy, running on each node. It performs TCP, UDP, and SCTP (stream control transmission protocol) stream forwarding. It is allegedly a type of DaemonSet, although [the documentation makes no obvious mention of this](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/). It is a normal pod, not a static pod. It communicates with `kube-apiserver`, and provides DNS resolution.
 
-
 ### Jobs
 
 Jobs are one-off Pods that run to completion, and then terminate.
@@ -148,7 +152,6 @@ Jobs are one-off Pods that run to completion, and then terminate.
 ### CronJobs
 
 CronJobs are Jobs that run on a schedule.
-
 
 ## Services
 
@@ -175,6 +178,25 @@ spec:
 `port` represents the outward-facing TCP port. Requests to port 80 are routed to the container's `targetPort` on port 9376.
 
 ## Cluster Administration
+
+### `kubectl`
+
+`kubectl run [pod]` runs a pod. This does not require a YAML configuration.
+
+`kubectl get pods` lists all pods in a cluster.
+
+`kubectl logs [pod]` queries logs for a given pod. It is possible to see logs from crashed containers with the `-p` (previous) flag
+
+`kubectl exec -it [pod] bash` will execute a command in a pod (like `bash`).
+
+`kubectl delete [podn-1] [podn]` will delete pod(s).
+
+`kubectl explain pod` shows a man page for a given pod specification.
+
+`kubectl describe [pod]` returns general details about a pod (i.e. one or more containers that are running together), or some other K8S object.
+
+`kubectl create` is imperative (and may result in configuration drift), whereas `kubectl apply` is declarative.
+
 
 ### Node Autoscaling
 
