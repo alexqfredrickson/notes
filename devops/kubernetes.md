@@ -216,6 +216,15 @@ Namespaces can have RBAC access policies associated with them.
 
 Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autoscaling special interest group (SIG) for K8S: Cluster Autoscaler and Karpenter. [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/README.md) automatically adjusts the size of a Kubernetes cluster if (a) pods failed to run in a cluster due to insufficient resources or (b) nodes are underutilized and their pods can be placed in other nodes.
 
+## Configuration
+
+### ConfigMap
+
+ConfigMaps store non-secret data in key-value pairs. They can be referenced as environment variables via Pods. They can also be sent via CLI arguments, or stored as configuration files in a volume.
+
+They can referenced via the `envFrom` property in a Pod specification, under `spec -> containers -> envFrom -> configMapRef`, to send K8S env vars to a container.
+
+ConfigMaps can be made immutable with `immutable: true`.
 
 ## `kubectl`
 
