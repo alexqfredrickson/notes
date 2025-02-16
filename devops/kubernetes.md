@@ -112,11 +112,17 @@ Workload resources include *deployments*, *replica sets*, *stateful sets*, *daem
 
 ### Deployments
 
-A Deployment specifies how an application should run, and the amount of replicas that should run. Deployments manage ReplicaSets.
+A Deployment specifies how an application should run, and the amount of replicas that should run. Deployments can be annotated just like `git` commits. 
 
 Deployments manage non-stateful application workloads. They provide declarative updates for Pods and ReplicaSets. You describe a desired state, and a Deployment Controller changes the pods to the desired state. 
 
 You would use a Deployment to roll out ReplicaSets, declare new pod state, roll back to earlier deployment revision, scale up a deploymnet to facilitate more load, pause deployments, or clean up old ReplicaSets.
+
+Deployments manage ReplicaSets. They automatically create ReplicaSets. Deleting a Deployment removes its ReplicaSets as well.
+
+Deployments have strategies. They perform rolling updates to replicas as a default setting. By default, a rolling deployment will increase the number of pods by 25% above the desired amount, in order to maintain application availability. 
+
+If a deployment is rolled back, the original ReplicaSet for the deployment is re-used and becomes the latest revision.
 
 #### CoreDNS
 
@@ -124,7 +130,7 @@ CoreDNS is a type of Kubernetes deployment which depends on `kube-controller-man
 
 ### ReplicaSets
 
-ReplicaSets try to maintain sets of replica Pods. It tries to guarantee availability of those identical Pods. They are managed by Deployments.
+ReplicaSets try to maintain sets of replica Pods. It tries to guarantee availability of those identical Pods. They are managed by Deployments. They are automatically created by deployments.
 
 ReplicaSets define which Pods they can aquire, a replica count, and a template specifying how Pods should be provisioned.
 
@@ -219,6 +225,9 @@ Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autos
 
 `kubectl api-resources` lists short names for API commands (like how `kubectl get namespaces` can be shortened to `kubectl get ns`).
 
+`kubectl rollout status` shows you the progress of a deployment.
+
+`kubectl scale` will adjust the number of replicas for a given deployment.
 
 ## Production Recommendations
 
