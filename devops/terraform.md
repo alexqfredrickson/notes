@@ -356,6 +356,184 @@ resource "aws_instance" "app_server" {
 * The `resource` block defines an atomic resource, with a specific name. Names are locally-scoped. `resource "aws_instance" "app_server"` is an AWS EC2 instance named "web". Arguments depend on the resource type. Arguments are documented at the Terraform registry - for example: `https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance`.
 
 
+### Practical Examples
+
+These are some practical examples of how to structure a Terraform project from scratch - via [https://www.resourcely.io/post/10-terraform-config-root-setups](https://www.resourcely.io/post/10-terraform-config-root-setups).
+
+#### Single Environment, Single Config
+
+```
+📂 repo-root/
+├── 📂 terraform/
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   ├── terraform.tfvars
+```
+
+Low complexity, but lacks environment isolation, limited scalability, and no rollback-per-environment.
+
+#### Multi-Environment, Separate State Files
+
+```
+📂 repo-root/
+├── 📂 terraform/
+│   ├── 📂 dev/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   ├── 📂 prod/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+```
+
+Environments are isolated and managed separately, so this is flexible and safe, but it violates DRY, and it's annoying to manage drift.
+
+#### Multi-Environment, Shared Modules
+
+```
+📂 repo-root/
+├── 📂 modules/
+│   ├── 📂 network/
+│   ├── 📂 compute/
+├── 📂 envs/
+│   ├── 📂 dev/
+│   │   ├── main.tf (calls `modules/network`)
+│   │   ├── terraform.tfvars
+│   ├── 📂 prod/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+```
+
+This is a higher-complexity approach. There is more code-reuse, but there are cross-environment dependencies. You also lose the ability to version per-environment. An update to *prod* will cause a version bump, which also affects *dev*. 
+
+#### Multi-Region
+
+```
+📂 repo-root/
+├── 📂 terraform/
+│   ├── 📂 us-east-1/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   ├── 📂 us-west-2/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+```
+
+In theory, this provides good DR - if you can afford multiple AWS environments.
+
+#### Microservices
+
+```
+📂 repo-root/
+├── 📂 services/
+│   ├── 📂 frontend/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   ├── 📂 backend/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+```
+
+This segregates microservice infrastructure, but requires careful coordination between microservices, as microservices have implicit dependencies on one another.
+
+#### Multi-Tenant SaaS Platform
+
+```
+📂 repo-root/
+├── 📂 tenants/
+│   ├── 📂 customerA/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+│   ├── 📂 customerB/
+│   │   ├── main.tf
+│   │   ├── terraform.tfvars
+```
+
+This segregates infrastructure per-tenant, but it is expensive to duplicate infrastructure per-tenant.
+
+#### Monorepo
+
+```
+📂 repo-root/
+├── 📂 modules/              
+│   ├── network/
+│   ├── compute/
+│   └── database/
+├── 📂 services/              
+│   ├── service-a/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   └── backend.tf
+│   ├── service-b/
+│   └── service-c/
+├── 📂 environments/          
+│   ├── dev/
+│   ├── staging/
+│   └── prod/
+```
+
+`modules/` re-uses code, `services` themselves have isolated infrastructure configurations, and `environments/` is for overrides. This is DevOps-friendly (easy VCS & CI/CD; shared governance model) - but it is big, requires increased collaboration amongst teams, and may require a complex permissions structure (for instance, if developers are not allowed to update shared production infrastructure, or something).
+
+#### Feature Branch-Based Deployments
+
+```
+📂 repo-root/
+├── 📂 modules/
+│   └── common/            
+├── 📂 environments/
+│   ├── dev/
+│   ├── staging/
+│   └── prod/
+├── 📂 features/              
+│   ├── feature-xyz/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── backend.tf
+│   └── feature-abc/
+```
+
+Each *feature branch* gets its own configuration. This allows for separate environments per-feature. This is developer-friendly, because developers can safely experiment in isolated sandbox environments, in parallel. *Feature environments* are completely disposable. On the downside, this is expensive, and increases CI/CD time. State file management becomes complex.
+
+#### Multi-Cloud
+
+```
+📂 repo-root/
+├── 📂 aws/
+│   ├── main.tf
+│   ├── terraform.tfvars
+├── 📂 gcp/
+│   ├── main.tf
+│   ├── terraform.tfvars
+```
+
+Going multi-cloud is generally highly complex, and requires careful inter-cloud communication and security.
+    
+#### Enterprise Team-Based
+
+```
+📂 repo-root/
+├── 📂 modules/              
+├── 📂 teams/
+│   ├── 📂 platform-team/
+│   │   ├── networking/
+│   │   ├── security/
+│   │   └── storage/
+│   ├── 📂 devops-team/
+│   │   ├── ci-cd/
+│   │   └── monitoring/
+│   └── 📂 app-team/
+│       ├── frontend/
+│       └── backend/
+├── 📂 environments/
+│   ├── dev/
+│   ├── staging/
+│   └── prod/
+```
+
+Infrastructure is segregated by team, and is RBAC-friendly. This can result in lots of potential code duplication, cross-team dependencies can be difficult.
+
+
 ## Errata
 
 * Terraform can handle cross-cloud dependencies.
