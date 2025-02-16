@@ -152,11 +152,15 @@ You would use a DaemonSet if you need to run a cluster storage, log collection, 
 
 ### Jobs
 
-Jobs are one-off Pods that run to completion, and then terminate.
+Jobs are like "supervisors" for one-off Pods that run to completion, and then terminate. They track task progress and retry, if-needed.
+
+Jobs have a `completions` attribute that sets the number of successfully finished jobs required in order to signal the success of all pods. If `1`, parallelism is liimted to one pod. If `null`, any pod will signal the success of all pods.
+
+Jobs also have a `parallelism` attribute for the amount of pods that should be spawned to work on a job.
 
 ### CronJobs
 
-CronJobs are Jobs that run on a schedule.
+CronJobs create Jobs on a schedule - for reporting, system maintenance tasks, etc.
 
 ## Services
 
