@@ -160,7 +160,7 @@ CronJobs are Jobs that run on a schedule.
 
 ## Services
 
-Services expose network applications as single outward-facing endpoints. 
+Services expose network applications as single outward-facing endpoints. In other words, they assign static IP addresses and DNS names to Pods. 
 
 Pods have IP addresses, but those change if those pods are destroyed - so if pods are dependent on one another, services are needed to ensure a loose coupling between those components. 
 
@@ -182,6 +182,16 @@ spec:
 
 `port` represents the outward-facing TCP port. Requests to port 80 are routed to the container's `targetPort` on port 9376.
 
+There are four type of services:
+
+  1. `ClusterIP`, which exposes a *private* service on a cluster-internal IP address. The service is only reachable from within the cluster. An Ingress or Gateway is required to expose the service to the public internet.
+  2. `NodePort`, which exposes the service on the Node's IP, on a static port. Kubernetes will still set up a cluster IP address, in order to make the node port available. If the node's IP addresses are externally accessible, they can be accessed publically.
+  3. `LoadBalancer`, which exposes the service externally, using some load balancer. You have to set up your own load balancer.
+  4. `ExternalName`, which maps a service to an `externalName` field, which may be a hostname (or whatever). The cluster's DNS server will return a `CNAME` record with this value. This allows a service to be accessed through an alternate name, for redirecting traffic, or for better user experience.
+
+A *headless service* can be configured as well, if `.spec.clusterIP: None` is specified. They provide DNS implementations with no proxies, so a Pod will handle its own traffic. Pods are still given IP addresses, but no cluster IPs are allocated. Headless services interface with service discovery mechanisms.  `kube-proxy` doesn't handle them. No load balancing is performed on them. This allows direct access to Pods without using Service-based IP addresses.
+
+Service Endpoints are IP addresses and ports assigned to the Pods that a Service points to.
 
 ## Namespaces
 
@@ -228,6 +238,8 @@ Nodes can be auto-scaled with Autoscalers. Two options are endorsed by the autos
 `kubectl rollout status` shows you the progress of a deployment.
 
 `kubectl scale` will adjust the number of replicas for a given deployment.
+
+`kubectl expose [deployment]` will expose a deployment as a service.
 
 ## Production Recommendations
 
