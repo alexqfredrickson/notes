@@ -226,6 +226,18 @@ They can referenced via the `envFrom` property in a Pod specification, under `sp
 
 ConfigMaps can be made immutable with `immutable: true`.
 
+### Secrets
+
+Secrets contain sensitive data that should not be stored in container images or pod specifications. They are similar to ConfigMaps. They are referenced via `envFrom -> secretRef`.
+
+Secrets are stored unencrypted by default in the API server's `etcd` store. You need to enable encryption-at-rest. 
+
+### Labels
+
+Labels are used to tag Kubernetes objects.
+
+They allow for "label selection" to filter on related objects - for instance, services may use label selectors to identify relevant pods.
+
 ## `kubectl`
 
 `kubectl run [pod]` runs a pod. This does not require a YAML configuration.
