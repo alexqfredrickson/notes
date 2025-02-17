@@ -90,6 +90,34 @@ CRDs (custom resource definitions) extend the Kubernetes API by defining new res
 
 There's a decent OpenAPI/Swagger document out there for this.
 
+#### RBAC
+
+Role-based Access Controls (RBAC) regulate access to network resources based on roles. It uses the `rbac.authorization.k8s.io` API group. You have to opt-in to RBAC via the `--authorization-config` flag when the API server starts.
+
+The RBAC API defines four kinds of Kubernetes objects:
+
+  1. *Roles*, which are additive-not-subtractive permission sets applied to namespaces.
+  2. *ClusterRoles*, which are additive-not-subtractive permission sets **not** applied to namespaces - they are instead applied cluster-wide. 
+  3. *RoleBindings*, whih grant permissions to a user or set of users.
+  4. *ClusterRoleBindings*, which grant permissions to all users.
+
+K8S sets up a *certificate authority*, which creates and verifies certificates for K8S.
+
+Kubernetes does not manage user accounts or groups - it assumes users and groups are managed externally.
+
+K8S does have a concept of a *service account*, which are tied to namespaces, and whose permissions are scoped to a particular namespace.
+
+#### New User Onboarding
+
+Assume there's a `ClusterRoleBinding` that defines a permission set for users in the K8S cluster.
+
+  1. A user generates a private RSA/SSH key via `openssl genrsa -out foo.key 4096`.
+  2. That user generates a CSR (a certificate signing request) for a CA (a certificate authority) to sign the request, via `openssl req -new -key foo.key foo.csr -subj '/CN=username/O=clusterrolebindingname' -sha256`. CN (common name) is the K8S user's name, O (organization) is their cluster role binding (which is kind of like a group role).
+  3. The CSR is interpolated into a K8S-specific YAML template which encapsulates a CSR. It looks like a `CertificateSigningRequest` in K8S object-land.
+  4. `kubectl apply -f foo-csr-request.yaml` sends the CSR request to K8S.
+  5. `kubectl certificate approve foo` approves the CSR request.
+  6. `kubectl get csr foo` will return a signed certificate for the end-user to use.
+
 ### `etcd`
 
 `etcd` is a [key-value store](https://etcd.io/) that Kubernetes uses to store all cluster data. It runs in a static pod in the control plane. 
@@ -251,6 +279,8 @@ They allow for "label selection" to filter on related objects - for instance, se
 ## `kubectl`
 
 `kubectl` is a command-line utility that accesses the Kubernetes AI.
+
+`kubectl config view` shows the `~/.kube/config` contents, with some data redacted. `contexts` and `current-context` show some RBAC-related data - i.e. the user, cluster, and namespace.
 
 `kubectl run [pod]` runs a pod. This does not require a YAML configuration.
 
