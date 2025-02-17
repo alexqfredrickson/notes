@@ -80,6 +80,16 @@ The control plane contains a `kubelet` which communicates with other `kubelet`s 
 
 `kube-apiserver` is a REST API used to communicate with a given Kubernetes cluster. Its data is stored in `etcd`. It runs in a static pod in the control plane. `kube-apiserver` communicates with `kubelet`s on nodes. `kubectl` frontloads requests to `kube-apiserver`. The API server is generally replicated across multiple static pods, and load balanced.
 
+`kube-apiserver` is interactable via `kubectl`, `kubeadm`, and REST API.
+
+`kube-apiserver` uses an *admission controller* to enforce policies, modify resources, enforce quotas, set defaults, validate configurations, manage namespaces, accept/reject requests, etc.
+
+Unremarkably, requests generally come into the server via HTTPS port 6443, routes the request to some part of the API via some HTTP verb, checks authentication, and checks authorization. *Then* the admission controller determines whether or not to serve the request. After that, the request is validated and the request is handled.
+
+CRDs (custom resource definitions) extend the Kubernetes API by defining new resource types - such as an InnoDB MySQL cluster. 
+
+There's a decent OpenAPI/Swagger document out there for this.
+
 ### `etcd`
 
 `etcd` is a [key-value store](https://etcd.io/) that Kubernetes uses to store all cluster data. It runs in a static pod in the control plane. 
@@ -239,6 +249,8 @@ Labels are used to tag Kubernetes objects.
 They allow for "label selection" to filter on related objects - for instance, services may use label selectors to identify relevant pods.
 
 ## `kubectl`
+
+`kubectl` is a command-line utility that accesses the Kubernetes AI.
 
 `kubectl run [pod]` runs a pod. This does not require a YAML configuration.
 
