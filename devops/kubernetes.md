@@ -39,6 +39,14 @@ Pods are generally not created directly. They are created automatically when you
 
 If a `kubelet` daemon creates a pod on some node, and doesn't want `kube-apiserver` (i.e. the Kubernetes control plane) to observe it or manage it, then it is called a *static pod*. A better term might be a *protected pod*. 
 
+### Init Containers
+
+Init containers are specialized containers that run before an app container runs in a Pod. They may contain setup scripts or utilities that aren't present in app images. 
+
+### Sidecar Containers
+
+Sidecar containers are like init containers, but they continue to run after the app container has started.
+
 ### Pod Lifecycles
 
 Pods move from `Pending` states, to `Running` states, to `Succeeded` or `Failed` states.
@@ -177,6 +185,10 @@ ReplicaSets define which Pods they can aquire, a replica count, and a template s
 StatefulSets are used when Pods need to be "stateful", in the sense that ordering and uniqueness matters. The pods that StatefulSets create have "sticky identities" with persistent identifiers.
 
 You would use a StatefulSet if you need stable network identifiers, stable storage, ordered deployments/scaling, or ordered rolling updates.
+
+StatefulSets require headless services for DNS resolution and stable network identities.
+
+StatefulSets can be used to ensure that n-many containers are always running, if you (for instance) need to prevent split-brain issues. 
 
 ### DaemonSets
 
