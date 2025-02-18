@@ -60,3 +60,11 @@ Kubernetes leverages OpenTelemetry (or "OTel") to generate, aggregate, export, a
     "data" : "<much wow=\"xml\"/>"
 }
 ```
+
+## Open Policy Agent
+
+[Open Policy Agent (OPA)](https://www.openpolicyagent.org/docs/latest/) is a policy engine that unifies policy enforcement, providing policy-as-code, and APIs to enforce K8S policies. It is a CNCF-graduated project.
+
+## Rook
+
+[Rook](https://rook.io/) is a storage orchestration tool supporting Ceph, which is a distributed storage system. Rook provides self-managing, self-scaling, and self-healing storage services for Kubernetes. Is is a CNCF project.

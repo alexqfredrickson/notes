@@ -74,6 +74,8 @@ Kubelets run on control planes and nodes. They maintain pods. They use *pod spec
 
 In a control plane context, `kubelet`s receive pod specs, and pass them to high-level container runtimes (such as `containerd`), which pass those off to low-level container runtimes (such as `runc`), which create *static pods*.
 
+`kubelets` use liveliness, readiness, and startup probes to check the health/status of running containers.
+
 ## Control Plane
 
 The Kubernetes *control plane* is a shorthand way of referring to five distinct services: `kube-apiserver`, `etcd`, `kube-scheduler`, `kube-controller-manager`, and `cloud-controller-manager`.
@@ -287,6 +289,18 @@ Secrets are stored unencrypted by default in the API server's `etcd` store. You 
 Labels are used to tag Kubernetes objects.
 
 They allow for "label selection" to filter on related objects - for instance, services may use label selectors to identify relevant pods.
+
+## Storage
+
+### Volumes
+
+Volumes let containers in a pod share a filesystem. Volumes can be *ephemeral* or *persistent*. Data is preserved across container restarts.
+
+#### Persistent Volumes
+
+A *PersistentVolume* is provisioned by an administrator or by a StorageClass object.
+
+A *PersistentVolumeClaim* is a request by a user for storage. It is sort of like a Pod.  Pods request memory/compute resources, and PVCs claim size and access modes. 
 
 ## `kubectl`
 
