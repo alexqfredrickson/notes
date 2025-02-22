@@ -35,3 +35,26 @@ Pipelines can be stored in the Git repository, or in Harness itself (i.e. like J
 ## Approvals
 
 Approvals can be criteria or metric-based. They can be manual or automated.
+
+## Feature Flags
+
+Harness Feature Flags is a managed feature flag feature (lol). They are to conditionally turn code features on and off.
+
+To enable Harness Feature Flags, you install a language-specific open-source SDK into the application code, add a flag statement, and then the SDK will fetch configuration (per session) from Harness.
+
+Feature flags can be associated with OPA policies.
+
+## Infrastructure as Code Management
+
+IaCM supports OpenTofu and legacy Terraform (<= 1.5.x).
+
+IaCM enforces policies to ensure authorized changes, monitors infrastructure for drift, automates PRs and performs cost estimation per-PR, has pipeline suport, manages state files, and performs cost management.
+
+*Workspaces* store Terraform configurations, variables, state files, etc. *Workspace expressions* leverage JEXL (Java Expression Language) to query workspace parameters.
+
+Infrastructure state can be migrated into IaCM using a special state migration tool.
+
+Drift detection works similarly to ... Terraform's drift detection.
+
+IaCM is RBAC-enabled.
+
