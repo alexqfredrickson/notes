@@ -525,7 +525,6 @@ Some basic API operations include:
 
 
 
-
 ### Personal Health Dashboard
 
 Personal Health Dashboard is a global service health/status dashboard. It's used when AWS is experiencing outages and/or service degradations.
@@ -594,6 +593,11 @@ DataSync is a data transfer/migration service.
 On-premise storage can communicate with local DataSync agents via NFS, SMB (Server Message Block), HDFS (Hadoop Distributed File System), or S3 - which in turn sends data via TLS to DataSync - which in turn sends data to EFS, S3, or FSx for Windows File Server/Lustre/OpenZFS/NetApp ONTAP.
 
 The aforementioned AWS storage services (EFS, S3, FSx) can also exchange data using DataSync.
+
+
+### Database Migration Service
+
+Database Migration Service (DMS) migrates on-premise databases into AWS, and migrates AWS databases into other AWS databases.  It sits on an AWS server, which connects to a database, reads it, formats the data, and loads data into some other data store.
 
 
 ### Direct Connect
