@@ -2,6 +2,7 @@
 
 ## Services
 
+
 ### IAM
 
 IAM (identity and access management) delegates AWS permissions to *users*, *groups*, and *roles*.
@@ -77,9 +78,11 @@ Policy types include:
 | `ACLs`                    | Define which principals in cross-accounts can access ACL-bounded resources. They are like resource-based policies, but do not use JSON. |
 | `Session policies`        | Used in tandem with the AWS CLI/API to assume specific roles, thereby limiting the persmissions that are granted to the session. |
 
+
 ### IAM Identity Center
 
 IAM Identity Center is an SSO solution that wraps over IAM. It is a free service.
+
 
 ### S3
 
@@ -133,13 +136,16 @@ Cross-region replication requires that you enable versioning on the bucket. It a
 
 You can enable logging to derive the following bucket specific information: the bucket owner, the bucket, the action time, the IP address (or requester and request ID), the type of operation, the S3 bucket key, HTTP response status, etc.
 
+
 ### Serverless Application Model (SAM)
 
 Serverless Application Model is an IaC template, with a corresponding CLI, which generates CloudFormation templates for Lambda functions.
 
+
 ### Serverless Application Repository
 
 Serverless Application Repository is a managed repository for serverless applications. They are pre-built applications with SAM templates that defines the AWS resources used.
+
 
 ### ELB
 
@@ -181,6 +187,7 @@ Classic load balancers operate at OSI Layer 4 and 7 (TCP/SSL/HTTP/HTTPS).
 Clients and load balancers negotiate SSL protocols, and SSL cipher suites as part of the SSL specification. 
 
 Server Order Preference is optionally supported. In "Server Order Preference", the client and the load balancer both communicate to each other which ciphers and protocols they support - ranked in order of preference - and choose which ones they want to use based off of that.
+
 
 ### VPC
 
@@ -251,6 +258,7 @@ You seat NAT instances inside VPCs, configure a security group for it, create a 
 #### Transit Gateway
 
 Transit Gateways are used to connect VPCs with on-premise networks. Routes can be automatically propagated to transit gateway route tables.
+
 
 ### EC2
 
@@ -331,11 +339,13 @@ Elastic IP addresses are IP addresses that are accessible from the public intern
 
 "Enhanced networking" is a special type of virtualization feature for EC2 that allows for higher bandwidth, higher packet-per-second performance, lower latency between instances, and less jitter.  It's free, but `t2` instances don't support it.
 
+
 ### ECS
 
 Elastic Container Service (ECS) is a container orchestration service used to run containers.
 
 A single task definition can describe up to 10 containers to launch at a time. 
+
 
 ### RDS 
 
@@ -353,6 +363,7 @@ In the event of failover, the traffic is routed to a read replica automatically.
 
 Microsoft SQL Server and Oracle RDS instances do not support read replicas.
 
+
 ### CloudWatch
 
 CloudWatch is a monitoring service that has alarms and dashboards.
@@ -365,13 +376,16 @@ Logs can be *manually* exported to S3 buckets that are SSE-KMS (server-side encr
 
 CloudWatch Events are a real-time stream of system events that occur when AWS resources change. They can respond to those events by sending messages, activating functions, making changes, and capturing state information.
 
+
 ### Cloud9
 
 Cloud9 is a deprecated in-browser IDE.
 
+
 ### CloudShell
 
 CloudShell is a browser-based shell that allows you to run AWS CLI scripts.
+
 
 ### EMR (Elastic Map Reduce)
 
@@ -380,6 +394,7 @@ EMR is a managed Hadoop framework. Hadoop is an Apache tool that does "MapReduce
 #### Apache Hive on Amazon EMR
 
 Apache Hive is a petabyte-scale data warehousing tool. It is open-source, distributed, and fault-tolerant. It is natively supported in AWS EMR.
+
 
 ### X-Ray
 
@@ -390,6 +405,7 @@ Some services are integrated with X-Ray and can send tracing headers automatical
 Clients can also leverage the X-Ray SDK to send JSON documents to a local X-ray daemon, which batch-uploads the data to X-Ray over UDP.
 
 X-Ray uses the data to generate "trace maps", which display various client/service data to help find bottlenecks, latency spikes, etc.
+
 
 ### Elastic Beanstalk
 
@@ -403,9 +419,11 @@ EBS supports multiple "deployment strategies":
  * *Immutable*: Deploys to new instances altogether, and tears down the old ASG/instances at the end. This is to ensure overall stability and safety.
  * *Traffic splitting*: Identical to an immutable deployment, but forwards some percentage of traffic to new instances over time, and then shuts down the old instances. This is to enable "canary-like" deployments.
 
+
 ### Athena
 
 Athena does SQL queries against S3 buckets. It analyzes CSV, JSON, or columnar data. It integrates with QuickSight to visualize data. It generates reports.
+
 
 ### AppSync
 
@@ -415,21 +433,26 @@ AppSync can subscribe to applications to implement  real-time updates. Clients i
 
 It has integrations with DynamoDB.
 
+
 ### AppFlow
 
 AppFlow is an integration service that transfers SaaS data between Salesforce, SAP, Google Analytics, Facebook Ads, ServiceNow, AWS S3, and AWS Redshift.
+
 
 ### AppConfig
 
 AppConfig is an SSM feature that is a "managed feature flag" kind of service. You manage your configuration in AWS (as an AppConfig artifact), create an "application namespace", define "environments" (like containers, Lambda functions, etc.), create a "configuration profile", deploy configuration data, and retrieve configurations with a local AppConfig agent.
 
+
 ### Copilot
 
 Copilot is a CLI intended to bootstrap ECS, Fargate, and App Runner projects. 
 
+
 ### CodeWhisperer
 
 CodeWhisperer is an ML-based code generation tool. It also scans for security issues. It integrates with the command line, VSCode, JetBrains, etc. It is being semi-deprecated (i.e. integrated with Amazon Q Developer).
+
 
 ### ElastiCache
 
@@ -444,6 +467,7 @@ Redis-based ElastiCache instances only contain a single node. Memcached-based El
 *Write-through* is a strategy in which the data in the cache is updated whenever data is written to the database. Note that (a) new cache nodes will not contain historical data, and (b) most data is never read from the cache.
 
 *Time-to-live* is a value you can add to cached data to explain when data goes stale, to ensure that the data is relatively up-to-date. 
+
 
 ### DynamoDB
 
@@ -501,9 +525,11 @@ Some basic API operations include:
 
 
 
+
 ### Personal Health Dashboard
 
 Personal Health Dashboard is a global service health/status dashboard. It's used when AWS is experiencing outages and/or service degradations.
+
 
 ### Trusted Advisor
 
@@ -511,13 +537,16 @@ Trusted Advisor offers recommendations related to cost optimization, performance
 
 Trusted Advisor can emit events to EventBridge - for example, to call a Lambda function when an account reaches a particular type of service limit. 
 
+
 ### Inspector
 
 Inspector is a vulnerability management scanning tool, targeting EC2 instances, ECR container images, and AWS Lambda functions.
 
+
 ### Shield
 
 Shield is a DDoS protection service.
+
 
 ### Route 53
 
@@ -538,13 +567,16 @@ When you create Route 53 records, you also select a "routing policy", which dete
   * *Mutlivalue answer routing*, when you want Route 53 to respond randomly to DNS requests
   * *Weighted routing*, when you want to probabilistically weight responses
 
+
 ### Service Catalog
 
 Service Catalog is a portfolio of IaC templates (CloudFormation and/or Terraform), which Service Catalog administrators can "approve" for use on AWS. It's not entirely clear to me why you'd want to use this, and it was probably built out for a particular enterprise use-case.
 
+
 ### OpsWorks
 
 OpsWorks is a deprecated AWS-managed Chef/Puppet service.
+
 
 ### Organizations
 
@@ -554,6 +586,7 @@ New accounts are grouped into *organizational units*. The idea is that individua
 
 *Trusted access* is a setting that can be enabled with AWS Organizations that allows the administrator of the management account to update contact details for each Organizations-enabled member account.
 
+
 ### DataSync
 
 DataSync is a data transfer/migration service.
@@ -562,9 +595,11 @@ On-premise storage can communicate with local DataSync agents via NFS, SMB (Serv
 
 The aforementioned AWS storage services (EFS, S3, FSx) can also exchange data using DataSync.
 
+
 ### Direct Connect
 
 Direct Connect is a service that allows your network to privately connect directly to AWS via fiber-optic cables. The use-case is increased bandwidth throughput and bypassing ISPs. 1 Gbps and 10 Gbps speeds are available.
+
 
 ### KMS
 
@@ -574,9 +609,11 @@ KMS (Key Management Service) creates cryptographic keys that can be used nativel
 
 Envelope encryption refers to the practice of using one key to encrypt another key.
 
+
 ### CloudHSM
 
 CloudHSM provisions and manages HSMs (hardware security modules) which let you generate your own encryption keys.
+
 
 ### CloudFormation
 
@@ -590,9 +627,11 @@ StackSets allow you to create stacks across multiple accounts, and/or multiple A
 
 `AWS::CloudFormation::WaitCondition` are special resources that track stack resource creation, and configuration process status. It (presumably) allows CFN to "wait" before provisioning more resources. They contain `Count`, `Handle`, and `Timeout` properties. `Count` is the number of success signals that CFN had to receive before it continues creating a stack. `Handle` points to a `AWS::CloudFormation::WaitConditionHandle`, which is a pre-signed URL that kicks off the `WaitCondition`. It's a bit mysterious. `Timeout` is the number of seconds to wait for CFN success signals to count. This is superceded by `CreationPolicies` in cases where you are working with EC2 and ASG resources.
 
+
 ### Polly
 
 Amazon Polly is a text-to-speech service. It's a bit creepy.
+
 
 ### Site-to-Site VPN
 
@@ -610,6 +649,7 @@ A Site-to-Site VPN is used to configure a VPC to talk to an on-premise network. 
 
 VPN CloudHub is a service provided with site-to-site VPNs that links AWS VPC virtual private gateways with customer gateways, allowing a Direct Connect-style connection from on-premise networks to AWS VPCs. It doesn't require a VPC, confusingly.
 
+
 ### CodePipeline
 
 CodePipeline is a managed continuous delivery (CD) service. It uses the following terminology and components:
@@ -625,11 +665,13 @@ CodePipeline is a managed continuous delivery (CD) service. It uses the followin
   * *Conditions* are sets of *rules* for entering stages.
   * *Rules* are like atomic "stage condition checks".
 
+
 ### CodeBuild
 
 CodeBuild is a managed build service that compiles source code, runs tests, and produces artifacts. It contains prepackaged build environments for Maven, Gradle, etc. It can be executed via CLI, or via CodePipeline.
 
 CodeBuild leverages *build projects* and *build environments*. A *build project* contains information about build steps, source code locale, build environments, build commands, and where to put the build output. A *build environment* consists of an operating system, a language runtime, and other tools to help CodeBuild run builds. *Build environments* are created from *build projects*. Source code is downloaded to the *build environment*. *Buildspec* files are found in build projects, or the source code, which contain build commands and settings in YAML format. Builds are uploaded to S3. Build logs are sent to CodeBuild and/or CloudWatch Logs.
+
 
 ### CodeDeploy
 
@@ -660,6 +702,7 @@ In a Lambda context, these include:
 
 In an EC2 context, there are [tons of different possible hooks](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server). In general, the application stops, "bundles" are downloaded (i.e. CodeDeploy will copy application revision files to temporary locations), installation steps, occur, the application starts, services are validated, and then traffic-related hooks occur.
 
+
 ### Config
 
 Config is a view of how AWS resources are configured, how they relate, and their past configurations. You specify a resource type, set up an S3 bucket, set up SNS to send *configuration stream notifications*, and then Config can record configuration changes.
@@ -670,6 +713,7 @@ Config uses a *delivery channel* to send notifications and update configuration 
 
 *Rules* continually track configuration changes amongst resources, and checks whether or not changes comply or don't comply. *Managed rules* evaluate whether or not AWS resources comply with best practices - for example, if EBS volumes are encrypted. *Custom rules* use Lambda functions or [CloudFormation Guard](https://github.com/aws-cloudformation/cloudformation-guard).
 
+
 ### Redshift
 
 Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-configured than a data warehouse. It leverages intelligent-scaling. It does not incur charges while idle. Redshift can be queried using its own syntax, or by way of using SQL queries.
@@ -677,6 +721,7 @@ Amazon Redshift is a managed, petabyte-scale data warehouse servie. It is less-c
 Redshift is designed for OLAP processing (by contrast, RDS is designed for more traditional OLTP processing).
 
 Redshift uses four KMS keys: (1) an AES-256 data encryption key, (2) a database key, (3) a cluster key, and (4) a root key.
+
 
 ### SNS
 
@@ -687,6 +732,7 @@ An "SNS topic" is a communication channel between a publisher and subscriber. To
 SNS subscribers receive all messages published to topics, or they can filter them depending on its policy.
 
 SNS is associated with AWS KMS.
+
 
 ### SQS
 
@@ -714,6 +760,7 @@ In a *long-polling* schema, responses are returned as soon as they become availa
 #### Dead-letter queues
 
 A dead-letter queue is a type of queue that other queues can target and store messages that have not been processed successfully in.  It is considered a best-practice to keep the queue and its associated dead-letter queue in the same AWS account and region.  Messages in a dead-letter queue can be examined, analyzed, etc.
+
 
 ### Lambda
 
@@ -757,6 +804,7 @@ Lambda concurrency means the number of in-flight requests that a function can ha
 
 Accounts have concurrency limits of 1,000 concurrent function executions across all functions in a region. You would use reserved concurrency if you want to guarantee that one Lambda function, within an ecosystem of other Lambda functions, gets to execute, despite these limits.
 
+
 ### SWF
 
 Simple Workflow Service is a way to create background jobs that have parallel or sequential steps.  It consists of:
@@ -767,9 +815,11 @@ Simple Workflow Service is a way to create background jobs that have parallel or
   * *Activity tasks*, which represent logical units of work.
   * *Deciders*, which schedule activity tasks, and provide them to activity workers.
 
+
 ### LightSail
 
 LightSail is a service like Elastic BeanStalk that automatically provisions instances, containers, managed databases, CDN distributions, load balancers, SSD-storage, static IP addresses, DNS management, and snapshots.
+
 
 ### VM Import/Export
 
@@ -777,9 +827,11 @@ VM Import/Export lets customers import virtual machine images from local virtual
 
 It is a free service, but S3/EBS volumes/EC2 instances cost money obviously.
 
+
 ### GuardDuty
 
 GuardDuty is a continual monitoring system that scans an AWS account for malicious activity. It looks at S3 events, EKS control planes and audit logs, ECS, EC2, malware on EBS volumes, malware on S3, brute force attacks against RDS (and suspicious login attempts), VPC flow logs, and Lambda functions communicating with threat actors.
+
 
 ### Glue
 
@@ -787,11 +839,13 @@ Glue is a serverless data integration service that allows end-users to analyze, 
 
 Glue has over 70 possible data sources. It loads data into data lakes. The data is then searched/queried using Athena, EMR, and/or Redshift Spectrum.
 
+
 ### Transfer Family
 
 Transfer Family transfers files in and out of S3 and EFS. 
 
 It uses protocols such as SFTP (Secure Shell File Transfer Protocol), AS2 (Application Statement 2), FTPS (File Transfer Protocol Secure), and FTP (File Transfer Protocol). Note that the hilariously named SFTP differs from FTPS in that SFTP leverages SSH, whereas FPTS leverages TLS/SSL.
+
 
 ### EventBridge
 
@@ -810,6 +864,7 @@ Storage Gateway comprises four separate services: S3 File Gateway, FSx File Gate
 
 S3 File Gateway is a file interface into S3, that allows retrieval of S3 objects via NFS.
 
+
 ### CloudTrail
 
 CloudTrail records actions taken by users, roles, or AWS services. It provides:
@@ -824,6 +879,7 @@ CloudTrail *events* are comprised of:
   2. *Data* events, which provide information about the operations performed **within** resources, and may consist of S3 API activities, Lambda executions, CloudTrail `PutAuditEvents`, SNS publish operations, etc.
   3. *Insight* events, which capture unusual API calls or error rates
 
+
 ### Kinesis Video Streams
 
 Kinesis Video Streams is a live-video-streaming-related service, allowing end-users to:
@@ -832,6 +888,7 @@ Kinesis Video Streams is a live-video-streaming-related service, allowing end-us
   * Perform real-time video processing
   * Perform batch analytics on videos 
   
+
 ### Kinesis Data Streams
 
 Kinesis Data Streams collect and process streams of data in real-time.
@@ -844,9 +901,11 @@ Streaming data is defined as being:
   * *Non-homogeneous*, meaning belonging to multiple different kinds of specifications
   * *Imperfect*, meaning data may have gaps or missing elements
 
+
 ### Amazon Data Firehose
 
 Amazon Data Firehose can read records from Kinesis streams and deliver real-time data to S3, Redshift, OpenSearch, Splunk, Datadog, MongoDB, New Relic, etc. It can also transform records and convert formats prior to delivery.
+
 
 ### CloudFront
 
@@ -862,6 +921,7 @@ CloudFront key pairs can only be created by the root user of the AWS account.
 
 *Lambda@Edge* is a CloudFront feature that runs Lambda functions in response to CloudFront CDN events.
 
+
 ### Billing and Cost Management
 
 Billing and Cost Management is a suite of features that stes up billing, retrieves/pays invoices, and plans/organizes/analyzes/optimizes costs.
@@ -870,11 +930,13 @@ You get two free budgets per-account.
 
 Billing and Cost Management allows you to tag resources with key/value pairs to apply cost allocation tags to track costs. They can be user-generated, or AWS-generated. They take up to 24 hours to appear in the Billing dashboard (post-resource-tagging). They are allocated from the Cost Allocation Tags page.
 
-###  Serverless Application Model
+
+### Serverless Application Model
 
 Serverless Application Model is an open-source CLI IaC framework that deploys serverless applications. It's kind of like a CloudFormation code generation tool, but presumably with limited scope. AWS claims that it can result in a ~90% LoC reduction vis a vis CloudFormation, but I'm not sure why you'd want to accept the additional technical sprawl. `sam init` generates a local SAM project.
 
 The delcared resources are `AWS::Serverless::*`, where `*` is an `API`, `Application`, `Connector`, `Function`, `GraphQLApi`, `HttpApi`, `LayerVersion`, `SimpleTable`, or `StateMachine`. For example, `AWS::Serverless::Function` will generate an AWS Lambda function (and associated resources like IAM roles and event source mappings).
+
 
 ### Cognito
 
@@ -894,6 +956,12 @@ Cognito User Pools can [remember and track devices](https://aws.amazon.com/blogs
 
 When you want to provide **access to AWS resources towards authenticated or anonymous users**, use an identity pool. It issues AWS credentials for your application to serve resources to end-users. You authenticate with a user pool or a SAML 2.0-compliant service. It can issue credentials for guest users. It can be role-based or attribute-based. They do not have to be integrated with a user pool.
 
+
+### SimpleDB
+
+SimpleDB is a high-availability NoSQL database. It is smaller and slower than DynamoDB, and offers up to 10GB of storage per-domain.
+
+
 ### API Gateway
 
 API Gateway is a service for creating, publishing, monitoring, maintaining, and securing REST, HTTP, and WebSocket-based APIs. 
@@ -906,7 +974,6 @@ API Gateway supports "usage plans", which specify who can access API stages (ver
 
 API Gateway also supports "mapping templates", which transforms data found in payloads from integration requests/responses.
 
-
 #### Resource policies
 
 API Gateway has JSON-based resource policies that you can attach to the API to control whether principals (usually IAM roles or groups) can invoke a given API. This can restrict the use the API to specific AWS account users, source IP addresses/CIDR blocks, VPCs, VPC endpoints, etc.
@@ -914,6 +981,7 @@ API Gateway has JSON-based resource policies that you can attach to the API to c
 This is different from IAM identity-based policies, which are attached to IAM users/groups/roles.
 
 In cases where the use of an API Gateway instance is restricted to users from another account, it can leverage the SigV4 signing protocol in conjunction with resource policies, to ensure that nobody except for users in other accounts can invoke the API.
+
 
 ### SES
 
@@ -923,17 +991,20 @@ SES calls are limited by an account's maximum send rate.
 
 ## General Concepts
 
+
 ### Regions and Availability Zones
 
 Regions are broad, geographically isolated, unconnected areas containing availability zones. Resources are generally not replicated across regions unless specifically instructed.
 
 Availability zones are connected with low latency, and consist of one (or more) data centers, each with redundant power, networking, and connectivity, in separate facilities. A single AZ may encompass multiple data centers. 
 
+
 ### IaaS vs. PaaS vs. SaaS
 
 * "Infrastructure-as-a-Service" refers to providing infrastructure, such as networking, virtual machines, and storage (i.e. AWS EC2).
 * "Platform-as-a-Service" refers to providing development environments with automated deployments (i.e. AWS Lambda). 
 * "Software-as-a-Service" refer to providing a completely managed software application over the internet.
+
 
 ### CI vs CD
 
